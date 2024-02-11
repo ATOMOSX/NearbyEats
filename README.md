@@ -45,25 +45,35 @@ NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastro
 
 ### Instalación
 
-```bash
 # Clonar el repositorio
+```bash
 git clone https://github.com/tu-usuario/nearbyeats.git
+```
 
 # Configurar y ejecutar el backend:
 cd nearbyeats/backend
 ./gradlew bootRun
 
 # Configurar y ejecutar el frontend:
+```bash
 cd nearbyeats/frontend
 npm install
 ng serve
+```
 
 ## Contribución
 
-- Clona el repositorio.
-- Crea una rama (`git checkout -b feature/nueva-funcionalidad`).
-- Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
-- Haz push a la rama (`git push origin feature/nueva-funcionalidad`).
-- Crea un nuevo Pull Request.
+#Clona el repositorio.
+```bash
+Crea una rama (`git checkout -b feature/nueva-funcionalidad`).
+```
 
+```bash
+Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
+```
+
+```bash
+Haz push a la rama (`git push origin feature/nueva-funcionalidad`).
+Crea un nuevo Pull Request.
+```
 ¡Gracias por contribuir al proyecto NearbyEats!
