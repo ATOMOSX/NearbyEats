@@ -63,15 +63,19 @@ ng serve
 
 ## Contribución
 
-#Clona el repositorio.
+# Clona el repositorio.
+
+# 1
 ```bash
 Crea una rama (`git checkout -b feature/nueva-funcionalidad`).
 ```
 
+# 2
 ```bash
 Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
 ```
 
+# 3
 ```bash
 Haz push a la rama (`git push origin feature/nueva-funcionalidad`).
 Crea un nuevo Pull Request.
