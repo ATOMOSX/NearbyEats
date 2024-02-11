@@ -40,8 +40,8 @@ NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastro
 
 ### Prerrequisitos
 
-- Java, Maven y MongoDB para el backend.
-- Node.js y Angular CLI para el frontend.
+- Java, Gradle y MongoDB para el backend.
+- TypeScript y Angular CLI para el frontend.
 
 ### Instalación
 
@@ -51,8 +51,11 @@ git clone https://github.com/tu-usuario/nearbyeats.git
 ```
 
 # Configurar y ejecutar el backend:
+
+```bash
 cd nearbyeats/backend
 ./gradlew bootRun
+```
 
 # Configurar y ejecutar el frontend:
 ```bash
@@ -61,21 +64,18 @@ npm install
 ng serve
 ```
 
-## Contribución
+# Contribución
 
-# Clona el repositorio.
+## Clona el repositorio.
 
-# 1
 ```bash
 Crea una rama (`git checkout -b feature/nueva-funcionalidad`).
 ```
 
-# 2
 ```bash
 Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
 ```
 
-# 3
 ```bash
 Haz push a la rama (`git push origin feature/nueva-funcionalidad`).
 Crea un nuevo Pull Request.
