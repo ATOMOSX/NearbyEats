@@ -64,6 +64,14 @@ npm install
 ng serve
 ```
 
+# Configurar la Base de datos
+Primero identificamos el archivo docker-compose.yaml no contenga errores.
+
+Despues ejecutamos desde consola
+```bash
+docker-compose up -d.
+```
+
 # Contribución
 
 ## Clona el repositorio.
