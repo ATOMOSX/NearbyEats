@@ -1,4 +1,4 @@
-package com.example.nearbyeatsb.controllers;
+package co.edu.uniquindio.proyecto.controllers;
 
 public class NearbyEat {
 

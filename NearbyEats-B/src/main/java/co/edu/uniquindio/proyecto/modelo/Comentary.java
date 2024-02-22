@@ -1,8 +1,8 @@
-package com.example.nearbyeatsb.modelo;
+package co.edu.uniquindio.proyecto.modelo;
 
 import java.util.Date;
 
-public class comentary {
+public class Comentary {
 
     private String id;
     private String content;
@@ -10,7 +10,7 @@ public class comentary {
     private User user;
     private Location location;
 
-    public comentary(String id, String content, Date publicationDate, User user, Location location) {
+    public Comentary(String id, String content, Date publicationDate, User user, Location location) {
         this.id = id;
         this.content = content;
         this.publicationDate = publicationDate;
@@ -18,7 +18,7 @@ public class comentary {
         this.location = location;
     }
 
-    public comentary() {
+    public Comentary() {
     }
 
     public String getId() {

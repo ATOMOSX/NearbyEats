@@ -1,4 +1,4 @@
-package com.example.nearbyeatsb.modelo;
+package co.edu.uniquindio.proyecto.modelo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,9 +16,9 @@ public class Location {
 //    @Lob
     private String images;
     private Score scores;
-    private comentary comments;
+    private Comentary comments;
 
-    public Location(String id, String name, String description, Date schedule, ArrayList phoneNumber, Places category, String images, Score scores, comentary comments) {
+    public Location(String id, String name, String description, Date schedule, ArrayList phoneNumber, Places category, String images, Score scores, Comentary comments) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -97,11 +97,11 @@ public class Location {
         this.scores = scores;
     }
 
-    public comentary getComments() {
+    public Comentary getComments() {
         return comments;
     }
 
-    public void setComments(comentary comments) {
+    public void setComments(Comentary comments) {
         this.comments = comments;
     }
 }

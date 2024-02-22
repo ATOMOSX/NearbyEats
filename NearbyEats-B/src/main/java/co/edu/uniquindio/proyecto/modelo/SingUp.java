@@ -1,4 +1,4 @@
-package com.example.nearbyeatsb.modelo;
+package co.edu.uniquindio.proyecto.modelo;
 
 import java.util.Date;
 
