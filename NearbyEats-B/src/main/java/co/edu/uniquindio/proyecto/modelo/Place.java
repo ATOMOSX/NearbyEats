@@ -21,7 +21,7 @@ public class Place implements Serializable {
 
     private String name;
     private String description;
-    private Ubicacion location;
+    private Ubication location;
     private List<String> pictures;
     private List<Horario> schedule;
     private List<String> phones;
