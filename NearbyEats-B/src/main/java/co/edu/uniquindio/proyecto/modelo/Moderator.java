@@ -5,22 +5,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@Document(collection = "revisiones")
+@Document(collection = "moderadores")
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Revision implements Serializable {
+public class Moderator extends User implements Serializable {
+
     @Id
     @EqualsAndHashCode.Include
     private String id;
-
-    private RevisionStatus revisionStatus;
-    private String description;
-    private LocalDateTime date;
-    private Moderator moderator;
+    private List<Revision> revisions;
 
 }

@@ -1,13 +1,13 @@
 package co.edu.uniquindio.proyecto.modelo;
 
-import org.springframework.data.annotation.Id;
+import lombok.*;
 
 import java.time.LocalTime;
 
-public class Horario {
-
-    @Id
-    private String id;
+@Getter
+@Setter
+public class Schedule {
+    private String dayOfWeek;
     private LocalTime openingTime;
     private LocalTime closingTime;
 }

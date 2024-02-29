@@ -1,7 +1,10 @@
 package co.edu.uniquindio.proyecto.modelo;
 
-public class Score {
+import lombok.*;
 
-    private Client cliente;
+@Getter
+@Setter
+public class Score {
+    private Client client;
     private float score;
 }

@@ -1,4 +1,6 @@
 package co.edu.uniquindio.proyecto.modelo;
 
-public enum Estado {
+public enum Status {
+    ACTIVE,
+    INACTIVE
 }

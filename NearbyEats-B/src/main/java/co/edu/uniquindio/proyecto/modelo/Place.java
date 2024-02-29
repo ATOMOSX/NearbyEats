@@ -14,7 +14,6 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Place implements Serializable {
-
     @Id
     @EqualsAndHashCode.Include
     private String id;
@@ -23,15 +22,13 @@ public class Place implements Serializable {
     private String description;
     private Ubication location;
     private List<String> pictures;
-    private List<Horario> schedule;
+    private List<Schedule> schedule;
     private List<String> phones;
     private List<Category> categories;
     private List<Comentary> commentaries;
     private List<Score> scores;
     private List<Revision> revisionsHistory;
-    private Estado estado;
-
-
+    private Status status;
 
 
 }
