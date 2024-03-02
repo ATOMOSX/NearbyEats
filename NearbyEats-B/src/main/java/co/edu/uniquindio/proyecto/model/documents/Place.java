@@ -1,5 +1,10 @@
-package co.edu.uniquindio.proyecto.modelo;
+package co.edu.uniquindio.proyecto.model.documents;
 
+import co.edu.uniquindio.proyecto.model.entities.Schedule;
+import co.edu.uniquindio.proyecto.model.entities.Score;
+import co.edu.uniquindio.proyecto.model.entities.Ubication;
+import co.edu.uniquindio.proyecto.model.enums.Category;
+import co.edu.uniquindio.proyecto.model.enums.Status;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

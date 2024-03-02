@@ -1,5 +1,6 @@
-package co.edu.uniquindio.proyecto.modelo;
+package co.edu.uniquindio.proyecto.model.entities;
 
+import co.edu.uniquindio.proyecto.model.documents.Client;
 import lombok.*;
 
 @Getter
