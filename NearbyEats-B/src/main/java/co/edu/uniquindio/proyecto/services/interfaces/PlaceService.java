@@ -6,5 +6,9 @@ public interface PlaceService {
     void createPlace();
 
     void deletePlace();
+    void updatePlace();
+    void searchPlace();
+    void filterStatusPlace();
+    void listPlaceOwnert();
 
 }

@@ -6,5 +6,7 @@ public interface ComentaryService {
     void listComments();
 
     void answerComment();
+    void calculateAvarageScore();
+
 
 }
