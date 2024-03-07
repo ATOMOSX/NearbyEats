@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.model;
 
-import co.edu.uniquindio.proyecto.dto.ClientLoginDTO;
+import co.edu.uniquindio.proyecto.dto.client.ClientLoginDTO;
 import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.repository.ClientRepo;
 import org.junit.jupiter.api.Test;

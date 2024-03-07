@@ -21,6 +21,7 @@ public class Client extends User implements Serializable {
     private String id;
     private String profilePhoto;
     private String nickname;
+    private String city;
     private List<Place> createdPlaces;
     private List<Place> favoritePlaces;
 
