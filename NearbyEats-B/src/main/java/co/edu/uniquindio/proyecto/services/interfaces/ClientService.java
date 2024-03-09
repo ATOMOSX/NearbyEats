@@ -13,7 +13,6 @@ public interface ClientService {
     void deleteAccount(String id) throws DeleteAccountException;
 
     void sendRecoveryEmail(String email) throws SendRecoveryEmailException;
-
     void changePassword(ChangePasswordDTO changePasswordDTO) throws ChangePasswordException;
 
     GetClientDTO getClient(String id) throws GetClientException;

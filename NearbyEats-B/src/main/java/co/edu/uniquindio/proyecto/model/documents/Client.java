@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.model.documents;
 
 import co.edu.uniquindio.proyecto.model.entities.User;
+import co.edu.uniquindio.proyecto.model.enums.Status;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,11 +11,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Document(collection = "clientes")
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Client extends User implements Serializable {
     @Id
     @EqualsAndHashCode.Include
@@ -25,4 +24,16 @@ public class Client extends User implements Serializable {
     private List<Place> createdPlaces;
     private List<Place> favoritePlaces;
 
+    @Builder
+    public Client(String firstName, String lastName, String email, String password,
+                  Status status, String id, String profilePhoto, String nickname,
+                  String city, List<Place> createdPlaces, List<Place> favoritePlaces) {
+        super(firstName, lastName, email, password, status);
+        this.id = id;
+        this.profilePhoto = profilePhoto;
+        this.nickname = nickname;
+        this.city = city;
+        this.createdPlaces = createdPlaces;
+        this.favoritePlaces = favoritePlaces;
+    }
 }
