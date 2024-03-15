@@ -33,11 +33,11 @@ public class ClienteServiceImpl implements ClientService {
     public String register(ClientRegistrationDTO clientRegistrationDTO) throws ClientRegistrationException {
 
         if (existEmail(clientRegistrationDTO.email())) {
-            throw new ClientRegistrationException();
+            throw new ClientRegistrationException("Este email no se encuentra disponible");
         }
 
         if (existNickname(clientRegistrationDTO.nickname())){
-            throw new ClientRegistrationException();
+            throw new ClientRegistrationException("El nickName ya se encuentra disponible");
         }
 
         Client client = Client.builder()
@@ -69,10 +69,8 @@ public class ClienteServiceImpl implements ClientService {
 
         Optional<Client> clientOptional = clientRepo.findById(updateAccountDTO.id());
         if (clientOptional.isEmpty()){
-            throw new UpdateAccountExcepetion();
+            throw new UpdateAccountExcepetion("Id del cliente no puede estar vacio para poder actualizar el cliente");
         }
-
-
 
         Client client = clientOptional.get();
         client.setFirstName(updateAccountDTO.firstName());
@@ -88,7 +86,7 @@ public class ClienteServiceImpl implements ClientService {
 
         Optional<Client> clientOptional = clientRepo.findById(id);
         if (clientOptional.isEmpty()){
-            throw new DeleteAccountException();
+            throw new DeleteAccountException("El id del cliente a eliminar no puede ser vacío");
         }
 
         Client client = clientOptional.get();
@@ -99,30 +97,23 @@ public class ClienteServiceImpl implements ClientService {
 
     @Override
     public void sendRecoveryEmail(String email) throws SendRecoveryEmailException {
+        Optional<Client> clientOptional = clientRepo.findByEmail(email);
 
+        if (clientOptional.isEmpty()){
+            throw new SendRecoveryEmailException("El email no puede ser vacio");
+        }
+       // emailService.sendEmail("Cambio de contraseña de NeabryEats", email,
+         //     "Para cambiar la contraseña accede al siguiente enlace http://......./params ");
     }
 
     @Override
     public void changePassword(ChangePasswordDTO changePasswordDTO) throws ChangePasswordException {
-//
-//        Optional<Client> clientOptional = clientRepo.findByEmail(email);
-//
-//        if (clientOptional.isEmpty()){
-//
-//        }
-//
-        // Futura implementación.
-        //emailService.sendEmail("Cambio de contraseña de NeabryEats", email,
-          //      "Para cambiar la contraseña accede al siguiente enlace http://......./params ");
-        //crear una que envie el correo
-
-
 
         //Validamos el Toker
         Optional<Client> clientOptional1 = clientRepo.findById(changePasswordDTO.idClient());
 
         if (clientOptional1.isEmpty()){
-            throw new ChangePasswordException();
+            throw new ChangePasswordException("El cliente no puede presentar un id vacio");
         }
 
         Client client = clientOptional1.get();
@@ -135,12 +126,12 @@ public class ClienteServiceImpl implements ClientService {
         Optional<Client> clientOptional = clientRepo.findById(id);
 
         if (clientOptional.isEmpty()){
-            throw new GetClientException();
+            throw new GetClientException("El cliente del id a obtener no puede ser vacío");
         }
         Client client = clientOptional.get();
 
         if (client.getStatus() == Status.INACTIVE){
-            throw new GetClientException();
+            throw new GetClientException("No se puede obtener un cliente inactivo");
         }
 
         return  new GetClientDTO(

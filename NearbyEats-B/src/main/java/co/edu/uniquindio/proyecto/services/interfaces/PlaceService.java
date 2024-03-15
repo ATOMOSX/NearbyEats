@@ -9,10 +9,15 @@ import java.util.List;
 public interface PlaceService {
 
     void createPlace(CreatePlaceDTO createPlaceDTO) throws CreatePlaceException;
+
     void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException;
+
     void updatePlace(UpdatePlaceDto updatePlaceDto) throws UpdatePlaceException;
+
     List<String> searchPlace(SearchPlaceDTO searchPlaceDTO) throws SearchPlaceException;
+
     List<String> filterStatusPlace(FilterStatusPlaceDTO filterStatusPlaceDTO) throws FilterStatusPlaceException;
-    List<String> listPlaceOwnert(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException;
+
+    List<String> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException;
 
 }
