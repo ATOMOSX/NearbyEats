@@ -7,6 +7,7 @@ import co.edu.uniquindio.proyecto.exceptions.client.*;
 import java.util.List;
 
 public interface ClientService {
+
     String login(ClientLoginDTO clientLoginDTO) throws ClientLoginException;
 
     String register(ClientRegistrationDTO clientRegistrationDTO) throws ClientRegistrationException;
