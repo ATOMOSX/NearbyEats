@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.services.interfaces;
 import co.edu.uniquindio.proyecto.dto.comment.AnswerCommentDTO;
 import co.edu.uniquindio.proyecto.dto.comment.CommentDTO;
 import co.edu.uniquindio.proyecto.dto.comment.ListCommentsDTO;
+import co.edu.uniquindio.proyecto.exceptions.client.GetClientException;
 import co.edu.uniquindio.proyecto.exceptions.comment.AnswerCommentException;
 import co.edu.uniquindio.proyecto.exceptions.comment.CalculateAverageScoreException;
 import co.edu.uniquindio.proyecto.exceptions.comment.CommentException;
@@ -13,8 +14,7 @@ import java.util.List;
 
 public interface CommentaryService {
     void comment(CommentDTO commentDTO) throws CommentException;
-
-    List<Place> listComments(ListCommentsDTO listCommentsDTO) throws ListCommentsExeception;
+    List<Place> listComments(ListCommentsDTO listCommensDTO) throws ListCommentsExeception, GetClientException;
 
     void answerComment(AnswerCommentDTO answerCommentDTO) throws AnswerCommentException;
 
