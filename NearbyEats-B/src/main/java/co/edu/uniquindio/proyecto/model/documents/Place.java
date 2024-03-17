@@ -18,6 +18,7 @@ import java.util.List;
 @Document(collection = "lugares")
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 public class Place implements Serializable {
     @Id
     @EqualsAndHashCode.Include

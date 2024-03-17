@@ -15,6 +15,7 @@ import co.edu.uniquindio.proyecto.services.interfaces.ClientService;
 import co.edu.uniquindio.proyecto.services.interfaces.CommentaryService;
 import co.edu.uniquindio.proyecto.services.interfaces.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
+@Service
 public class ComentaryServiceImpl implements CommentaryService {
 
     private final CommentaryRepo comentaryRepo;

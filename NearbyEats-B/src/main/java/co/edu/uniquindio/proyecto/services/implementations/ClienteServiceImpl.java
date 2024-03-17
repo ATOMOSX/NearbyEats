@@ -10,11 +10,14 @@ import co.edu.uniquindio.proyecto.services.interfaces.ClientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
+
 public class ClienteServiceImpl implements ClientService {
 
     private final ClientRepo clientRepo;
@@ -56,18 +59,11 @@ public class ClienteServiceImpl implements ClientService {
         return registerCliente.getId();
     }
 
-    public boolean existNickname(String nickname){
-       return clientRepo.findByNickname(nickname).isPresent();
-    }
-
-    public boolean existEmail(String email)  {
-        return clientRepo.findByEmail(email).isPresent();
-    }
-
     @Override
     public void updateAccount(UpdateAccountDTO updateAccountDTO) throws UpdateAccountExcepetion {
 
         Optional<Client> clientOptional = clientRepo.findById(updateAccountDTO.id());
+
         if (clientOptional.isEmpty()){
             throw new UpdateAccountExcepetion("Id del cliente no puede estar vacio para poder actualizar el cliente");
         }
@@ -158,5 +154,13 @@ public class ClienteServiceImpl implements ClientService {
                 c.getProfilePhoto(),
                 c.getNickname(),
                 c.getCity())).toList();
+    }
+
+    public boolean existNickname(String nickname){
+        return clientRepo.findByNickname(nickname).isPresent();
+    }
+
+    public boolean existEmail(String email)  {
+        return clientRepo.findByEmail(email).isPresent();
     }
 }
