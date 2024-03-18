@@ -3,6 +3,8 @@ package co.edu.uniquindio.proyecto.services.implementations;
 import co.edu.uniquindio.proyecto.dto.place.*;
 import co.edu.uniquindio.proyecto.exceptions.place.*;
 import co.edu.uniquindio.proyecto.model.documents.Place;
+import co.edu.uniquindio.proyecto.model.entities.Ubication;
+import co.edu.uniquindio.proyecto.model.enums.Category;
 import co.edu.uniquindio.proyecto.model.enums.Status;
 import co.edu.uniquindio.proyecto.repository.PlaceRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.PlaceService;
@@ -13,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -86,7 +86,30 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<String> searchPlace(SearchPlaceDTO searchPlaceDTO) throws SearchPlaceException {
-        return null;
+
+        List<String> searchPlaces = new ArrayList<>();
+
+        if (existName(searchPlaceDTO.name())) {
+            throw new SearchPlaceException("El nombre que estas buscando no se encuentra en la base de datos");
+        }
+
+        if (existCategory(Collections.singletonList(searchPlaceDTO.category()))) {
+            throw new SearchPlaceException("La categoria que estas buscando se encuentra vacia");
+        }
+
+        if (existLocation(searchPlaceDTO.location())) {
+            throw new SearchPlaceException("La ubicación que estas tratando de buscar se encuentra vacia");
+        }
+
+        List<String> searchPlace = placeRepo.findByCriteria(searchPlaceDTO);
+
+        for (String place : searchPlace) {
+
+            searchPlace.add(searchPlaceDTO.name());
+        }
+
+        return searchPlaces;
+
     }
 
     @Override
@@ -101,6 +124,14 @@ public class PlaceServiceImpl implements PlaceService {
 
     public boolean existName(String name){
         return placeRepo.findByNamePlace(name).isPresent();
+    }
+
+    public boolean existLocation(Ubication location){
+        return !placeRepo.findByLocation(location).isEmpty();
+    }
+
+    public boolean existCategory(List<Category> categories){
+        return !placeRepo.findByCategories(categories).isEmpty();
     }
 
     private void uploadForbiddenName() {
