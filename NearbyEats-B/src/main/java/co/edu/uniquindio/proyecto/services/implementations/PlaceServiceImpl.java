@@ -53,7 +53,7 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
 
-        Optional<Place> placeOptional = placeRepo.findById(deletePlaceDTO.id());
+        Optional<Place> placeOptional = placeRepo.findById(deletePlaceDTO.idPlace());
 
         if (placeOptional.isEmpty()) {
             throw new DeletePlaceException("El id del lugar esta vacio, no puede ser eliminado");
