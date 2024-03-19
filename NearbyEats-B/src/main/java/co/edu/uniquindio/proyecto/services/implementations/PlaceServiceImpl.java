@@ -113,13 +113,27 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<String> filterStatusPlace(FilterStatusPlaceDTO filterStatusPlaceDTO) throws FilterStatusPlaceException {
-        return null;
+    public List<ItemPlaceStatusDTO> filterStatusPlace(FilterStatusPlaceDTO filterStatusPlaceDTO) throws FilterStatusPlaceException {
+
+        List<Place> places = placeRepo.findByStatus(Status.ACTIVE);
+
+        return places.stream().map(
+                p -> new ItemPlaceStatusDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription())).toList();
     }
 
     @Override
-    public List<String> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException {
-        return null;
+    public List<ItemPlaceOwnerDTO> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException {
+
+        List<Place> places = placeRepo.findByOwner(listPlaceOwnerDTO.idClient());
+
+        return places.stream().map(
+                p -> new ItemPlaceOwnerDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription())).toList();
     }
 
     public boolean existName(String name){

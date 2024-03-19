@@ -16,8 +16,8 @@ public interface PlaceService {
 
     List<String> searchPlace(SearchPlaceDTO searchPlaceDTO) throws SearchPlaceException;
 
-    List<String> filterStatusPlace(FilterStatusPlaceDTO filterStatusPlaceDTO) throws FilterStatusPlaceException;
+    List<ItemPlaceStatusDTO> filterStatusPlace(FilterStatusPlaceDTO filterStatusPlaceDTO) throws FilterStatusPlaceException;
 
-    List<String> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException;
+    List<ItemPlaceOwnerDTO> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException;
 
 }

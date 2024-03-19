@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.dto.place.SearchPlaceDTO;
 import co.edu.uniquindio.proyecto.model.documents.Place;
 import co.edu.uniquindio.proyecto.model.entities.Ubication;
 import co.edu.uniquindio.proyecto.model.enums.Category;
+import co.edu.uniquindio.proyecto.model.enums.Status;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,6 @@ public interface PlaceRepo extends MongoRepository<Place, String> {
     List<Place> findByCategories(List<Category> category);
     List<Place> findByLocation(Ubication location);
     List<String> findByCriteria(SearchPlaceDTO searchPlaceDTO);
+    List<Place> findByStatus(Status status);
+    List<Place> findByOwner(String owner);
 }
