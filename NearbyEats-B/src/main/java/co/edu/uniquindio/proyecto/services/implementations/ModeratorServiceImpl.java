@@ -29,7 +29,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         }
 
         if (!moderatorOptional.get().getPassword().equals(moderatorLoginDTO.password())){
-            throw new ModeratorLoginException("");
+            throw new ModeratorLoginException("La contraseña suministrada es incorrecta");
         }
     }
 
