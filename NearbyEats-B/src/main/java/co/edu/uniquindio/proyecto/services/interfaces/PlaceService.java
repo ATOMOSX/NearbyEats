@@ -20,7 +20,5 @@ public interface PlaceService {
 
     List<ItemPlaceOwnerDTO> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException;
 
-    void calculateAverageScore(String placeId) throws CalculateAverageScoreException;
-
     GetPlaceDTO getPlace(String id) throws GetPlaceException;
 }

@@ -3,10 +3,9 @@ package co.edu.uniquindio.proyecto.services.interfaces;
 import co.edu.uniquindio.proyecto.dto.comment.AnswerCommentDTO;
 import co.edu.uniquindio.proyecto.dto.comment.CommentDTO;
 import co.edu.uniquindio.proyecto.dto.comment.ItemCommentDTO;
-import co.edu.uniquindio.proyecto.dto.comment.ListCommentsDTO;
 import co.edu.uniquindio.proyecto.exceptions.client.GetClientException;
 import co.edu.uniquindio.proyecto.exceptions.comment.AnswerCommentException;
-import co.edu.uniquindio.proyecto.exceptions.place.CalculateAverageScoreException;
+import co.edu.uniquindio.proyecto.exceptions.comment.CalculateAverageScoreException;
 import co.edu.uniquindio.proyecto.exceptions.comment.CommentException;
 import co.edu.uniquindio.proyecto.exceptions.comment.ListCommentsExeception;
 import co.edu.uniquindio.proyecto.exceptions.place.GetPlaceException;
@@ -21,4 +20,5 @@ public interface CommentaryService {
 
     void answerComment(AnswerCommentDTO answerCommentDTO) throws AnswerCommentException, GetClientException, GetPlaceException;
 
+    void calculateAverageScore(String placeId) throws CalculateAverageScoreException;
 }

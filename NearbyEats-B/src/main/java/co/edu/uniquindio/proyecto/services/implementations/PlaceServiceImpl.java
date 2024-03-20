@@ -1,13 +1,8 @@
 package co.edu.uniquindio.proyecto.services.implementations;
 
-import co.edu.uniquindio.proyecto.dto.client.GetClientDTO;
 import co.edu.uniquindio.proyecto.dto.place.*;
-import co.edu.uniquindio.proyecto.exceptions.client.GetClientException;
 import co.edu.uniquindio.proyecto.exceptions.place.*;
-import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.model.documents.Place;
-import co.edu.uniquindio.proyecto.model.documents.Revision;
-import co.edu.uniquindio.proyecto.model.entities.Schedule;
 import co.edu.uniquindio.proyecto.model.entities.Ubication;
 import co.edu.uniquindio.proyecto.model.enums.Category;
 import co.edu.uniquindio.proyecto.model.enums.Status;
@@ -139,11 +134,6 @@ public class PlaceServiceImpl implements PlaceService {
                         p.getId(),
                         p.getName(),
                         p.getDescription())).toList();
-    }
-
-    @Override
-    public void calculateAverageScore(String placeId) throws CalculateAverageScoreException {
-
     }
 
     @Override

@@ -8,6 +8,7 @@ import co.edu.uniquindio.proyecto.dto.comment.ListCommentsDTO;
 import co.edu.uniquindio.proyecto.dto.place.GetPlaceDTO;
 import co.edu.uniquindio.proyecto.exceptions.client.GetClientException;
 import co.edu.uniquindio.proyecto.exceptions.comment.AnswerCommentException;
+import co.edu.uniquindio.proyecto.exceptions.comment.CalculateAverageScoreException;
 import co.edu.uniquindio.proyecto.exceptions.comment.CommentException;
 import co.edu.uniquindio.proyecto.exceptions.comment.ListCommentsExeception;
 import co.edu.uniquindio.proyecto.exceptions.place.GetPlaceException;
@@ -73,6 +74,11 @@ public class CommentaryServiceImpl implements CommentaryService {
         Commentary originalComment = commentaryOptional.get();
         originalComment.setAnswer(answer);
         commentaryRepo.save(originalComment);
+    }
+
+    @Override
+    public void calculateAverageScore(String placeId) throws CalculateAverageScoreException {
+
     }
 
 }
