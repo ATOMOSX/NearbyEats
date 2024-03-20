@@ -1,8 +1,13 @@
 package co.edu.uniquindio.proyecto.services.implementations;
 
+import co.edu.uniquindio.proyecto.dto.client.GetClientDTO;
 import co.edu.uniquindio.proyecto.dto.place.*;
+import co.edu.uniquindio.proyecto.exceptions.client.GetClientException;
 import co.edu.uniquindio.proyecto.exceptions.place.*;
+import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.model.documents.Place;
+import co.edu.uniquindio.proyecto.model.documents.Revision;
+import co.edu.uniquindio.proyecto.model.entities.Schedule;
 import co.edu.uniquindio.proyecto.model.entities.Ubication;
 import co.edu.uniquindio.proyecto.model.enums.Category;
 import co.edu.uniquindio.proyecto.model.enums.Status;
@@ -134,6 +139,37 @@ public class PlaceServiceImpl implements PlaceService {
                         p.getId(),
                         p.getName(),
                         p.getDescription())).toList();
+    }
+
+    @Override
+    public void calculateAverageScore(String placeId) throws CalculateAverageScoreException {
+
+    }
+
+    @Override
+    public GetPlaceDTO getPlace(String id) throws GetPlaceException {
+        Optional<Place> placeOptional = placeRepo.findById(id);
+
+        if (placeOptional.isEmpty())
+            throw new GetPlaceException("El id no puede ser vacío");
+
+        Place place = placeOptional.get();
+
+        if (place.getStatus() == Status.INACTIVE){
+            throw new GetPlaceException("No se puede obtener un lugar inactivo");
+        }
+
+        return  new GetPlaceDTO(
+                id,
+                place.getName(),
+                place.getDescription(),
+                place.getLocation(),
+                place.getPictures(),
+                place.getSchedule(),
+                place.getPhones(),
+                place.getCategories(),
+                place.getRevisionsHistory()
+        );
     }
 
     public boolean existName(String name){

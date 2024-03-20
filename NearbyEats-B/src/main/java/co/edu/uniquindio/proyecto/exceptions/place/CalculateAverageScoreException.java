@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.exceptions.comment;
+package co.edu.uniquindio.proyecto.exceptions.place;
 
 public class CalculateAverageScoreException extends Exception {
 

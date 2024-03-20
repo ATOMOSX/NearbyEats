@@ -31,10 +31,8 @@ public class Place implements Serializable {
     private List<Schedule> schedule;
     private List<String> phones;
     private List<Category> categories;
-    private List<Comentary> commentaries;
-    private List<Score> scores;
+    private List<Commentary> commentaries;
     private List<Revision> revisionsHistory;
     private Status status;
-
 
 }
