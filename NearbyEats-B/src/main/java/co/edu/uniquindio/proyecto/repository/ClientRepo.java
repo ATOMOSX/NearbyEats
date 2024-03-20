@@ -14,5 +14,6 @@ public interface ClientRepo extends MongoRepository<Client, String> {
     Optional<Client> findByNickname(String nickname);
 
     Optional<Client> findByEmail(String email);
+
     List<Client> findByStatus(Status status);
 }

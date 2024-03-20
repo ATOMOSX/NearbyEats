@@ -1,6 +1,5 @@
 package co.edu.uniquindio.proyecto.services.interfaces;
 
-import co.edu.uniquindio.proyecto.dto.client.ItemClientDTO;
 import co.edu.uniquindio.proyecto.dto.client.*;
 import co.edu.uniquindio.proyecto.exceptions.client.*;
 
@@ -22,8 +21,6 @@ public interface ClientService {
 
     GetClientDTO getClient(String id) throws GetClientException;
 
-    //Implementación en la clase, ADICIONAL NO MUY NECESARIO.
-    List<ItemClientDTO> listarClientes() throws Exception;
-
+    List<ItemClientDTO> listClients() throws ListClientException;
 
 }

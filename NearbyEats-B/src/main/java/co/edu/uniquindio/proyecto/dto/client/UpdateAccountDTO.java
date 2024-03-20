@@ -10,6 +10,6 @@ public record UpdateAccountDTO(
         @NotBlank(message = "Last name is required") @Length(max = 100) String lastName,
         @NotBlank(message = "Email is required") @Email String email,
         @NotBlank(message = "Profile photo is required") String profilePhoto,
-        @NotBlank(message = "City is required") @Length(max = 100) String city,
-        @NotBlank(message = "Password is required") @Length(max = 100) String password) {
+        @NotBlank(message = "City is required") @Length(max = 100) String city
+) {
 }

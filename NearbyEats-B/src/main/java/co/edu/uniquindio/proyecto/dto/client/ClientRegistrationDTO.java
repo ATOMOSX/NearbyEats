@@ -11,5 +11,6 @@ public record ClientRegistrationDTO(
         @NotBlank(message = "Email is required") @Email String email,
         @NotBlank(message = "Profile photo is required") String profilePhoto,
         @NotBlank(message = "City is required") @Length(max = 100) String city,
-        @NotBlank(message = "Password is required") @Length(max = 100) String password) {
+        @NotBlank(message = "Password is required") @Length(min = 7, message = "7 characters minimum") String password
+) {
 }
