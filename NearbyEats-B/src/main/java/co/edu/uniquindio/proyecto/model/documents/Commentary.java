@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Document(collection = "comentarios")
 @ToString
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Commentary {
 
     @Id
     private String id;
     private String nickName;
+    private String placeId;
     private String commentary;
     private LocalDateTime date;
     private Commentary answer;

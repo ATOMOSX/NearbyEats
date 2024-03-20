@@ -1,11 +1,16 @@
 package co.edu.uniquindio.proyecto.dto.comment;
 
+import co.edu.uniquindio.proyecto.model.documents.Commentary;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
+
 public record ListCommentsDTO(
-        @NotBlank(message = "idClient is required") @Length(max = 100) String idClient,
-        @NotBlank(message = "idComment is required") @Length(max = 100) String idComment,
-        @NotBlank(message = "idComment is required") @Length(max = 100) String idPlace
+        String nickName,
+        String commentary,
+        LocalDateTime date,
+        Commentary answer,
+        int score
 ) {
 }
