@@ -14,7 +14,10 @@ import co.edu.uniquindio.proyecto.repository.CommentaryRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ClientService;
 import co.edu.uniquindio.proyecto.services.interfaces.CommentaryService;
 import co.edu.uniquindio.proyecto.services.interfaces.PlaceService;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,11 @@ public class ComentaryServiceImpl implements CommentaryService {
 
     @Override
     public void comment(CommentDTO commentDTO) throws CommentException {
+       /* userId,
+                @NotBlank(message = "Place is required") @Length(max = 100) String placeId,
+                @NotBlank(message = "Comment is required") String comment,
+                @NotBlank(message = "Score is required") String score,
+                @NotBlank(message = "Date is required") @DateTimeFormat LocalDateTime date*/
 
     }
 
@@ -55,6 +63,25 @@ public class ComentaryServiceImpl implements CommentaryService {
                     c.getScore()
             ));
         }
+        /*
+        b.comentarios.aggregate(
+	{
+		$match: {codigoNegocio: "Negocio1"}
+	},
+	{
+		$lookup:
+		{
+			from: "clientes",
+			localField: "codigoCliente",
+			foreignField: "_id",
+			as: "ciente"
+		}
+	},
+	{
+		$projection: { nombreCliente: "$cliente.nombre", fotoCliente: "$cliente.foto"}
+	}
+)
+         */
 
         return response;
     }

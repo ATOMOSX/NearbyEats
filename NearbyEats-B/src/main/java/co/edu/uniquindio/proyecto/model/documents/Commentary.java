@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -13,15 +12,14 @@ import java.util.List;
 @Document(collection = "comentarios")
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Comentary {
+public class Commentary {
 
     @Id
     private String id;
     private String nickName;
     private String commentary;
     private LocalDateTime date;
-    private String image;
-    private Comentary answer;
-    private String score;
+    private Commentary answer;
+    private int score;
 
 }
