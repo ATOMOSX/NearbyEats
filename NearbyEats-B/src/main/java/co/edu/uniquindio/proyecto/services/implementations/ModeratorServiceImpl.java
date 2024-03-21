@@ -36,5 +36,17 @@ public class ModeratorServiceImpl implements ModeratorService {
     @Override
     public void changePassword(ModeratorChangePasswordDTO moderatorChangePasswordDTO) throws ModeratorChangePassworException {
 
+        Optional<Moderator> moderatorOptional = moderatorRepo.findById(moderatorChangePasswordDTO.id());
+
+        if (moderatorOptional.isEmpty()) {
+            throw new ModeratorChangePassworException("El moderator no puede presentar un id vacío o nulo");
+        }
+        
+        //if(!token.equals(changePasswordDTO.password())
+        //throw new ChangePasswordException("Token inválido");
+
+        Moderator moderator = moderatorOptional.get();
+        moderator.setPassword(moderatorChangePasswordDTO.password());
+        moderatorRepo.save(moderator);
     }
 }
