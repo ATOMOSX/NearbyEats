@@ -11,8 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -20,6 +24,7 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepo clientRepo;
+    private Set<String> forbiddenNickName;
 
     @Override
     public String login(ClientLoginDTO clientLoginDTO) throws ClientLoginException {
@@ -161,6 +166,19 @@ public class ClientServiceImpl implements ClientService {
                 c.getEmail(),
                 c.getCity())).toList();
     }
+
+    private void uploadForbiddenName() {
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("usuarios_prohibidos.txt"))) {
+            String nickName;
+            while ((nickName = bufferedReader.readLine() ) != null) {
+                forbiddenNickName.add(nickName.trim());
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public boolean isForbiddenNickName (String nickName) {return forbiddenNickName.contains(nickName);}
 
     public boolean existsNickname(String nickname){
         return clientRepo.findByNickname(nickname).isPresent();
