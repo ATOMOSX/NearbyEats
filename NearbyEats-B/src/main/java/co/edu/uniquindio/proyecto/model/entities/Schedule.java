@@ -6,6 +6,8 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Schedule {
     private String dayOfWeek;
     private LocalTime openingTime;

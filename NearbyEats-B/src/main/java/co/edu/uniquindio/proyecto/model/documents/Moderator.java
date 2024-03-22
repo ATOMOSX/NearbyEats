@@ -11,10 +11,8 @@ import java.util.List;
 
 @Getter
 @Setter
-
 @Document(collection = "moderadores")
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Moderator extends User implements Serializable {
 
     @Id
