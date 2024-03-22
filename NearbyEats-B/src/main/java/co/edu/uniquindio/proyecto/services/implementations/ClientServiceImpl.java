@@ -2,11 +2,15 @@ package co.edu.uniquindio.proyecto.services.implementations;
 
 import co.edu.uniquindio.proyecto.dto.client.ItemClientDTO;
 import co.edu.uniquindio.proyecto.dto.client.*;
+import co.edu.uniquindio.proyecto.dto.email.EmailDTO;
 import co.edu.uniquindio.proyecto.exceptions.client.*;
+import co.edu.uniquindio.proyecto.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.model.enums.Status;
 import co.edu.uniquindio.proyecto.repository.ClientRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.ClientService;
+import co.edu.uniquindio.proyecto.services.interfaces.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,7 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepo clientRepo;
     private Set<String> forbiddenNickName;
+    private EmailService emailService;
 
     @Override
     public String login(ClientLoginDTO clientLoginDTO) throws ClientLoginException {
@@ -98,14 +103,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void sendRecoveryEmail(String email) throws SendRecoveryEmailException {
+    public void sendRecoveryEmail(String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
         Optional<Client> clientOptional = clientRepo.findByEmail(email);
 
         if (clientOptional.isEmpty()){
             throw new SendRecoveryEmailException("El email no puede ser vacio");
         }
-       // emailService.sendEmail("Cambio de contraseña de NeabryEats", email,
-         //     "Para cambiar la contraseña accede al siguiente enlace http://......./params ");
+
+        emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
+                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", ""));
     }
 
     @Override
