@@ -15,6 +15,7 @@ public record CreatePlaceDTO(
         @NotBlank(message = "El campo de fotos esta vacio")List<String> pictures,
         @NotBlank(message = "Los horarios estan vacio" ) List<Schedule> schedule,
         @NotBlank(message = "Los horarios estan vacios" ) List<String> phones,
-        @NotBlank(message = "No se ha establecido una categoria" ) List<Category> categories
+        @NotBlank(message = "No se ha establecido una categoria" ) List<Category> categories,
+        String clientId
         ) {
 }

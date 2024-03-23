@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Document(collection = "clientes")
 @ToString
 public class Client extends User implements Serializable {

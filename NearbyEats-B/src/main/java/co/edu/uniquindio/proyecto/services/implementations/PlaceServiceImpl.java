@@ -2,10 +2,12 @@ package co.edu.uniquindio.proyecto.services.implementations;
 
 import co.edu.uniquindio.proyecto.dto.place.*;
 import co.edu.uniquindio.proyecto.exceptions.place.*;
+import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.model.documents.Place;
 import co.edu.uniquindio.proyecto.model.entities.Ubication;
 import co.edu.uniquindio.proyecto.model.enums.Category;
 import co.edu.uniquindio.proyecto.model.enums.Status;
+import co.edu.uniquindio.proyecto.repository.ClientRepo;
 import co.edu.uniquindio.proyecto.repository.PlaceRepo;
 import co.edu.uniquindio.proyecto.services.interfaces.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -23,18 +26,22 @@ import java.util.*;
 public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepo placeRepo;
+    private final ClientRepo clientRepo;
     private Set<String> forbiddenName;
 
     @Override
     public void createPlace(CreatePlaceDTO createPlaceDTO) throws CreatePlaceException {
-
         if (existName(createPlaceDTO.name())) {
-            throw new CreatePlaceException("El nombre que deseas usar ya se encuentra disponible, por favor verificalo bien");
+            throw new CreatePlaceException("El nombre que deseas usar no se encuentra disponible, por favor intenta " +
+                    "ingresar uno nuevo");
         }
 
         if (isForbiddenName(createPlaceDTO.name())) {
-            throw new CreatePlaceException("El nombre que deseas usar no esta permitido en nuestra plataforma");
+            throw new CreatePlaceException("El nombre que deseas usar no está permitido en nuestra plataforma");
         }
+
+        Optional<Client> optionalClient = clientRepo.findById(createPlaceDTO.clientId());
+        Client client = optionalClient.get();
 
         Place place = Place.builder()
                 .name(createPlaceDTO.name())
@@ -44,34 +51,41 @@ public class PlaceServiceImpl implements PlaceService {
                 .schedule(createPlaceDTO.schedule())
                 .phones(createPlaceDTO.phones())
                 .categories(createPlaceDTO.categories())
+                .creationDate(LocalDateTime.now())
                 .build();
 
-
-        Place registerPlace = placeRepo.save(place);
+        client.getCreatedPlaces().add(place);
+        placeRepo.save(place);
+        clientRepo.save(client);
     }
 
     @Override
     public void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
-
         Optional<Place> placeOptional = placeRepo.findById(deletePlaceDTO.idPlace());
 
         if (placeOptional.isEmpty()) {
-            throw new DeletePlaceException("El id del lugar esta vacio, no puede ser eliminado");
+            throw new DeletePlaceException("El id del lugar esta vacío, no puede ser eliminado");
         }
+
+        Optional<Client> optionalClient = clientRepo.findById(deletePlaceDTO.clientId());
+        Client client = optionalClient.get();
 
         Place place = placeOptional.get();
         place.setStatus(Status.INACTIVE);
+        place.setDeletionDate(LocalDateTime.now());
+        int placeIndex = client.getCreatedPlaces().indexOf(place);
+        client.getCreatedPlaces().set(placeIndex, null);
 
         placeRepo.save(place);
+        clientRepo.save(client);
     }
 
     @Override
     public void updatePlace(UpdatePlaceDto updatePlaceDto) throws UpdatePlaceException {
-
         Optional<Place> placeOptional = placeRepo.findById(updatePlaceDto.id());
 
         if (placeOptional.isEmpty()) {
-            throw new UpdatePlaceException("El id del negocio no puede estar vacio para poder actualizarlo");
+            throw new UpdatePlaceException("El id del negocio no puede estar vacío para poder actualizarlo");
         }
 
         Place place = placeOptional.get();
@@ -82,34 +96,32 @@ public class PlaceServiceImpl implements PlaceService {
         place.setSchedule(updatePlaceDto.schedule());
         place.setPhones(updatePlaceDto.phones());
         place.setCategories(updatePlaceDto.categories());
+
+        placeRepo.save(place);
     }
 
     @Override
-    public List<String> searchPlace(SearchPlaceDTO searchPlaceDTO) throws SearchPlaceException {
+    public List<ListPlaceDTO> listPlaceByCategory(Category category) throws SearchPlaceException {
+        if (existCategory(category))
+            throw new SearchPlaceException("La categoría que estás buscando se encuentra vacía");
 
-        List<String> searchPlaces = new ArrayList<>();
+        return placeRepo.findByCategory(category);
+    }
 
-        if (existName(searchPlaceDTO.name())) {
-            throw new SearchPlaceException("El nombre que estas buscando no se encuentra en la base de datos");
-        }
+    @Override
+    public List<ListPlaceDTO> listPlaceByLocation(Ubication location) throws SearchPlaceException {
+        if (existLocation(location))
+            throw new SearchPlaceException("La ubicación que estás tratando de buscar se encuentra vacía");
 
-        if (existCategory(Collections.singletonList(searchPlaceDTO.category()))) {
-            throw new SearchPlaceException("La categoria que estas buscando se encuentra vacia");
-        }
+        return placeRepo.findByLocation(location);
+    }
 
-        if (existLocation(searchPlaceDTO.location())) {
-            throw new SearchPlaceException("La ubicación que estas tratando de buscar se encuentra vacia");
-        }
+    @Override
+    public List<ListPlaceDTO> listPlaceByName(String name) throws SearchPlaceException {
+        if (existName(name))
+            throw new SearchPlaceException("El nombre que estás buscando no se encuentra en la base de datos");
 
-        List<String> searchPlace = placeRepo.findByCriteria(searchPlaceDTO);
-
-        for (String place : searchPlace) {
-
-            searchPlace.add(searchPlaceDTO.name());
-        }
-
-        return searchPlaces;
-
+        return placeRepo.findByName(name);
     }
 
     @Override
@@ -125,15 +137,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<ItemPlaceOwnerDTO> listPlaceOwner(ListPlaceOwnerDTO listPlaceOwnerDTO) throws ListPlaceOwnerException {
+    public List<ItemPlaceOwnerDTO> listPlaceOwner(String clientId) throws ListPlaceOwnerException {
+        Optional<Client> clientOptional = clientRepo.findById(clientId);
 
-        List<Place> places = placeRepo.findByOwner(listPlaceOwnerDTO.idClient());
+        if(clientOptional.isEmpty())
+            throw new ListPlaceOwnerException("El cliente no existe");
 
-        return places.stream().map(
-                p -> new ItemPlaceOwnerDTO(
-                        p.getId(),
-                        p.getName(),
-                        p.getDescription())).toList();
+        return clientRepo.findPlacesById(clientId);
     }
 
     @Override
@@ -163,15 +173,15 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     public boolean existName(String name){
-        return placeRepo.findByNamePlace(name).isPresent();
+        return placeRepo.findByName(name).isEmpty();
     }
 
     public boolean existLocation(Ubication location){
-        return !placeRepo.findByLocation(location).isEmpty();
+        return placeRepo.findByLocation(location).isEmpty();
     }
 
-    public boolean existCategory(List<Category> categories){
-        return !placeRepo.findByCategories(categories).isEmpty();
+    public boolean existCategory(Category category){
+        return placeRepo.findByCategory(category).isEmpty();
     }
 
     private void uploadForbiddenName() {

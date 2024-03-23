@@ -11,6 +11,6 @@ public record ItemClientDTO<City>(
         String profilePhoto,
         String nickname,
         String email,
-        City city
+        String city
 ) {
 }

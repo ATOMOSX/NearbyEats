@@ -19,13 +19,14 @@ import java.util.Optional;
 public class ModeratorServiceImpl implements ModeratorService {
 
     private final ModeratorRepo moderatorRepo;
+
     @Override
     public void login(ModeratorLoginDTO moderatorLoginDTO) throws ModeratorLoginException {
 
-        Optional<Moderator> moderatorOptional = moderatorRepo.findByNickname(moderatorLoginDTO.nickname());
+        Optional<Moderator> moderatorOptional = moderatorRepo.findByEmail(moderatorLoginDTO.email());
 
         if (moderatorOptional.isEmpty()){
-            throw new ModeratorLoginException("El nickName no existe");
+            throw new ModeratorLoginException("El email no existe");
         }
 
         if (!moderatorOptional.get().getPassword().equals(moderatorLoginDTO.password())){
