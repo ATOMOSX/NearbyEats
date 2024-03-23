@@ -4,11 +4,14 @@ import co.edu.uniquindio.proyecto.exceptions.image.UploadImageException;
 import co.edu.uniquindio.proyecto.exceptions.image.deleteImageException;
 import co.edu.uniquindio.proyecto.services.interfaces.ImagesService;
 import com.cloudinary.Cloudinary;
-import jakarta.mail.Multipart;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,20 +25,31 @@ public class ImagesServiceImpl implements ImagesService {
     public ImagesServiceImpl() {
 
         Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", "SU_CLOUD_NAME");
-        config.put("api_key", "SU_API_KEY");
-        config.put("api_secret", "SU_API_SECRET");
+        config.put("cloud_name", "dzdswg3j5");
+        config.put("api_key", "512362591958621");
+        config.put("api_secret", "kwc-ePHWaBdJNXpcORZFxOHRHWQ");
 
         cloudinary = new Cloudinary(config);
     }
-    
+
     @Override
-    public Map uploadImage(Multipart image) throws UploadImageException {
-        return null;
+    public Map uploadImage(MultipartFile image) throws UploadImageException, IOException {
+        File file = convert(image);
+        return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "NearbyEats"));
     }
 
     @Override
-    public Map deleteImage(String idImage) throws deleteImageException {
-        return null;
+    public Map deleteImage(String idImage) throws deleteImageException, IOException {
+        return cloudinary.uploader().destroy(idImage, ObjectUtils.emptyMap());
+    }
+
+    private File convert(MultipartFile image) throws IOException {
+
+        File file = File.createTempFile(image.getOriginalFilename(), null);
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(image.getBytes());
+        fileOutputStream.close();
+
+        return file;
     }
 }
