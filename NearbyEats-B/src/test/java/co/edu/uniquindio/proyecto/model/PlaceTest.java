@@ -36,7 +36,7 @@ public class PlaceTest {
                 List.of(new Schedule("Monday", LocalTime.of(10, 00), LocalTime.of(20, 30))),
                 List.of("1234567"),
                 List.of(Category.RESTAURANT),
-                "65fdf34f7520694d06ac400d"
+                "6600c6932817b9077153bfec"
         );
 
         Optional<Client> optionalClient = clientRepo.findById(createPlaceDTO.clientId());

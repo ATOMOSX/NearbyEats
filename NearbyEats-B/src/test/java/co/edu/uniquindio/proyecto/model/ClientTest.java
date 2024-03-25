@@ -47,4 +47,32 @@ public class ClientTest {
         System.out.println(client1.getId());
         Assertions.assertNotNull(client1);
     }
+
+    @Test
+    public void createClientTwoTest() {
+        ClientRegistrationDTO clientRegistrationDTO = new ClientRegistrationDTO(
+                "Pedrito",
+                "Pérez",
+                "pedir",
+                "pedri@correo.com",
+                "yose.jpg",
+                "Montenegro",
+                "elpepe"
+        );
+
+        Client client = Client.builder()
+                .nickname(clientRegistrationDTO.nickname())
+                .city(clientRegistrationDTO.city())
+                .profilePhoto(clientRegistrationDTO.profilePhoto())
+                .firstName(clientRegistrationDTO.firstName())
+                .lastName(clientRegistrationDTO.lastName())
+                .password(clientRegistrationDTO.password())
+                .status(Status.ACTIVE)
+                .email(clientRegistrationDTO.email())
+                .build();
+
+        Client client1 = clientRepo.save(client);
+        System.out.println(client1.getId());
+        Assertions.assertNotNull(client1);
+    }
 }
