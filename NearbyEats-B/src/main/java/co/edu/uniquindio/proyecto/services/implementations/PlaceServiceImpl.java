@@ -67,10 +67,15 @@ public class PlaceServiceImpl implements PlaceService {
             throw new DeletePlaceException("El id del lugar esta vacío, no puede ser eliminado");
         }
 
+        Place place = placeOptional.get();
+
+        if (place.getStatus() == Status.INACTIVE) {
+            throw new DeletePlaceException("No se puede obtener un lugar inactivo");
+        }
+
         Optional<Client> optionalClient = clientRepo.findById(deletePlaceDTO.clientId());
         Client client = optionalClient.get();
 
-        Place place = placeOptional.get();
         place.setStatus(Status.INACTIVE);
         place.setDeletionDate(LocalDateTime.now());
         int placeIndex = client.getCreatedPlaces().indexOf(place);
