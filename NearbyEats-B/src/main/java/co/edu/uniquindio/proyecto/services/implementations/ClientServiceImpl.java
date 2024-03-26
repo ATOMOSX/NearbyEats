@@ -111,7 +111,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
-                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", ""));
+                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", email));
     }
 
     @Override
