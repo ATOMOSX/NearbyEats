@@ -52,6 +52,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .phones(createPlaceDTO.phones())
                 .categories(createPlaceDTO.categories())
                 .creationDate(LocalDateTime.now())
+                .status(Status.WAITING)
                 .build();
 
         client.getCreatedPlaces().add(place);

@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.model;
 
-import co.edu.uniquindio.proyecto.dto.place.CreatePlaceDTO;
-import co.edu.uniquindio.proyecto.dto.place.DeletePlaceDTO;
+import co.edu.uniquindio.proyecto.dto.place.*;
 import co.edu.uniquindio.proyecto.exceptions.place.DeletePlaceException;
 import co.edu.uniquindio.proyecto.model.documents.Client;
 import co.edu.uniquindio.proyecto.model.documents.Place;
@@ -40,7 +39,8 @@ public class PlaceTest {
                 List.of(new Schedule("Monday", LocalTime.of(10, 00), LocalTime.of(20, 30))),
                 List.of("1234567"),
                 List.of(Category.RESTAURANT),
-                "6600c6932817b9077153bfec"
+                "6600c6932817b9077153bfec",
+                Status.WAITING
         );
 
         Optional<Client> optionalClient = clientRepo.findById(createPlaceDTO.clientId());
@@ -74,7 +74,44 @@ public class PlaceTest {
                 List.of(new Schedule("Monday", LocalTime.of(10, 00), LocalTime.of(20, 30))),
                 List.of("1234567", "987654321"),
                 List.of(Category.HOTEL),
-                "6600cc9e7746d640ddb0f10e"
+                "6600cc9e7746d640ddb0f10e",
+                Status.WAITING
+        );
+
+        Optional<Client> optionalClient = clientRepo.findById(createPlaceDTO.clientId());
+        Client client = optionalClient.get();
+
+        Place place = Place.builder()
+                .name(createPlaceDTO.name())
+                .description(createPlaceDTO.description())
+                .location(createPlaceDTO.location())
+                .pictures(createPlaceDTO.pictures())
+                .schedule(createPlaceDTO.schedule())
+                .phones(createPlaceDTO.phones())
+                .categories(createPlaceDTO.categories())
+                .creationDate(LocalDateTime.now())
+                .build();
+
+        client.setCreatedPlaces(List.of(place));
+        Place place1 = placeRepo.save(place);
+        Client client1 = clientRepo.save(client);
+        Assertions.assertNotNull(place1);
+        Assertions.assertNotNull(client1);
+    }
+
+
+    @Test
+    public void createPlaceThreeTest() {
+        CreatePlaceDTO createPlaceDTO = new CreatePlaceDTO(
+                "Mega Perro",
+                "Los mejores perros de la ciudad para compartir con tus familiares o amigos favoritos",
+                new Ubication(12.3456f, -67.8910f),
+                List.of("picture", "picture2", "picture 3"),
+                List.of(new Schedule("Monday", LocalTime.of(10, 00), LocalTime.of(20, 30))),
+                List.of("1234567", "987654321"),
+                List.of(Category.HOTEL),
+                "6600cc9e7746d640ddb0f10e",
+                Status.WAITING
         );
 
         Optional<Client> optionalClient = clientRepo.findById(createPlaceDTO.clientId());
@@ -123,5 +160,106 @@ public class PlaceTest {
         placeRepo.save(place);
         clientRepo.save(client);
         Assertions.assertNotNull(placeOptional);
+    }
+
+    @Test
+    public void updatePlaceTest() {
+        UpdatePlaceDto updatePlaceDto = new UpdatePlaceDto(
+                "66035b13be401d4201e38d37",
+                "Mega Dog Dog Hot",
+                "Los mejores perros de la ciudad para compartir con tus familiares o amigos favoritos",
+                new Ubication(12.3456f, -67.8910f),
+                List.of("picture", "picture2", "picture 3"),
+                List.of(new Schedule("Monday", LocalTime.of(10, 00), LocalTime.of(20, 30))),
+                List.of("1234567", "987654321"),
+                List.of(Category.HOTEL)
+        );
+
+        Optional<Place> placeOptional = placeRepo.findById(updatePlaceDto.id());
+
+        Place place = placeOptional.get();
+        place.setName(updatePlaceDto.name());
+        place.setDescription(updatePlaceDto.description());
+        place.setLocation(updatePlaceDto.location());
+        place.setPictures(updatePlaceDto.pictures());
+        place.setSchedule(updatePlaceDto.schedule());
+        place.setPhones(updatePlaceDto.phones());
+        place.setCategories(updatePlaceDto.categories());
+
+        placeRepo.save(place);
+        Assertions.assertNotNull(placeOptional);
+    }
+
+    @Test
+    public void listPlaceByCategoryTest() {
+        Category category = Category.HOTEL;
+
+        List<ListPlaceDTO> placeList = placeRepo.findByCategory(category);
+        System.out.println(placeList);
+        Assertions.assertNotNull(placeList);
+    }
+
+    @Test
+    public void listPlaceByLocationTest() {
+        Ubication ubication = new Ubication(36.7892f, -105.4347f);
+
+        List<ListPlaceDTO> placeList = placeRepo.findByLocation(ubication);
+        System.out.println(placeList);
+        Assertions.assertNotNull(placeList);
+    }
+
+    @Test
+    public void listPlaceByNameTest() {
+        // podemos agregar cualquier palabra que contenga y nos arrojará la consulta como hospedaje, exito, etc.
+        String name = "exito";
+
+        List<ListPlaceDTO> placeList = placeRepo.findByName(name);
+        System.out.println(placeList);
+        Assertions.assertNotNull(placeList);
+    }
+
+    @Test
+    public void filterStatusPlaceTest() {
+        List<Place> places = placeRepo.findByStatus(Status.ACTIVE);
+
+       List<ItemPlaceStatusDTO> placesMap = places.stream().map(
+                p -> new ItemPlaceStatusDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription())).toList();
+
+        System.out.println(placesMap);
+        Assertions.assertNotNull(placesMap);
+    }
+
+    //Resvisar este test
+    @Test
+    public void listPlaceOwnerTest() {
+//        String idClient = "6600cc9e7746d640ddb0f10e";
+//
+//        List<ItemPlaceOwnerDTO> placeOwnerDTOS = clientRepo.findPlacesById(idClient);
+//        System.out.println(placeOwnerDTOS);
+    }
+
+    @Test
+    public void getPlace() {
+        String idPlace = "66024e4d35ecb96f435959d9";
+
+        Optional<Place> placeOptional = placeRepo.findById(idPlace);
+        Place place = placeOptional.get();
+
+        GetPlaceDTO getPlaceDTO = new GetPlaceDTO(
+                idPlace,
+                place.getName(),
+                place.getDescription(),
+                place.getLocation(),
+                place.getPictures(),
+                place.getSchedule(),
+                place.getPhones(),
+                place.getCategories(),
+                place.getRevisionsHistory()
+        );
+        System.out.println(getPlaceDTO);
+        Assertions.assertNotNull(place);
     }
 }

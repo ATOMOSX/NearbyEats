@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.dto.place;
 import co.edu.uniquindio.proyecto.model.entities.Schedule;
 import co.edu.uniquindio.proyecto.model.entities.Ubication;
 import co.edu.uniquindio.proyecto.model.enums.Category;
+import co.edu.uniquindio.proyecto.model.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ public record CreatePlaceDTO(
         @NotBlank(message = "Los horarios estan vacio" ) List<Schedule> schedule,
         @NotBlank(message = "Los horarios estan vacios" ) List<String> phones,
         @NotBlank(message = "No se ha establecido una categoria" ) List<Category> categories,
-        String clientId
+        @NotBlank(message = "clientId is required") String clientId,
+        @NotBlank(message = "status is required") Status status
+
         ) {
 }
