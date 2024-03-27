@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.implementationstest;
 
 import co.edu.uniquindio.proyecto.dto.comment.CommentDTO;
 import co.edu.uniquindio.proyecto.model.documents.Client;
