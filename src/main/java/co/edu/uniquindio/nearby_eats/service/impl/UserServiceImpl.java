@@ -2,7 +2,6 @@ package co.edu.uniquindio.nearby_eats.service.impl;
 
 import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserChangePasswordDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
@@ -30,28 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(UserLoginDTO userLoginDTO) throws Exception {
-        Optional<User> user = userRepository.findByNicknameAndIsActive(userLoginDTO.nickname(), true);
-        if (user.isPresent()) {
-            // TODO: Decrypt password
-            if (user.get().getPassword().equals(userLoginDTO.password())) {
-                return user.get().getId(); // TODO: Generate and return token
-            } else {
-                throw new Exception("Invalid password");
-            }
-        } else {
-            throw new Exception("User not found");
-        }
-    }
-
-    @Override
     public String register(UserRegistrationDTO userRegistrationDTO) throws Exception {
 
-        if (userRepository.existsByEmailAndIsActive(userRegistrationDTO.email(), true)) {
+        if (userRepository.existsByEmail(userRegistrationDTO.email(), true)) {
             throw new Exception("Email already exists");
         }
 
-        if (userRepository.existsByNicknameAndIsActive(userRegistrationDTO.nickname(), true)) {
+        if (userRepository.existsByNickname(userRegistrationDTO.nickname(), true)) {
             throw new Exception("Nickname already exists");
         }
 
@@ -135,8 +119,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private User getUserById(String id) throws Exception {
-        Optional<User> user = userRepository.findByIdAndIsActive(id, true);
-        if (user.isPresent()) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent() && user.get().getIsActive()) {
             return user.get();
         } else {
             throw new Exception("User not found");

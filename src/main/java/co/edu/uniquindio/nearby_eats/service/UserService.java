@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface UserService {
 
-    String login(UserLoginDTO userLoginDTO) throws Exception;
-
     String register(UserRegistrationDTO userRegistrationDTO) throws Exception;
 
     void updateUser(String id, UserUpdateDTO userUpdateDTO) throws Exception;

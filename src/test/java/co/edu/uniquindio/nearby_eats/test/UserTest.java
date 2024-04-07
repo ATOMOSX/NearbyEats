@@ -1,6 +1,5 @@
 package co.edu.uniquindio.nearby_eats.test;
 
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
@@ -38,13 +37,6 @@ public class UserTest {
     }
 
     @Test
-    public void loginUserTest() throws Exception {
-        UserLoginDTO userLoginDTO = new UserLoginDTO("juanito123", "123456");
-        String userId = userService.login(userLoginDTO);
-        Assertions.assertNotNull(userId);
-    }
-
-    @Test
     public void updateUserTest() throws Exception {
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO(
                 "Juan",
@@ -72,7 +64,7 @@ public class UserTest {
     }
 
     @Test
-    public void sendRecoveryEmailTest() throws Exception {
+    public void sendRecoveryEmailTest() {
         Assertions.assertDoesNotThrow(() -> userService.sendRecoveryEmail("jloaizanieto@gmail.com")); // Email must exist
     }
 

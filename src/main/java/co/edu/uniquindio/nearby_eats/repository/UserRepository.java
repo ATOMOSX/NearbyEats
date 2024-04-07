@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByIdAndIsActive(String id, Boolean isActive);
+    Optional<User> findById(String id, Boolean isActive);
+    Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
-    Boolean existsByEmailAndIsActive(String email, Boolean isActive);
-    Boolean existsByNicknameAndIsActive(String nickname, Boolean isActive);
-    Optional<User> findByNicknameAndIsActive(String nickname, Boolean isActive);
-
+    Boolean existsByEmail(String email, Boolean isActive);
+    Boolean existsByNickname(String nickname, Boolean isActive);
+    Optional<User> findByNickname(String nickname, Boolean isActive);
     List<User> findAllByIsActive(Boolean isActive);
 }
