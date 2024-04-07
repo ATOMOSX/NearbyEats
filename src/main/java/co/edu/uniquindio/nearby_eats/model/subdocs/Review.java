@@ -1,18 +1,18 @@
 package co.edu.uniquindio.nearby_eats.model.subdocs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Review implements Serializable {
-    private String moderator;
+    private String moderatorId;
     private LocalDate date;
     private String action;
-    private String comment;
+    private String commentary;
 }
