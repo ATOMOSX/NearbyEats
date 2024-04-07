@@ -1,7 +1,8 @@
 package co.edu.uniquindio.nearby_eats.model.enums;
 
-public enum RevisionStatus {
+public enum PlaceStatus {
     PENDING,
     APPROVED,
-    REJECTED
+    REJECTED,
+    DELETED
 }
