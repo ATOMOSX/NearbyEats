@@ -153,17 +153,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendRecoveryEmail(String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
-        if (userRepository.existsByEmail(email)) {
-            // TODO: Generate token and replace 123
+        Optional<User> clientOptional = userRepository.findByEmail(email);
 
-            emailService.sendEmail(
-                    new EmailDTO(
-                            email,
-                            "Cambio de contraseña - Nearby Eats",
-                            "Para cambiar tu contraseña, haz clic en el siguiente enlace: http://localhost:8080/recovery?token=123"
-                    )
-            );
+        if (clientOptional.isEmpty()){
+            throw new SendRecoveryEmailException("El email no puede ser vacio");
         }
+
+        emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
+                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", email));
+
     }
 
     @Override

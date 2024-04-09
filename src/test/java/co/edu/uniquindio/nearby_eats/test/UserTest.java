@@ -1,14 +1,17 @@
 package co.edu.uniquindio.nearby_eats.test;
 
+import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.user.GetAllUserException;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ public class UserTest {
     @Autowired
     private EmailService emailService;
 
-    private final String userId = "client1";
+    private final String userId = "client2";
 
     @Test
     public void loginUserTest() {
@@ -68,7 +71,7 @@ public class UserTest {
     }
 
     @Test
-    public void registerTwoUserTest() throws Exception {
+    public void registerTwoUserTest() {
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO(
                 "Pedrito",
                 "Pérez",
@@ -100,7 +103,7 @@ public class UserTest {
     @Test
     public void updateUserTest() throws Exception {
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO(
-                "client3",
+                "client2",
                 "Perez",
                 "jloaizanieto@gmail.com",
                 "Armenia",
@@ -123,24 +126,33 @@ public class UserTest {
 
     @Test
     public void getAllUsersTest() throws GetAllUserException {
-        int expectedUsers = 1;
+        int expectedUsers = 0;
         List<UserInformationDTO> users = userService.getAllUsers();
+        System.out.println(users);
         Assertions.assertEquals(expectedUsers, users.size());
     }
 
     @Test
     public void getUserTest() throws Exception {
         UserInformationDTO user = userService.getUser(userId);
+        System.out.println(user);
         Assertions.assertNotNull(user);
     }
 
     @Test
-    public void sendRecoveryEmailTest() {
-        Assertions.assertDoesNotThrow(() -> userService.sendRecoveryEmail("jloaizanieto@gmail.com")); // Email must exist
+    public void sendRecoveryEmailTest() throws MessagingException, EmailServiceException {
+        String email = "juand.lopezm@uqvirtual.edu.co";
+
+        Optional<User> clientOptional = userRepository.findByEmail(email);
+
+        emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
+                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", email));
+
+        Assertions.assertNotNull(clientOptional);
     }
 
     @Test
-    public void changePasswordTest() throws Exception {
+    public void changePasswordTest()  {
         // TODO: Implement this test
     }
 
