@@ -17,7 +17,7 @@ public interface UserService {
 
     String register(UserRegistrationDTO userRegistrationDTO) throws UserRegistrationException;
 
-    void updateUser(UserUpdateDTO) throws UpdateAccountException;
+    void updateUser(UserUpdateDTO userUpdateDTO) throws UpdateAccountException;
 
     void deleteUser(String id) throws DeleteAccountException;
 
