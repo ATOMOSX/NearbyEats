@@ -2,6 +2,7 @@ package co.edu.uniquindio.nearby_eats.service.impl;
 
 import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,7 +16,7 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public void sendEmail(EmailDTO emailDTO) throws Exception {
+    public void sendEmail(EmailDTO emailDTO) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 

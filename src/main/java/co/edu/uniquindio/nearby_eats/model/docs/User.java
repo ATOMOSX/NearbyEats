@@ -38,7 +38,7 @@ public class User implements Serializable {
 
     private List<String> roles;
 
-    private Boolean isActive = true;
+    private Boolean isActive = true; // Me genera un nullPointer
 
     private List<String> favoritePlaces;
 
