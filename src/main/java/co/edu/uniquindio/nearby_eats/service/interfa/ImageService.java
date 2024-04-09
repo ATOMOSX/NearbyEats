@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.service;
+package co.edu.uniquindio.nearby_eats.service.interfa;
 
 import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;

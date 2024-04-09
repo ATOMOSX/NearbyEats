@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.service;
+package co.edu.uniquindio.nearby_eats.service.interfa;
 
 import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;

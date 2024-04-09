@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.service;
+package co.edu.uniquindio.nearby_eats.service.interfa;
 
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;

@@ -1,6 +1,6 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
-import co.edu.uniquindio.nearby_eats.service.ImageService;
+import co.edu.uniquindio.nearby_eats.service.interfa.ImageService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.stereotype.Service;

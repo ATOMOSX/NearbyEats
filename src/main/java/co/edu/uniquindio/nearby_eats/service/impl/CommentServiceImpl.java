@@ -11,7 +11,7 @@ import co.edu.uniquindio.nearby_eats.model.subdocs.Reply;
 import co.edu.uniquindio.nearby_eats.repository.CommentRepository;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
-import co.edu.uniquindio.nearby_eats.service.CommentService;
+import co.edu.uniquindio.nearby_eats.service.interfa.CommentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

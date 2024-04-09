@@ -15,7 +15,7 @@ import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
-import co.edu.uniquindio.nearby_eats.service.PlaceService;
+import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;

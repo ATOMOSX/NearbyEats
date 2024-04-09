@@ -4,7 +4,7 @@ import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
-import co.edu.uniquindio.nearby_eats.service.AuthenticationService;
+import co.edu.uniquindio.nearby_eats.service.interfa.AuthenticationService;
 import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

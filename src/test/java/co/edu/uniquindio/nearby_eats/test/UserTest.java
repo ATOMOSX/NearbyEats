@@ -3,7 +3,7 @@ package co.edu.uniquindio.nearby_eats.test;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
-import co.edu.uniquindio.nearby_eats.service.UserService;
+import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

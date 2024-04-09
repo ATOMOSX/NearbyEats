@@ -2,18 +2,22 @@ package co.edu.uniquindio.nearby_eats.service.impl;
 
 import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserChangePasswordDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.user.UpdateAccountException;
+import co.edu.uniquindio.nearby_eats.exceptions.user.UserLoginException;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
-import co.edu.uniquindio.nearby_eats.service.EmailService;
-import co.edu.uniquindio.nearby_eats.service.UserService;
+import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
+import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,10 +26,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private Set<String> forbiddenNickName;
+    private EmailService emailService;
 
     public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
+    }
+
+    @Override
+    public String login(UserLoginDTO userLoginDTO) throws UserLoginException {
+        Optional<User> userOptional = userRepository.findByEmail(userLoginDTO.email());
+
+        if (userOptional.isEmpty()){
+            throw new UserLoginException("El email no existe");
+        }
+
+        if (!userOptional.get().getPassword().equals(userLoginDTO.password()))
+            throw new UserLoginException("La contraseña es incorrecta");
+
+        return "token";
     }
 
     @Override
@@ -53,6 +73,11 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
         return saved.getId();
+    }
+
+    @Override
+    public void updateUser() throws UpdateAccountException {
+
     }
 
     @Override
