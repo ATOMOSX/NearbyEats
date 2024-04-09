@@ -1,6 +1,8 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
+import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +91,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .categories(placeCreateDTO.categories())
                 .status(PlaceStatus.PENDING.name())
                 .createdBy(placeCreateDTO.clientId())
+                .creationDate(LocalDateTime.now().toString())
                 .build();
 
         Place savedPlace = placeRepository.save(place);
@@ -100,32 +104,32 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void updatePlace(String placeId, PlaceCreateDTO placeCreateDTO) throws UpdatePlaceException {
-        Optional<Place> place = placeRepository.findById(placeId);
+    public void updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException {
+        Optional<Place> place = placeRepository.findById(updatePlaceDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new UpdatePlaceException("El lugar no existe");
         }
 
-        if (isBannedName(placeCreateDTO.name())) {
+        if (isBannedName(updatePlaceDTO.name())) {
             throw new UpdatePlaceException("El nombre del lugar no es permitido");
         }
 
         Place updatedPlace = place.get();
-        updatedPlace.setName(placeCreateDTO.name());
-        updatedPlace.setDescription(placeCreateDTO.description());
-        updatedPlace.setLocation(placeCreateDTO.location());
-        updatedPlace.setImages(placeCreateDTO.images());
-        updatedPlace.setSchedules(placeCreateDTO.schedule());
-        updatedPlace.setPhones(placeCreateDTO.phones());
-        updatedPlace.setCategories(placeCreateDTO.categories());
+        updatedPlace.setName(updatePlaceDTO.name());
+        updatedPlace.setDescription(updatePlaceDTO.description());
+        updatedPlace.setLocation(updatePlaceDTO.location());
+        updatedPlace.setImages(updatePlaceDTO.images());
+        updatedPlace.setSchedules(updatePlaceDTO.schedule());
+        updatedPlace.setPhones(updatePlaceDTO.phones());
+        updatedPlace.setCategories(updatePlaceDTO.categories());
 
         placeRepository.save(updatedPlace);
     }
 
     @Override
-    public void deletePlace(String placeId) throws DeletePlaceException {
-        Optional<Place> place = placeRepository.findById(placeId);
+    public void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
+        Optional<Place> place = placeRepository.findById(deletePlaceDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new DeletePlaceException("El lugar no existe");
@@ -133,8 +137,16 @@ public class PlaceServiceImpl implements PlaceService {
 
         Place deletedPlace = place.get();
         deletedPlace.setStatus(PlaceStatus.DELETED.name());
+        deletedPlace.setDeletionDate(LocalDateTime.now().toString());
+
+        Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
+        User user = optionalUser.get();
+
+        int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace);
+        user.getCreatedPlaces().set(placeIndex, null);
 
         placeRepository.save(deletedPlace);
+        userRepository.save(user);
     }
 
     @Override
@@ -205,7 +217,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         Review review = Review.builder()
                 .moderatorId(placeReviewDTO.moderatorId())
-                .date(LocalDate.now())
+                .date(LocalDateTime.now().toString())
                 .action(placeReviewDTO.action().name())
                 .commentary(placeReviewDTO.commentary())
                 .build();
@@ -221,5 +233,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         placeRepository.save(updatedPlace);
     }
+
+    // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
 
 }

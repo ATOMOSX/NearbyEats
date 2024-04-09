@@ -64,20 +64,22 @@ public class UserServiceImpl implements UserService {
             throw new UserRegistrationException("Nickname already exists");
         }
 
+        if(isForbiddenNickName(userRegistrationDTO.nickname()))
+            throw new UserRegistrationException("El nickname es inválido");
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encryptedPassword = passwordEncoder.encode(userRegistrationDTO.password());
-
 
         User user = User.builder()
                 .firstName(userRegistrationDTO.firstName())
                 .lastName(userRegistrationDTO.lastName())
                 .email(userRegistrationDTO.email())
-                .password(encryptedPassword) // TODO: Encrypt password
-                .nickname(userRegistrationDTO.nickname()) // TODO: Verify banned user names
+                .password(encryptedPassword)
+                .nickname(userRegistrationDTO.nickname())
                 .city(userRegistrationDTO.city())
                 .profilePicture(userRegistrationDTO.profilePicture())
                 .isActive(true)
-                .roles(List.of(UserRole.CLIENT.name()))
+                .role(UserRole.CLIENT.name())
                 .build();
 
         User saved = userRepository.save(user);

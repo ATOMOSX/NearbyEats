@@ -4,6 +4,7 @@ import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.user.GetAllUserException;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
@@ -22,8 +23,10 @@ public class UserTest {
 
     @Autowired
     private UserService userService;
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private EmailService emailService;
 
     private final String userId = "client1";
@@ -119,7 +122,7 @@ public class UserTest {
     }
 
     @Test
-    public void getAllUsersTest() {
+    public void getAllUsersTest() throws GetAllUserException {
         int expectedUsers = 1;
         List<UserInformationDTO> users = userService.getAllUsers();
         Assertions.assertEquals(expectedUsers, users.size());

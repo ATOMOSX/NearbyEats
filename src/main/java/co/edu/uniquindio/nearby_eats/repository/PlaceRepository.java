@@ -3,6 +3,7 @@ package co.edu.uniquindio.nearby_eats.repository;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface PlaceRepository extends MongoRepository<Place, String>{
-
 
     Boolean existsByName(String name);
 

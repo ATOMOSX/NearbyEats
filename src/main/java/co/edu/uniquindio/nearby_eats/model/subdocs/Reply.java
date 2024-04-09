@@ -1,17 +1,17 @@
 package co.edu.uniquindio.nearby_eats.model.subdocs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Reply implements Serializable {
     private String text;
-    private LocalDateTime date;
+    private String date;
     private String respondedBy;
 }

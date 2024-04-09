@@ -1,5 +1,6 @@
 package co.edu.uniquindio.nearby_eats.model.docs;
 
+import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,9 +37,9 @@ public class User implements Serializable {
 
     private String city;
 
-    private List<String> roles;
+    private String role;
 
-    private Boolean isActive = true; // Me genera un nullPointer
+    private Boolean isActive;
 
     private List<String> favoritePlaces;
 
