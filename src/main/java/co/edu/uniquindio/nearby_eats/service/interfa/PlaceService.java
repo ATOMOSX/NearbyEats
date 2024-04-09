@@ -1,6 +1,8 @@
 package co.edu.uniquindio.nearby_eats.service.interfa;
 
+import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
@@ -16,9 +18,9 @@ public interface PlaceService {
 
     void createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException;
 
-    void updatePlace(String placeId, PlaceCreateDTO placeCreateDTO) throws UpdatePlaceException;
+    void updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException;
 
-    void deletePlace(String placeId) throws DeletePlaceException;
+    void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException;
 
     PlaceResponseDTO getPlace(String placeId) throws GetPlaceException;
 

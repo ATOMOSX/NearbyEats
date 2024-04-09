@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Comment implements Serializable {
@@ -26,7 +28,7 @@ public class Comment implements Serializable {
 
     private String place;
 
-    private LocalDateTime date;
+    private String date;
 
     private Integer rating;
 

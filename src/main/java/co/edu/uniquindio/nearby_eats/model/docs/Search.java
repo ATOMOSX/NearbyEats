@@ -25,5 +25,5 @@ public class Search implements Serializable {
 
     private String query;
 
-    private LocalDateTime date;
+    private String date;
 }
