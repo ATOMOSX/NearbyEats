@@ -29,7 +29,8 @@ public class UserController {
 
     @PostMapping("/login-user")
     public ResponseEntity<MessageDTO<String>> login(@Valid @RequestBody UserLoginDTO userLoginDTO) throws UserLoginException {
-        return null;
+        userService.login(userLoginDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "login user successful"));
     }
     @PostMapping("/register-user")
     public ResponseEntity<MessageDTO<String>> register(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) throws UserRegistrationException {
