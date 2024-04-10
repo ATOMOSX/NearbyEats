@@ -1,5 +1,6 @@
 package co.edu.uniquindio.nearby_eats.controlers;
 
+import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserChangePasswordDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
@@ -11,6 +12,7 @@ import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,42 +28,47 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login-user")
-    public String login(@Valid @RequestBody UserLoginDTO userLoginDTO) throws UserLoginException {
+    public ResponseEntity<MessageDTO<String>> login(@Valid @RequestBody UserLoginDTO userLoginDTO) throws UserLoginException {
         return null;
     }
     @PostMapping("/register-user")
-    public String register(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) throws UserRegistrationException {
-        return null;
+    public ResponseEntity<MessageDTO<String>> register(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) throws UserRegistrationException {
+        userService.register(userRegistrationDTO);
+        return ResponseEntity.ok().body( new MessageDTO<>(false, "register user successful"));
     }
 
     @PostMapping("/update-account-user")
-    void updateUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
-
+    public ResponseEntity<MessageDTO<String>> updateUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
+        userService.updateUser(userUpdateDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "update user successful"));
     }
     @PostMapping("/delete-user")
-    void deleteUser(@Valid @RequestBody String id) throws DeleteAccountException {
-
+    public ResponseEntity<MessageDTO<String>> deleteUser(@Valid @RequestBody String id) throws DeleteAccountException {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }
 
     @PostMapping("/change-password/send-recovery-email")
-    void sendRecoveryEmail(@Valid @RequestBody String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
-
+    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@Valid @RequestBody String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
+        userService.sendRecoveryEmail(email);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "send email recovery email successful"));
     }
 
     @PostMapping("/change-password")
-    void changePassword(@Valid @RequestBody UserChangePasswordDTO userChangePasswordDTO) throws ChangePasswordException {
-
+    public ResponseEntity<MessageDTO<String>> changePassword(@Valid @RequestBody UserChangePasswordDTO userChangePasswordDTO) throws ChangePasswordException {
+        userService.changePassword(userChangePasswordDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "change password user is successful"));
     }
 
     @PostMapping("/get-all-users")
-    List<UserInformationDTO> getAllUsers() throws GetAllUserException {
-        return null;
+    public ResponseEntity<MessageDTO<List<UserInformationDTO>>> getAllUsers() throws GetAllUserException {
+        userService.getAllUsers();
+        return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getAllUsers()));
     }
 
     @PostMapping("/get-user")
-    UserInformationDTO getUser(@Valid @RequestBody String id) throws GetUserException {
-        return null;
+    public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@Valid @RequestBody String id) throws GetUserException {
+        userService.getUser(id);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));
     }
-
-
 }
