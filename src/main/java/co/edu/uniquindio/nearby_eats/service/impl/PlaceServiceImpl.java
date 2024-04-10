@@ -54,17 +54,6 @@ public class PlaceServiceImpl implements PlaceService {
         }
     }
 
-    private void loadBannedNames() throws IOException {
-        ClassPathResource resource = new ClassPathResource("banned_names.txt");
-        try (InputStream inputStream = resource.getInputStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                bannedNames.add(line.trim().toLowerCase());
-            }
-        }
-    }
-
     @Override
     public void createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException {
 
@@ -235,5 +224,16 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
+
+    private void loadBannedNames() throws IOException {
+        ClassPathResource resource = new ClassPathResource("banned_names.txt");
+        try (InputStream inputStream = resource.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                bannedNames.add(line.trim().toLowerCase());
+            }
+        }
+    }
 
 }

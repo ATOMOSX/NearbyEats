@@ -63,6 +63,7 @@ public class UserTest {
                 .lastName(userRegistrationDTO.lastName())
                 .password(encryptedPassword)
                 .email(userRegistrationDTO.email())
+                .isActive(true)
                 .build();
 
         User user1 = userRepository.save(user);
@@ -93,6 +94,7 @@ public class UserTest {
                 .lastName(userRegistrationDTO.lastName())
                 .password(encryptedPassword)
                 .email(userRegistrationDTO.email())
+                .isActive(true)
                 .build();
 
         User user1 = userRepository.save(user);
