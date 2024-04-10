@@ -9,6 +9,7 @@ import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.user.*;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserService userService;

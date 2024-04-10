@@ -13,6 +13,7 @@ import co.edu.uniquindio.nearby_eats.exceptions.place.UpdatePlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/place")
+@SecurityRequirement(name = "bearerAuth")
 public class PlaceController {
 
     private final PlaceService placeService;
