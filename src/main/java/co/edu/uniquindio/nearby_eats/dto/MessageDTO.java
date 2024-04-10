@@ -1,7 +1,7 @@
 package co.edu.uniquindio.nearby_eats.dto;
 
-public class MessageDTO<S> {
-
-    public MessageDTO(boolean b, S registerUserSuccessful) {
-    }
+public record MessageDTO <T>(
+        boolean error,
+        T response
+) {
 }

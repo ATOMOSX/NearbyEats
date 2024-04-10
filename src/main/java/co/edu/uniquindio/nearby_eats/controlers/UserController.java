@@ -13,10 +13,7 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,14 +40,14 @@ public class UserController {
         userService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "update user successful"));
     }
-    @PostMapping("/delete-user")
-    public ResponseEntity<MessageDTO<String>> deleteUser(@Valid @RequestBody String id) throws DeleteAccountException {
+    @PostMapping("/delete-user/{id}")
+    public ResponseEntity<MessageDTO<String>> deleteUser(@PathVariable String id) throws DeleteAccountException {
         userService.deleteUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }
 
-    @PostMapping("/change-password/send-recovery-email")
-    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@Valid @RequestBody String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
+    @PostMapping("/change-password/send-recovery-email/{email}")
+    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@PathVariable String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
         userService.sendRecoveryEmail(email);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "send email recovery email successful"));
     }
@@ -67,8 +64,8 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getAllUsers()));
     }
 
-    @PostMapping("/get-user")
-    public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@Valid @RequestBody String id) throws GetUserException {
+    @PostMapping("/get-user/{id}")
+    public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@PathVariable String id) throws GetUserException {
         userService.getUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));
     }
