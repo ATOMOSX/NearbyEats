@@ -51,14 +51,14 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlace(placeId)));
     }
 
-    @PostMapping("/get-place/by-category/category}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable String category) {
+    @PostMapping("/get-place/by-category/{category}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable String category) throws GetPlaceException {
         placeService.getPlacesByCategory(category);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(category)));
     }
 
     @PostMapping("/get-place/by-status/{status}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@PathVariable String status) {
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@PathVariable String status) throws GetPlaceException {
         placeService.getPlacesByStatus(status);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByStatus(status)));
     }
@@ -70,7 +70,7 @@ public class PlaceController {
     }
 
     @PostMapping("/get-place/by-location/{location}")
-    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@PathVariable Location location) {
+    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@PathVariable Location location) throws GetPlaceException {
         placeService.getPlacesByLocation(location);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByLocation(location)));
     }

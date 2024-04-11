@@ -13,8 +13,6 @@ import java.util.List;
 
 public interface UserService {
 
-    String login (UserLoginDTO userLoginDTO) throws UserLoginException;
-
     String register(UserRegistrationDTO userRegistrationDTO) throws UserRegistrationException;
 
     void updateUser(UserUpdateDTO userUpdateDTO) throws UpdateAccountException;

@@ -5,5 +5,8 @@ import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.authentication.AuthtenticationException;
 
 public interface AuthenticationService {
-    TokenDTO login(UserLoginDTO userLoginDTO) throws AuthtenticationException;
+    TokenDTO loginUser(UserLoginDTO userLoginDTO) throws AuthtenticationException;
+
+    TokenDTO loginModerator(UserLoginDTO userLoginDTO) throws AuthtenticationException;
+
 }

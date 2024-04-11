@@ -21,8 +21,14 @@ public class AuthenticationControllable {
     private final AuthenticationService authenticationService;
 
     @PostMapping("login-user")
-    public ResponseEntity<MessageDTO<TokenDTO>> login (@Valid @RequestBody UserLoginDTO userLoginDTO) throws AuthtenticationException {
-        TokenDTO tokenDTO = authenticationService.login(userLoginDTO);
+    public ResponseEntity<MessageDTO<TokenDTO>> loginUser (@Valid @RequestBody UserLoginDTO userLoginDTO) throws AuthtenticationException {
+        TokenDTO tokenDTO = authenticationService.loginUser(userLoginDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, tokenDTO));
+    }
+
+    @PostMapping("login-moderator")
+    public ResponseEntity<MessageDTO<TokenDTO>> loginModerator (@Valid @RequestBody UserLoginDTO userLoginDTO) throws AuthtenticationException {
+        TokenDTO tokenDTO = authenticationService.loginModerator(userLoginDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, tokenDTO));
     }
 }

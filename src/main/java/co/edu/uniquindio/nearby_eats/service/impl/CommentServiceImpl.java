@@ -1,18 +1,23 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
+import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.comment.CommentDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.comment.DeleteCommentDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.comment.ReplyDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.comment.CommentResponseDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.comment.ReplyResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.comment.*;
+import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.model.docs.Comment;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
+import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Reply;
 import co.edu.uniquindio.nearby_eats.repository.CommentRepository;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.CommentService;
+import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
+import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,23 +32,25 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, PlaceRepository placeRepository, UserRepository userRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService) {
         this.commentRepository = commentRepository;
         this.placeRepository = placeRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
-    public void createComment(CommentDTO commentDTO) throws CreateCommentException {
+    public void createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException {
 
-        // Verificar si el lugar existe
-        if (!placeRepository.existsById(commentDTO.placeId())) {
+        Optional<Place> placeOptional = placeRepository.findById(commentDTO.placeId());
+        if (placeOptional.isEmpty()) {
             throw new CreateCommentException("El lugar no existe");
         }
 
-        // Verificar si el usuario existe
-        if (!userRepository.existsById(commentDTO.clientId())) {
+        Optional<User> userOptional = userRepository.findById(commentDTO.clientId());
+        if (userOptional.isEmpty()) {
             throw new CreateCommentException("El usuario no existe");
         }
 
@@ -66,10 +73,15 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         commentRepository.save(comment);
+
+        Optional<User> ownerOptional = userRepository.findById(placeOptional.get().getCreatedBy());
+        User owner = ownerOptional.get();
+        emailService.sendEmail(new EmailDTO("Nuevo comentario en "+placeOptional.get().getName(),
+                "Para responder el comentario, ingrese al siguiente enlace:  http://localhost:8080/api/comment/answer-comment", owner.getEmail()));
     }
 
     @Override
-    public void answerComment(ReplyDTO replyDTO) throws AnswerCommentException {
+    public void answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
 
         Optional<Comment> commentOptional = commentRepository.findById(replyDTO.commentId());
         if (commentOptional.isEmpty()) {
@@ -96,6 +108,9 @@ public class CommentServiceImpl implements CommentService {
 
         comment.setReply(reply);
         commentRepository.save(comment);
+        Optional<User> user = userRepository.findById(replyDTO.respondedBy());
+        emailService.sendEmail(new EmailDTO("Nuevo comentario en "+place.get().getName(),
+                "Su comentario ha sido respondido:  http://localhost:8080/api/comment/create-comment", user.get().getEmail()));
     }
 
     @Override

@@ -5,14 +5,16 @@ import co.edu.uniquindio.nearby_eats.dto.request.comment.DeleteCommentDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.comment.ReplyDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.comment.CommentResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.comment.*;
+import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
+import jakarta.mail.MessagingException;
 
 import java.util.List;
 
 public interface CommentService {
 
-    void createComment(CommentDTO commentDTO) throws CreateCommentException;
+    void createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException;
 
-    void answerComment(ReplyDTO replyDTO) throws AnswerCommentException;
+    void answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException;
 
     void deleteComment(DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException;
 

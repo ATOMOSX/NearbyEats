@@ -13,6 +13,7 @@ import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
+import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
 import jakarta.mail.MessagingException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,24 +34,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private Set<String> forbiddenNickName;
+    private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, EmailService emailService, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.emailService = emailService;
-    }
-
-    @Override
-    public String login(UserLoginDTO userLoginDTO) throws UserLoginException {
-        Optional<User> userOptional = userRepository.findByEmail(userLoginDTO.email());
-
-        if (userOptional.isEmpty()){
-            throw new UserLoginException("El email no existe");
-        }
-
-        if (!userOptional.get().getPassword().equals(userLoginDTO.password()))
-            throw new UserLoginException("La contraseña es incorrecta");
-
-        return "token";
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -155,12 +144,14 @@ public class UserServiceImpl implements UserService {
     public void sendRecoveryEmail(String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
         Optional<User> clientOptional = userRepository.findByEmail(email);
 
-        if (clientOptional.isEmpty()){
+        if (clientOptional.isEmpty()) {
             throw new SendRecoveryEmailException("El email no puede ser vacio");
         }
 
+        String token = jwtUtils.generateToken(email, null);
+
         emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
-                "Para cambiar la contraseña ingrese al siguiente enlace http://......./params ", email));
+                "Para cambiar la contraseña ingrese al siguiente enlace http://localhost:8080/api/user/change-password"+token, email));
 
     }
 
@@ -169,17 +160,16 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> userOptional = userRepository.findById(userChangePasswordDTO.id());
 
+        jwtUtils.parseJwt(userChangePasswordDTO.recoveryToken());
+
         if (userOptional.isEmpty()) {
             throw new ChangePasswordException("id user is empty");
         }
-
-        // Verificar token
-        // Obtener usuario por token
-        // TODO: Encrypt password
-        // Actualizar usuario
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encryptedPassword = passwordEncoder.encode(userChangePasswordDTO.newPassword());
 
         User user = userOptional.get();
-        user.setPassword(userChangePasswordDTO.newPassword());
+        user.setPassword(encryptedPassword);
         userRepository.save(user);
     }
 

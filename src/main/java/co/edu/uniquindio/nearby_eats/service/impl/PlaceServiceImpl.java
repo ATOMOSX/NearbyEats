@@ -1,14 +1,12 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
 import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.FavoritePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
-import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.DeletePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.UpdatePlaceException;
+import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
@@ -174,6 +172,7 @@ public class PlaceServiceImpl implements PlaceService {
         List<Place> places = placeRepository.findAllByStatus(status);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
+    // TODO: listar pendientes, rechazados y aprobados por cliente
 
     @Override
     public List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException {
@@ -190,6 +189,23 @@ public class PlaceServiceImpl implements PlaceService {
     public List<PlaceResponseDTO> getPlacesByLocation(Location location) {
         List<Place> places = placeRepository.findAllByLocation(location);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
+    }
+
+    @Override
+    public List<PlaceResponseDTO> getPlacesByName(String name) throws GetPlaceException {
+        List<Place> places = placeRepository.findAllByName(name);
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
+    }
+    // TODO: listar lugares pendientes, aprobados o rechazados por un moderador (para cada moderador)
+
+    @Override
+    public void saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceExcpetion {
+
+    }
+
+    @Override
+    public void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceExcpetion {
+
     }
 
     @Override
@@ -211,6 +227,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .commentary(placeReviewDTO.commentary())
                 .build();
 
+        // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
         Place updatedPlace = place.get();
         updatedPlace.getReviews().add(review);
 
@@ -221,9 +238,9 @@ public class PlaceServiceImpl implements PlaceService {
         }
 
         placeRepository.save(updatedPlace);
+        // TODO: enviar email al dueño del lugar
     }
 
-    // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
 
     private void loadBannedNames() throws IOException {
         ClassPathResource resource = new ClassPathResource("banned_names.txt");
@@ -235,5 +252,6 @@ public class PlaceServiceImpl implements PlaceService {
             }
         }
     }
+
 
 }
