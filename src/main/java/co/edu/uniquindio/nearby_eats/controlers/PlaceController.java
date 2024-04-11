@@ -2,10 +2,12 @@ package co.edu.uniquindio.nearby_eats.controlers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByStatusByClientDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.DeletePlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
@@ -14,6 +16,7 @@ import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +62,10 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(category)));
     }
 
-    @PostMapping("/get-place/by-status/{status}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@PathVariable String status) throws GetPlaceException {
-        placeService.getPlacesByStatus(status);
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByStatus(status)));
+    @PostMapping("/get-place/by-status")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@Valid @RequestBody GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException {
+        placeService.getPlacesByStatus(getPlacesByStatusByClientDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByStatus(getPlacesByStatusByClientDTO)));
     }
 
     @PostMapping("/get-place/by-user-id/{clientId}")
@@ -80,7 +83,7 @@ public class PlaceController {
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda
 
     @PostMapping("/review-place")
-    public ResponseEntity<MessageDTO<String>> reviewPlace(@Valid @RequestBody PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException {
+    public ResponseEntity<MessageDTO<String>> reviewPlace(@Valid @RequestBody PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException, MessagingException, EmailServiceException {
         placeService.reviewPlace(placeReviewDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, ""));
     }

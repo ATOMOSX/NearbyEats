@@ -1,11 +1,10 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
-import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.FavoritePlaceDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
+import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.*;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
@@ -15,7 +14,9 @@ import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
+import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -39,11 +39,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
     private final Set<String> bannedNames = new HashSet<>();
 
-    public PlaceServiceImpl(PlaceRepository placeRepository, UserRepository userRepository) {
+    public PlaceServiceImpl(PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService) {
         this.placeRepository = placeRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
 
         try {
             loadBannedNames();
@@ -168,11 +170,10 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByStatus(String status) {
-        List<Place> places = placeRepository.findAllByStatus(status);
+    public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) {
+        List<Place> places = placeRepository.findAllByStatusAndCreatedBy(getPlacesByStatusByClientDTO.status(), getPlacesByStatusByClientDTO.clientId());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
-    // TODO: listar pendientes, rechazados y aprobados por cliente
 
     @Override
     public List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException {
@@ -192,24 +193,53 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException {
+        return placeRepository.getPlacesByStatusByModerator(getPlacesByModeratorDTO.status(),
+                getPlacesByModeratorDTO.moderatorId());
+    }
+
+    @Override
     public List<PlaceResponseDTO> getPlacesByName(String name) throws GetPlaceException {
         List<Place> places = placeRepository.findAllByName(name);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
-    // TODO: listar lugares pendientes, aprobados o rechazados por un moderador (para cada moderador)
 
     @Override
-    public void saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceExcpetion {
+    public void saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
+        Optional<User> userOptional = userRepository.findById(favoritePlaceDTO.userId());
+        if(userOptional.isEmpty())
+            throw new FavoritePlaceException("El cliente no existe");
 
+        Optional<Place> placeOptional = placeRepository.findById(favoritePlaceDTO.placeId());
+        if(placeOptional.isEmpty())
+            throw new FavoritePlaceException("El lugar no existe");
+
+        User user = userOptional.get();
+        Place place = placeOptional.get();
+        user.getFavoritePlaces().add(place.getId());
+        userRepository.save(user);
     }
 
     @Override
-    public void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceExcpetion {
+    public void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
+        Optional<User> userOptional = userRepository.findById(deleteFavoritePlaceDTO.userId());
+        if(userOptional.isEmpty())
+            throw new FavoritePlaceException("El cliente no existe");
 
+        Optional<Place> placeOptional = placeRepository.findById(deleteFavoritePlaceDTO.placeId());
+        if(placeOptional.isEmpty())
+            throw new FavoritePlaceException("El lugar no existe");
+
+        User user = userOptional.get();
+        Place place = placeOptional.get();
+
+        int placeIndex = user.getCreatedPlaces().indexOf(place);
+        user.getFavoritePlaces().set(placeIndex, null);
+        userRepository.save(user);
     }
 
     @Override
-    public void reviewPlace(PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException {
+    public void reviewPlace(PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException, MessagingException, EmailServiceException {
         Optional<Place> place = placeRepository.findById(placeReviewDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
@@ -238,7 +268,13 @@ public class PlaceServiceImpl implements PlaceService {
         }
 
         placeRepository.save(updatedPlace);
-        // TODO: enviar email al dueño del lugar
+
+        User user = userRepository.findById(updatedPlace.getCreatedBy()).get();
+
+        emailService.sendEmail(new EmailDTO("Nueva revisión en "+updatedPlace.getName(),
+                "Su negocio ha sido revisado:  " +
+                        "http://localhost:8080/api/place/review-place", user.getEmail()));
+        // TODO: validar urls de los email
     }
 
 
