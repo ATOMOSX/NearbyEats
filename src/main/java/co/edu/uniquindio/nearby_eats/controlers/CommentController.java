@@ -8,9 +8,8 @@ import co.edu.uniquindio.nearby_eats.exceptions.comment.AnswerCommentException;
 import co.edu.uniquindio.nearby_eats.exceptions.comment.DeleteCommentException;
 import co.edu.uniquindio.nearby_eats.exceptions.comment.GetAverageScoreCommentException;
 import co.edu.uniquindio.nearby_eats.exceptions.comment.ListCommentsException;
-import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.service.interfa.CommentService;
-import jakarta.mail.MessagingException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +20,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
+@SecurityRequirement(name = "bearerAuth")
 public class CommentController {
 
     private final CommentService commentService;
 
     @PostMapping("/answer-comment")
-    public ResponseEntity<MessageDTO<String>> answerComment(@Valid @RequestBody ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
+    public ResponseEntity<MessageDTO<String>> answerComment(@Valid @RequestBody ReplyDTO replyDTO) throws AnswerCommentException{
         commentService.answerComment(replyDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "answer commentary is successful"));
     }
