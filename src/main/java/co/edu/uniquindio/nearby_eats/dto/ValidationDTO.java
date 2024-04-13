@@ -1,7 +1,9 @@
 package co.edu.uniquindio.nearby_eats.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record ValidationDTO(
-        String campo,
-        String error
+        @NotBlank(message = "campo is required") String campo,
+        @NotBlank(message = "error is required") String error
 ) {
 }

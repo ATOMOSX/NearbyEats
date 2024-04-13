@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record UpdatePlaceDTO(
-        @NotBlank(message = "El campo nombre es requerido" ) String name,
-        @NotBlank(message = "El campo descripcion esta vacio" ) String description,
-        @NotBlank(message = "El campo location esta vacio") Location location,
-        @NotBlank(message = "El campo de fotos esta vacio") List<String> images,
-        @NotBlank(message = "Los horarios estan vacio" ) List<Schedule> schedule,
-        @NotBlank(message = "Los horarios estan vacios" ) List<String> phones,
-        @NotBlank(message = "No se ha establecido una categoria" ) List<String> categories,
+        @NotBlank(message = "name is required" ) String name,
+        @NotBlank(message = "description is required" ) String description,
+        @NotBlank(message = "location is required") Location location,
+        @NotBlank(message = "images is empty") List<String> images,
+        @NotBlank(message = "schedule is empty" ) List<Schedule> schedule,
+        @NotBlank(message = "this phones is empty" ) List<String> phones,
+        @NotBlank(message = "No category has been established" ) List<String> categories,
         @NotBlank(message = "clientId is required") String clientId,
-        String placeId
+        @NotBlank(message = "placeId is required") String placeId
 ) {
 }

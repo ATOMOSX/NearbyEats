@@ -6,6 +6,6 @@ import org.hibernate.validator.constraints.Length;
 
 public record EmailDTO(
         @NotBlank(message = "subject is required") @Length(max = 100) String subject,
-        @NotBlank(message = "messageBody is required") String messageBody,
+        @NotBlank(message = "messageBody is required") @Length(max = 288) String messageBody,
         @NotBlank(message = "addressee is required") @Email String addressee) {
 }
