@@ -2,6 +2,7 @@ package co.edu.uniquindio.nearby_eats.repository;
 
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
@@ -16,7 +17,7 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     Boolean existsByName(String name);
 
-    List<Place> findAllByCategoriesContaining(String category);
+    List<Place> findAllByCategoriesContaining(PlaceCategory category);
 
     List<Place> findAllByCreatedBy(String clientId);
 

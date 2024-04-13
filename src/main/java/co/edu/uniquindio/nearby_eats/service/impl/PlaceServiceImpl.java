@@ -9,6 +9,7 @@ import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
@@ -17,6 +18,7 @@ import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import jakarta.mail.MessagingException;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException {
+    public Place createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException {
 
         if (placeRepository.existsByName(placeCreateDTO.name())) {
             throw new CreatePlaceException("Ya existe un lugar con ese nombre");
@@ -84,8 +86,8 @@ public class PlaceServiceImpl implements PlaceService {
                 .build();
 
         Place savedPlace = placeRepository.save(place);
-        user.getCreatedPlaces().add(savedPlace.getId());
         userRepository.save(user);
+        return place;
     }
 
     private boolean isBannedName(String name) {
@@ -93,7 +95,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException {
+    public Place updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException {
         Optional<Place> place = placeRepository.findById(updatePlaceDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
@@ -114,10 +116,11 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setCategories(updatePlaceDTO.categories());
 
         placeRepository.save(updatedPlace);
+        return updatedPlace;
     }
 
     @Override
-    public void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
+    public Place deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
         Optional<Place> place = placeRepository.findById(deletePlaceDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
@@ -131,11 +134,9 @@ public class PlaceServiceImpl implements PlaceService {
         Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
         User user = optionalUser.get();
 
-        int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace);
-        user.getCreatedPlaces().set(placeIndex, null);
-
         placeRepository.save(deletedPlace);
         userRepository.save(user);
+        return deletedPlace;
     }
 
     @Override
@@ -164,7 +165,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByCategory(String category) {
+    public List<PlaceResponseDTO> getPlacesByCategory(PlaceCategory category) {
         List<Place> places = placeRepository.findAllByCategoriesContaining(category);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }

@@ -35,12 +35,6 @@ public class UserTest {
     private final String userId = "client2";
 
     @Test
-    public void loginUserTest() {
-        UserLoginDTO userLoginDTO = new UserLoginDTO("atomos29@correo.com", "$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW");
-    }
-
-
-    @Test
     public void registerUserTest() throws Exception {
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO(
                 "Juan",

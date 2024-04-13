@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 public record DeletePlaceDTO(
-        @NotBlank(message = "placeId is required") @Length(max = 100) String placeId,
-        @NotBlank(message = "clientID is required") @Length(max = 100) String clientId
+        @NotBlank(message = "placeId is required")  String placeId,
+        @NotBlank(message = "clientID is required")  String clientId
 ) {
 }

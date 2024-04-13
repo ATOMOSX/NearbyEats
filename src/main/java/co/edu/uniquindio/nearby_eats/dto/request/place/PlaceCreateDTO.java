@@ -14,7 +14,7 @@ public record PlaceCreateDTO(
         @NotBlank(message = "images is empty") List<String> images,
         @NotBlank(message = "this schedule is empty" ) List<Schedule> schedule,
         @NotBlank(message = "this phones is empty" ) List<String> phones,
-        @NotBlank(message = "No category has been established" ) List<String> categories,
+        @NotBlank(message = "No category has been established" ) List<PlaceCategory> categories,
         @NotBlank(message = "clientId is required") String clientId
 ) {
 }

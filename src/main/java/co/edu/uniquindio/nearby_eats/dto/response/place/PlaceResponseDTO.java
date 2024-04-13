@@ -18,7 +18,7 @@ public record PlaceResponseDTO(
         @NotBlank(message = "picture is required") List<String> pictures,
         @NotBlank(message = "id is required") @DateTimeFormat List<Schedule> schedule,
         @NotBlank(message = "phones is required") List<String> phones,
-        @NotBlank(message = "categories is required") List<PlaceCategory> categories,
+        @NotBlank(message = "categories is required")  List<PlaceCategory> categories,
         @NotBlank(message = "revisionHistory is required") List<Review> revisionsHistory
 ) {
 }

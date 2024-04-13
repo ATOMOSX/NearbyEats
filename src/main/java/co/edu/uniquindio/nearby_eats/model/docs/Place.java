@@ -1,5 +1,6 @@
 package co.edu.uniquindio.nearby_eats.model.docs;
 
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
@@ -34,7 +35,7 @@ public class Place implements Serializable {
 
     private List<String> phones;
 
-    private List<String> categories;
+    private List<PlaceCategory> categories;
 
     private Location location;
 

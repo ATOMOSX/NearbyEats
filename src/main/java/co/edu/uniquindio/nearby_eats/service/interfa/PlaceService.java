@@ -6,22 +6,25 @@ import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
+import co.edu.uniquindio.nearby_eats.model.docs.Place;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import jakarta.mail.MessagingException;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
 public interface PlaceService {
 
-    void createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException;
+    Place createPlace(PlaceCreateDTO placeCreateDTO) throws CreatePlaceException;
 
-    void updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException;
+    Place updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException;
 
-    void deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException;
+    Place deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException;
 
     PlaceResponseDTO getPlace(String placeId) throws GetPlaceException;
 
-    List<PlaceResponseDTO> getPlacesByCategory(String category) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesByCategory(PlaceCategory category) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException;
 

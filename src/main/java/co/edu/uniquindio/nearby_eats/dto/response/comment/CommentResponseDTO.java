@@ -9,7 +9,7 @@ public record CommentResponseDTO(
         @NotBlank(message = "date is required") String date,
         @NotBlank(message = "clientId is required") @Length(max = 100) String clientId,
         @NotBlank(message = "text is required") @Length(max = 288) String text,
-        @NotBlank(message = "") Integer score,
-        ReplyResponseDTO reply
+        @NotBlank(message = "score is required") @Length(max = 2) Integer score,
+        @NotBlank(message = "reply is required") ReplyResponseDTO reply
 ) {
 }

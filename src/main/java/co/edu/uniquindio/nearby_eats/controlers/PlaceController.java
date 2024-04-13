@@ -13,6 +13,7 @@ import co.edu.uniquindio.nearby_eats.exceptions.place.DeletePlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.place.UpdatePlaceException;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -57,7 +58,7 @@ public class PlaceController {
     }
 
     @PostMapping("/get-place/by-category/{category}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable String category) throws GetPlaceException {
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable PlaceCategory category) throws GetPlaceException {
         placeService.getPlacesByCategory(category);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(category)));
     }
