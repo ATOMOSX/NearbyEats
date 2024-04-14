@@ -18,7 +18,6 @@ import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import jakarta.mail.MessagingException;
-import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -187,12 +186,14 @@ public class PlaceServiceImpl implements PlaceService {
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
+    // TODO: Organizar método, para ingresar una ubicacoión aproximada
     @Override
     public List<PlaceResponseDTO> getPlacesByLocation(Location location) {
         List<Place> places = placeRepository.findAllByLocation(location);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
+    // TODO: Crear los moderadores el el dataseet para poder hacer la prueba del método
     @Override
     public List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException {
         return placeRepository.getPlacesByStatusByModerator(getPlacesByModeratorDTO.status(),
@@ -206,19 +207,21 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
-        Optional<User> userOptional = userRepository.findById(favoritePlaceDTO.userId());
-        if(userOptional.isEmpty())
-            throw new FavoritePlaceException("El cliente no existe");
+    public Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
 
         Optional<Place> placeOptional = placeRepository.findById(favoritePlaceDTO.placeId());
         if(placeOptional.isEmpty())
             throw new FavoritePlaceException("El lugar no existe");
 
+        Optional<User> userOptional = userRepository.findById(favoritePlaceDTO.userId());
+        if(userOptional.isEmpty())
+            throw new FavoritePlaceException("El cliente no existe");
+
         User user = userOptional.get();
         Place place = placeOptional.get();
         user.getFavoritePlaces().add(place.getId());
         userRepository.save(user);
+        return place;
     }
 
     @Override

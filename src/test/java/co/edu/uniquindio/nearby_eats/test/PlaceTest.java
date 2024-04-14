@@ -1,16 +1,12 @@
 package co.edu.uniquindio.nearby_eats.test;
 
-import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.*;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
-import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.DeletePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.UpdatePlaceException;
+import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
@@ -74,7 +70,7 @@ public class PlaceTest {
         );
 
         Optional<Place> placeOptional = placeRepository.findById(updatePlaceDTO.placeId());
-        Place place = placeService.updatePlace(updatePlaceDTO);
+        placeService.updatePlace(updatePlaceDTO);
 
         Assertions.assertNotNull(placeOptional);
     }
@@ -108,5 +104,67 @@ public class PlaceTest {
         System.out.println(place);
 
         Assertions.assertNotNull(placeCategory);
+    }
+
+    @Test
+    public void getPlacesByStatusTest() throws GetPlaceException {
+        GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO = new GetPlacesByStatusByClientDTO(
+                PlaceStatus.PENDING,
+                userId
+        );
+
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByStatus(getPlacesByStatusByClientDTO);
+        System.out.println(placeResponseDTOS);
+
+        Assertions.assertNotNull(getPlacesByStatusByClientDTO);
+    }
+
+    @Test
+    public void getPlacesByClientIdTest() throws GetPlaceException {
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByClientId(userId);
+        System.out.println(placeResponseDTOS);
+
+        Assertions.assertNotNull(placeResponseDTOS);
+    }
+
+    @Test
+    public void getPlacesByLocationTest() throws GetPlaceException {
+
+    }
+
+    @Test
+    public void getPlacesByModeratorTest() throws GetPlaceException {
+
+    }
+
+    @Test
+    public void getPlaceByNameTest() throws GetPlaceException {
+        String name = "Exito";
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByName(name);
+        System.out.println(placeResponseDTOS);
+
+        Assertions.assertNotNull(placeResponseDTOS);
+    }
+
+    @Test
+    public void saveFavoritePlaceTest() throws FavoritePlaceException {
+        FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
+                userId,
+                placeId
+        );
+
+        Place place = placeService.saveFavoritePlace(favoritePlaceDTO);
+        System.out.println(place);
+        Assertions.assertNotNull(favoritePlaceDTO);
+    }
+
+    public void deleteFavortitePlace() throws FavoritePlaceException {
+        FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
+                userId,
+                placeId
+        );
+
+        placeService.deleteFavoritePlace(favoritePlaceDTO);
+
     }
 }

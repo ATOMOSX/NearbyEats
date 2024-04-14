@@ -10,7 +10,6 @@ import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import jakarta.mail.MessagingException;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public interface PlaceService {
 
     List<PlaceResponseDTO> getPlacesByName(String name) throws GetPlaceException;
 
-    void saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException;
+    Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException;
 
     void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException;
 

@@ -3,6 +3,7 @@ package co.edu.uniquindio.nearby_eats.repository;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
@@ -27,7 +28,7 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByName(String name);
 
-    List<Place> findAllByStatusAndCreatedBy(String status, String clientId);
+    List<Place> findAllByStatusAndCreatedBy(PlaceStatus status, String clientId);
 
     @Aggregation({"{$unwind: '$reviews'}",
             "{$lookup: { from: 'users', localField: 'reviews.moderatorId', foreignField: '_id', as: 'moderator' } }",
