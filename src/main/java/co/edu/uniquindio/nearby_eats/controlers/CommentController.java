@@ -33,19 +33,19 @@ public class CommentController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, "answer commentary is successful"));
     }
 
-    @PostMapping("/delete-comment")
+    @DeleteMapping("/delete-comment")
     public ResponseEntity<MessageDTO<String>> deleteComment(@Valid @RequestBody DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException{
         commentService.deleteComment(deleteCommentDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "comment is delete correctly"));
     }
 
-    @PostMapping("/get-comments-by-place/{placeId}")
+    @GetMapping("/get-comments-by-place/{placeId}")
     public ResponseEntity<MessageDTO<List<CommentResponseDTO>>> getCommentsByPlace(@PathVariable String placeId) throws ListCommentsException{
         commentService.getCommentsByPlace(placeId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, commentService.getCommentsByPlace(placeId)));
     }
 
-    @PostMapping("/get-average-score-by-place/{placeId}")
+    @GetMapping("/get-average-score-by-place/{placeId}")
     public ResponseEntity<MessageDTO<Float>> getAverageScoreByPlace(@PathVariable String placeId) throws GetAverageScoreCommentException{
         commentService.getAverageScoreByPlace(placeId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, commentService.getAverageScoreByPlace(placeId)));

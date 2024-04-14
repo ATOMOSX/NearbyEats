@@ -32,12 +32,12 @@ public class UserController {
         return ResponseEntity.ok().body( new MessageDTO<>(false, "register user successful"));
     }
 
-    @PostMapping("/update-account-user")
+    @PatchMapping("/update-account-user")
     public ResponseEntity<MessageDTO<String>> updateUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
         userService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "update user successful"));
     }
-    @PostMapping("/delete-user/{id}")
+    @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<MessageDTO<String>> deleteUser(@PathVariable String id) throws DeleteAccountException {
         userService.deleteUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
@@ -55,13 +55,13 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, "change password user is successful"));
     }
 
-    @PostMapping("/get-all-users")
+    @GetMapping("/get-all-users")
     public ResponseEntity<MessageDTO<List<UserInformationDTO>>> getAllUsers() throws GetAllUserException {
         userService.getAllUsers();
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getAllUsers()));
     }
 
-    @PostMapping("/get-user/{id}")
+    @GetMapping("/get-user/{id}")
     public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@PathVariable String id) throws GetUserException {
         userService.getUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));

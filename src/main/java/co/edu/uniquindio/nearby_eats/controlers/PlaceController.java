@@ -39,43 +39,43 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, "create place is successful"));
     }
 
-    @PostMapping("/update-place")
+    @PatchMapping("/update-place")
     public ResponseEntity<MessageDTO<String>> updatePlace(@Valid @RequestBody UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException {
         placeService.updatePlace(updatePlaceDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "update place is successful"));
     }
 
-    @PostMapping("/delete-place")
+    @DeleteMapping("/delete-place")
     public ResponseEntity<MessageDTO<String>> deletePlace(@Valid @RequestBody DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
         placeService.deletePlace(deletePlaceDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete place is successful"));
     }
 
-    @PostMapping("/get-place/{id}")
+    @GetMapping("/get-place/{id}")
     public ResponseEntity<MessageDTO<PlaceResponseDTO>> getPlace(@PathVariable String placeId) throws GetPlaceException {
         placeService.getPlace(placeId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlace(placeId)));
     }
 
-    @PostMapping("/get-place/by-category/{category}")
+    @GetMapping("/get-place/by-category/{category}")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable PlaceCategory category) throws GetPlaceException {
         placeService.getPlacesByCategory(category);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(category)));
     }
 
-    @PostMapping("/get-place/by-status")
+    @GetMapping("/get-place/by-status")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@Valid @RequestBody GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException {
         placeService.getPlacesByStatus(getPlacesByStatusByClientDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByStatus(getPlacesByStatusByClientDTO)));
     }
 
-    @PostMapping("/get-place/by-user-id/{clientId}")
+    @GetMapping("/get-place/by-user-id/{clientId}")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByClientId(@PathVariable String clientId) throws GetPlaceException {
         placeService.getPlacesByClientId(clientId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByClientId(clientId)));
     }
 
-    @PostMapping("/get-place/by-location/{location}")
+    @GetMapping("/get-place/by-location/{location}")
     private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@PathVariable Location location) throws GetPlaceException {
         placeService.getPlacesByLocation(location);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByLocation(location)));
