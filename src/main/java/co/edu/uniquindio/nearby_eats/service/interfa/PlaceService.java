@@ -39,7 +39,7 @@ public interface PlaceService {
 
     Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException;
 
-    void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException;
+    Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException;
 
     void reviewPlace(PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException, MessagingException, EmailServiceException;
 

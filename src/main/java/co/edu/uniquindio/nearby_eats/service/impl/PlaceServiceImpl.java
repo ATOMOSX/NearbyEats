@@ -13,6 +13,7 @@ import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
+import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -140,27 +143,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public PlaceResponseDTO getPlace(String placeId) throws GetPlaceException {
-        Optional<Place> place = placeRepository.findById(placeId);
+        Optional<Place> placeOptional = placeRepository.findById(placeId);
 
-        if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
+        if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new GetPlaceException("El lugar no existe");
         }
 
-        return convertToPlaceResponseDTO(place.get());
-    }
-
-    private PlaceResponseDTO convertToPlaceResponseDTO(Place place) {
-        return new PlaceResponseDTO(
-                place.getId(),
-                place.getName(),
-                place.getDescription(),
-                place.getLocation(),
-                place.getImages(),
-                place.getSchedules(),
-                place.getPhones(),
-                place.getCategories(),
-                place.getReviews()
-        );
+        return convertToPlaceResponseDTO(placeOptional.get());
     }
 
     @Override
@@ -225,7 +214,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
+    public Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
         Optional<User> userOptional = userRepository.findById(deleteFavoritePlaceDTO.userId());
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
@@ -237,9 +226,9 @@ public class PlaceServiceImpl implements PlaceService {
         User user = userOptional.get();
         Place place = placeOptional.get();
 
-        int placeIndex = user.getCreatedPlaces().indexOf(place);
-        user.getFavoritePlaces().set(placeIndex, null);
+        user.getFavoritePlaces().remove(place.getId());
         userRepository.save(user);
+        return place;
     }
 
     @Override
@@ -261,14 +250,26 @@ public class PlaceServiceImpl implements PlaceService {
                 .commentary(placeReviewDTO.commentary())
                 .build();
 
-        // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
         Place updatedPlace = place.get();
         updatedPlace.getReviews().add(review);
 
-        if (placeReviewDTO.action().equals(PlaceStatus.APPROVED)) {
-            updatedPlace.setStatus(PlaceStatus.APPROVED.name());
-        } else if (placeReviewDTO.action().equals(PlaceStatus.REJECTED)) {
+        if (placeReviewDTO.action().equals(PlaceStatus.REJECTED)) {
             updatedPlace.setStatus(PlaceStatus.REJECTED.name());
+
+            // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime deadline = now.plusDays(5);
+
+            updatedPlace.setDeletionDate(String.valueOf(deadline));
+
+            // TODO: si sobrepasa los 5 días se eliminará automaticamente.
+            if (now.isAfter(deadline)) {
+                placeRepository.delete(updatedPlace);
+                throw new ReviewPlaceException("El lugar ha sido eliminado automaticamente " +
+                        "debido a que ha sobrepasado los 5 días  en estado rechazado");
+            }
+        } else if (placeReviewDTO.action().equals(PlaceStatus.APPROVED)) {
+            updatedPlace.setStatus(PlaceStatus.APPROVED.name());
         }
 
         placeRepository.save(updatedPlace);
@@ -281,7 +282,6 @@ public class PlaceServiceImpl implements PlaceService {
         // TODO: validar urls de los email
     }
 
-
     private void loadBannedNames() throws IOException {
         ClassPathResource resource = new ClassPathResource("banned_names.txt");
         try (InputStream inputStream = resource.getInputStream();
@@ -293,5 +293,38 @@ public class PlaceServiceImpl implements PlaceService {
         }
     }
 
+    private PlaceResponseDTO convertToPlaceResponseDTO(Place place) {
+        return new PlaceResponseDTO(
+                place.getId(),
+                place.getName(),
+                place.getDescription(),
+                place.getLocation(),
+                place.getImages(),
+                place.getSchedules(),
+                place.getPhones(),
+                place.getCategories(),
+                place.getReviews()
+        );
+    }
+
+    private boolean isOpenNow(Place place) {
+
+        List<Schedule> schedules = place.getSchedules();
+        if (schedules == null || schedules.isEmpty()) {
+            return false;
+        }
+
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        for (Schedule schedule : schedules) {
+            LocalTime openingTime = LocalTime.parse(schedule.getOpeningTime());
+            LocalTime closingTime = LocalTime.parse(schedule.getClosingTime());
+
+            if (currentTime.isAfter(ChronoLocalDateTime.from(openingTime)) && currentTime.isBefore(ChronoLocalDateTime.from(closingTime))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

@@ -46,5 +46,6 @@ public class Place implements Serializable {
     private List<Review> reviews;
     private String creationDate;
     private String deletionDate;
+    private boolean open;
 
 }

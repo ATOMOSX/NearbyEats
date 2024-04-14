@@ -146,6 +146,7 @@ public class PlaceTest {
         Assertions.assertNotNull(placeResponseDTOS);
     }
 
+    //Revisión
     @Test
     public void saveFavoritePlaceTest() throws FavoritePlaceException {
         FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
@@ -155,16 +156,21 @@ public class PlaceTest {
 
         Place place = placeService.saveFavoritePlace(favoritePlaceDTO);
         System.out.println(place);
-        Assertions.assertNotNull(favoritePlaceDTO);
+        Assertions.assertNotNull(place);
     }
 
+    //Revisión
+    @Test
     public void deleteFavortitePlace() throws FavoritePlaceException {
         FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
                 userId,
                 placeId
         );
 
-        placeService.deleteFavoritePlace(favoritePlaceDTO);
-
+        Place place = placeService.deleteFavoritePlace(favoritePlaceDTO);
+        System.out.println(place);
+        Assertions.assertNotNull(place);
     }
+
+
 }
