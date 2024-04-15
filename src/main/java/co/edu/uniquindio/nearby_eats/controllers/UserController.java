@@ -1,8 +1,7 @@
-package co.edu.uniquindio.nearby_eats.controlers;
+package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserChangePasswordDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
@@ -57,13 +56,11 @@ public class UserController {
 
     @GetMapping("/get-all-users")
     public ResponseEntity<MessageDTO<List<UserInformationDTO>>> getAllUsers() throws GetAllUserException {
-        userService.getAllUsers();
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getAllUsers()));
     }
 
     @GetMapping("/get-user/{id}")
     public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@PathVariable String id) throws GetUserException {
-        userService.getUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));
     }
 }

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.controlers;
+package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.comment.DeleteCommentDTO;
@@ -41,13 +41,11 @@ public class CommentController {
 
     @GetMapping("/get-comments-by-place/{placeId}")
     public ResponseEntity<MessageDTO<List<CommentResponseDTO>>> getCommentsByPlace(@PathVariable String placeId) throws ListCommentsException{
-        commentService.getCommentsByPlace(placeId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, commentService.getCommentsByPlace(placeId)));
     }
 
     @GetMapping("/get-average-score-by-place/{placeId}")
     public ResponseEntity<MessageDTO<Float>> getAverageScoreByPlace(@PathVariable String placeId) throws GetAverageScoreCommentException{
-        commentService.getAverageScoreByPlace(placeId);
         return ResponseEntity.ok().body(new MessageDTO<>(false, commentService.getAverageScoreByPlace(placeId)));
     }
 
