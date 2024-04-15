@@ -1,8 +1,7 @@
-package co.edu.uniquindio.nearby_eats.controlers;
+package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserChangePasswordDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.controlers.exception;
+package co.edu.uniquindio.nearby_eats.controllers.exception;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.ValidationDTO;
@@ -7,10 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.nearby_eats.controlers;
+package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
 import co.edu.uniquindio.nearby_eats.dto.image.ImageDTO;
