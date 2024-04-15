@@ -56,13 +56,11 @@ public class UserController {
 
     @GetMapping("/get-all-users")
     public ResponseEntity<MessageDTO<List<UserInformationDTO>>> getAllUsers() throws GetAllUserException {
-        userService.getAllUsers();
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getAllUsers()));
     }
 
     @GetMapping("/get-user/{id}")
     public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@PathVariable String id) throws GetUserException {
-        userService.getUser(id);
         return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));
     }
 }
