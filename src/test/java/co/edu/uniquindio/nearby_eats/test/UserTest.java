@@ -8,6 +8,7 @@ import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.user.GetAllUserException;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
+import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
@@ -58,6 +59,7 @@ public class UserTest {
                 .password(encryptedPassword)
                 .email(userRegistrationDTO.email())
                 .isActive(true)
+                .role(UserRole.CLIENT.name())
                 .build();
 
         User user1 = userRepository.save(user);
@@ -70,8 +72,8 @@ public class UserTest {
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO(
                 "Pedrito",
                 "Pérez",
-                "pedir",
                 "pedri@correo.com",
+                "pedir",
                 "yose.jpg",
                 "Montenegro",
                 "elpepe"
@@ -89,6 +91,7 @@ public class UserTest {
                 .password(encryptedPassword)
                 .email(userRegistrationDTO.email())
                 .isActive(true)
+                .role(UserRole.CLIENT.name())
                 .build();
 
         User user1 = userRepository.save(user);
@@ -121,8 +124,13 @@ public class UserTest {
     }
 
     @Test
+    public void deleteUserTest() {
+        Assertions.assertDoesNotThrow(() -> userService.deleteUser(userId));
+    }
+
+    @Test
     public void getAllUsersTest() throws GetAllUserException {
-        int expectedUsers = 0;
+        int expectedUsers = 2;
         List<UserInformationDTO> users = userService.getAllUsers();
         System.out.println(users);
         Assertions.assertEquals(expectedUsers, users.size());
@@ -152,8 +160,4 @@ public class UserTest {
         // TODO: Implement this test
     }
 
-    @Test
-    public void deleteUserTest() {
-        Assertions.assertDoesNotThrow(() -> userService.deleteUser(userId));
-    }
 }

@@ -2,6 +2,7 @@ package co.edu.uniquindio.nearby_eats.repository;
 
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     Boolean existsByEmail(String email, Boolean isActive);
     Optional<User> findByNickname (String nickname);
     Optional<User> findByNickname(String nickname, Boolean isActive);
-    List<User> findAllByIsActive(Boolean isActive);
+
+    List<User> findAllByIsActiveAndRole(Boolean isActive, String role);
 }

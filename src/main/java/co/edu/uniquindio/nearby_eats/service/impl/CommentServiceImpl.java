@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException {
+    public Comment createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException {
 
         Optional<Place> placeOptional = placeRepository.findById(commentDTO.placeId());
         if (placeOptional.isEmpty()) {
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // Verificar si la calificación está entre 1 y 5
-        if (commentDTO.score() >= 1 && commentDTO.score() <= 5) {
+        if (commentDTO.score() < 1 || commentDTO.score() > 5) {
             throw new CreateCommentException("La calificación debe estar entre 1 y 5");
         }
 
@@ -72,16 +72,17 @@ public class CommentServiceImpl implements CommentService {
                 .date(LocalDateTime.now().toString())
                 .build();
 
-        commentRepository.save(comment);
+        Comment comment1 = commentRepository.save(comment);
 
         Optional<User> ownerOptional = userRepository.findById(placeOptional.get().getCreatedBy());
         User owner = ownerOptional.get();
         emailService.sendEmail(new EmailDTO("Nuevo comentario en "+placeOptional.get().getName(),
                 "Para responder el comentario, ingrese al siguiente enlace:  http://localhost:8080/api/comment/answer-comment", owner.getEmail()));
+        return comment1;
     }
 
     @Override
-    public void answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
+    public Comment answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
 
         Optional<Comment> commentOptional = commentRepository.findById(replyDTO.commentId());
         if (commentOptional.isEmpty()) {
@@ -107,14 +108,15 @@ public class CommentServiceImpl implements CommentService {
                         .build();
 
         comment.setReply(reply);
-        commentRepository.save(comment);
+        Comment comment1 = commentRepository.save(comment);
         Optional<User> user = userRepository.findById(replyDTO.respondedBy());
         emailService.sendEmail(new EmailDTO("Nuevo comentario en "+place.get().getName(),
                 "Su comentario ha sido respondido:  http://localhost:8080/api/comment/create-comment", user.get().getEmail()));
+        return comment1;
     }
 
     @Override
-    public void deleteComment(DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException {
+    public String deleteComment(DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException {
         Optional<Comment> commentOptional = commentRepository.findById(deleteCommentDTO.commentId());
         if (commentOptional.isEmpty()) {
             throw new DeleteCommentException("El comentario no existe");
@@ -124,6 +126,7 @@ public class CommentServiceImpl implements CommentService {
             throw new DeleteCommentException("El usuario no puede eliminar un comentario de otro usuario");
 
         commentRepository.deleteById(deleteCommentDTO.commentId());
+        return commentOptional.get().getId();
     }
 
     @Override

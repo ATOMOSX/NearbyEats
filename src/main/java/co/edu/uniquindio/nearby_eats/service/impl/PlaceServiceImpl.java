@@ -87,9 +87,9 @@ public class PlaceServiceImpl implements PlaceService {
                 .creationDate(LocalDateTime.now().toString())
                 .build();
 
-        user.getCreatedPlaces().add(place.getId());
-        userRepository.save(user);
         Place savedPlace = placeRepository.save(place);
+        user.getCreatedPlaces().add(savedPlace.getId());
+        userRepository.save(user);
         return savedPlace;
     }
 

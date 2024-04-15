@@ -30,7 +30,7 @@ public class Comment implements Serializable {
 
     private String date;
 
-    private Integer rating;
+    private int rating;
 
     private Reply reply;
 }

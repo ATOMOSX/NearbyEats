@@ -14,32 +14,6 @@ db.users.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.User'
     },
     {
-        _id: 'client2',
-        profilePicture: 'yo2.jpg',
-        nickname: 'Atomos2',
-        city: 'Armenia',
-        firstName: 'Juan',
-        lastName: 'López',
-        email: 'atomos9@correo.com',
-        password: '$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW',
-        isActive: true,
-        role: 'CLIENT',
-        _class: 'co.edu.uniquindio.nearby_eats.model.docs.User'
-    },
-    {
-        _id: 'client3',
-        profilePicture: 'yo3.jpg',
-        nickname: 'Atomos3',
-        city: 'Armenia',
-        firstName: 'David',
-        lastName: 'Muñoz',
-        email: 'atomos239@correo.com',
-        password: '$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW',
-        isActive: true,
-        role: 'CLIENT',
-        _class: 'co.edu.uniquindio.nearby_eats.model.docs.User'
-    },
-    {
         _id: 'mod1',
         profilePicture: 'yo4.jpg',
         nickname: 'AtomosMod',
@@ -96,6 +70,7 @@ db.places.insertMany([
 ]);
 db.comments.insertMany([
     {
+        _id: "comment1",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client1',

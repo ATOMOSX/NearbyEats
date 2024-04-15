@@ -66,6 +66,7 @@ public class PlaceTest {
 
     @Test
     public void updatePlaceTest() throws UpdatePlaceException{
+        Place oldPlace = placeRepository.findByName("Mocawa Plaza");
         UpdatePlaceDTO updatePlaceDTO = new UpdatePlaceDTO(
                 "sazón Plaza",
                 "Los mejores precios en Comidas",
@@ -76,7 +77,7 @@ public class PlaceTest {
                 List.of("3207920496", "3108825866"),
                 List.of(PlaceCategory.RESTAURANT),
                 userId,
-                placeId
+                oldPlace.getId()
         );
 
         Place place = placeService.updatePlace(updatePlaceDTO);
@@ -85,9 +86,10 @@ public class PlaceTest {
 
     @Test
     public void deletePlaceTest() throws DeletePlaceException {
+        Place oldPlace = placeRepository.findByName("sazón Plaza");
         DeletePlaceDTO deletePlaceDTO = new DeletePlaceDTO(
-                        placeId,
-                "client1"
+                oldPlace.getId(),
+                userId
         );
 
         Place place = placeService.deletePlace(deletePlaceDTO);
@@ -140,6 +142,12 @@ public class PlaceTest {
 
     @Test
     public void getPlacesByModeratorTest() throws GetPlaceException {
+        List<PlaceResponseDTO> placeResponseDTOS =
+                placeService.getPlacesByModerator(new GetPlacesByModeratorDTO(PlaceStatus.PENDING.name(),
+                        "mod1")
+                );
+
+        Assertions.assertNotNull(placeResponseDTOS);
 
     }
 
@@ -181,7 +189,7 @@ public class PlaceTest {
     @Test
     public void testRecommendPlaces() throws Exception {
         // Configuración de prueba
-        User user = userRepository.findById("660c39bc76b88f44bd856c11").orElse(null);
+        User user = userRepository.findById("client1").orElse(null);
         Assertions.assertNotNull(user);
 
         searchRepository.save(new Search("1", user.getId(), "CAFE", new Date().toString()));

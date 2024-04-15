@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserInformationDTO> getAllUsers() {
-        List<User> users = userRepository.findAllByIsActive(true);
+        List<User> users = userRepository.findAllByIsActiveAndRole(true, "CLIENT");
         return users.stream()
                 .map(this::convertToUserInformationDTO)
                 .collect(Collectors.toList());

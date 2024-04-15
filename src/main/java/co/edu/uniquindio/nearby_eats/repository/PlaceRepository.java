@@ -33,9 +33,11 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     @Aggregation({"{$unwind: '$reviews'}",
             "{$lookup: { from: 'users', localField: 'reviews.moderatorId', foreignField: '_id', as: 'moderator' } }",
-            "{ $match: { status: ?0, moderator: { $ne: [] }, moderator._id: ?1 } }",
+            "{ $match: { status: ?0, moderator: { $ne: [] }, 'moderator._id': ?1 } }",
             "{ $project: { _id: 1, name: 1, description: 1, location: 1, pictures: 1, schedule: 1, phones: 1, categories: 1, revisionsHistory: 1 } }"})
     List<PlaceResponseDTO> getPlacesByStatusByModerator(String status, String moderatorID);
 
     List<Place> findAllByCategoriesContaining(List<PlaceCategory> categories);
+
+    Place findByName(String name);
 }
