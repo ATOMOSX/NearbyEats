@@ -7,6 +7,7 @@ import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
+import co.edu.uniquindio.nearby_eats.model.enums.Weekday;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
@@ -41,17 +42,15 @@ public class PlaceTest {
                 "Los mejores precios en Hoteles",
                 new Location("point", Arrays.asList(10.123, -73.456)),
                 List.of("picture1.jpg", "picture2.jpg", "picture3.jpg"),
-                List.of(new Schedule("Monday", "9:00", "18:00"),
-                        new Schedule("Tuesday", "9:00", "18:00")),
+                List.of(new Schedule(Weekday.MONDAY.name(), "9:00", "18:00"),
+                        new Schedule(Weekday.TUESDAY.name(), "9:00", "18:00")),
                 List.of("3207920496", "3108825866"),
                 List.of(PlaceCategory.HOTEL),
                 userId
         );
 
-        Optional<Place> placeOptional = placeRepository.findById(placeCreateDTO.clientId());
-
         Place createPlace = placeService.createPlace(placeCreateDTO);
-        Assertions.assertNotNull(placeOptional);
+        Assertions.assertNotNull(createPlace);
     }
 
     @Test
@@ -61,18 +60,16 @@ public class PlaceTest {
                 "Los mejores precios en Comidas",
                 new Location("point", Arrays.asList(4.560493469238281, -75.65943908691406)),
                 List.of("picture1.jpg", "picture2.jpg"),
-                List.of(new Schedule("Monday", "9:00", "18:00"),
-                        new Schedule("Tuesday", "9:00", "18:00")),
+                List.of(new Schedule(Weekday.MONDAY.name(), "9:00", "18:00"),
+                        new Schedule(Weekday.TUESDAY.name(), "9:00", "18:00")),
                 List.of("3207920496", "3108825866"),
                 List.of(PlaceCategory.RESTAURANT),
                 userId,
                 placeId
         );
 
-        Optional<Place> placeOptional = placeRepository.findById(updatePlaceDTO.placeId());
-        placeService.updatePlace(updatePlaceDTO);
-
-        Assertions.assertNotNull(placeOptional);
+        Place place = placeService.updatePlace(updatePlaceDTO);
+        Assertions.assertNotNull(place);
     }
 
     @Test
@@ -82,10 +79,8 @@ public class PlaceTest {
                 "client1"
         );
 
-        Optional<Place> placeOptional = placeRepository.findById(deletePlaceDTO.placeId());
         Place place = placeService.deletePlace(deletePlaceDTO);
-
-        Assertions.assertNotNull(placeOptional);
+        Assertions.assertNotNull(place);
     }
 
     @Test

@@ -87,9 +87,10 @@ public class PlaceServiceImpl implements PlaceService {
                 .creationDate(LocalDateTime.now().toString())
                 .build();
 
-        Place savedPlace = placeRepository.save(place);
+        user.getCreatedPlaces().add(place.getId());
         userRepository.save(user);
-        return place;
+        Place savedPlace = placeRepository.save(place);
+        return savedPlace;
     }
 
     private boolean isBannedName(String name) {
@@ -98,9 +99,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Place updatePlace(UpdatePlaceDTO updatePlaceDTO) throws UpdatePlaceException {
-        Optional<Place> place = placeRepository.findById(updatePlaceDTO.placeId());
+        Optional<Place> placeOptional = placeRepository.findById(updatePlaceDTO.placeId());
 
-        if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
+        if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new UpdatePlaceException("El lugar no existe");
         }
 
@@ -108,7 +109,7 @@ public class PlaceServiceImpl implements PlaceService {
             throw new UpdatePlaceException("El nombre del lugar no es permitido");
         }
 
-        Place updatedPlace = place.get();
+        Place updatedPlace = placeOptional.get();
         updatedPlace.setName(updatePlaceDTO.name());
         updatedPlace.setDescription(updatePlaceDTO.description());
         updatedPlace.setLocation(updatePlaceDTO.location());
@@ -117,28 +118,30 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setPhones(updatePlaceDTO.phones());
         updatedPlace.setCategories(updatePlaceDTO.categories());
 
-        placeRepository.save(updatedPlace);
-        return updatedPlace;
+        Place place = placeRepository.save(updatedPlace);
+        return place;
     }
 
     @Override
     public Place deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
-        Optional<Place> place = placeRepository.findById(deletePlaceDTO.placeId());
+        Optional<Place> placeOptional = placeRepository.findById(deletePlaceDTO.placeId());
 
-        if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
+        if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new DeletePlaceException("El lugar no existe");
         }
 
-        Place deletedPlace = place.get();
+        Place deletedPlace = placeOptional.get();
         deletedPlace.setStatus(PlaceStatus.DELETED.name());
         deletedPlace.setDeletionDate(LocalDateTime.now().toString());
 
         Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
         User user = optionalUser.get();
 
-        placeRepository.save(deletedPlace);
+        int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace);
+        user.getCreatedPlaces().set(placeIndex, null);
         userRepository.save(user);
-        return deletedPlace;
+        Place place = placeRepository.save(deletedPlace);
+        return place;
     }
 
     @Override
@@ -264,7 +267,9 @@ public class PlaceServiceImpl implements PlaceService {
 
             // TODO: si sobrepasa los 5 días se eliminará automaticamente.
             if (now.isAfter(deadline)) {
-                placeRepository.delete(updatedPlace);
+                updatedPlace.setStatus(PlaceStatus.DELETED.name());
+                updatedPlace.setDeletionDate(LocalDateTime.now().toString());
+                placeRepository.save(updatedPlace);
                 throw new ReviewPlaceException("El lugar ha sido eliminado automaticamente " +
                         "debido a que ha sobrepasado los 5 días  en estado rechazado");
             }
