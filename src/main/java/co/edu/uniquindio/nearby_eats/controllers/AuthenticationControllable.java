@@ -1,6 +1,7 @@
 package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.user.ModeratorLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.authentication.AuthtenticationException;
@@ -27,8 +28,8 @@ public class AuthenticationControllable {
     }
 
     @PostMapping("login-moderator")
-    public ResponseEntity<MessageDTO<TokenDTO>> loginModerator (@Valid @RequestBody UserLoginDTO userLoginDTO) throws AuthtenticationException {
-        TokenDTO tokenDTO = authenticationService.loginModerator(userLoginDTO);
+    public ResponseEntity<MessageDTO<TokenDTO>> loginModerator (@Valid @RequestBody ModeratorLoginDTO moderatorLoginDTO) throws AuthtenticationException {
+        TokenDTO tokenDTO = authenticationService.loginModerator(moderatorLoginDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, tokenDTO));
     }
 }

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
+import co.edu.uniquindio.nearby_eats.dto.request.user.ModeratorLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.authentication.AuthtenticationException;
@@ -47,8 +48,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenDTO loginModerator(UserLoginDTO userLoginDTO) throws AuthtenticationException {
-        Optional<User> userOptional = userRepository.findByEmail(userLoginDTO.email());
+    public TokenDTO loginModerator(ModeratorLoginDTO moderatorLoginDTO) throws AuthtenticationException {
+        Optional<User> userOptional = userRepository.findByEmail(moderatorLoginDTO.email());
         if (userOptional.isEmpty()) {
             throw new AuthtenticationException("El email no se encuentra en la base de datos");
         }
@@ -57,7 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = userOptional.get();
-        if( !passwordEncoder.matches(userLoginDTO.password(), user.getPassword()) ) {
+        if( !passwordEncoder.matches(moderatorLoginDTO.password(), user.getPassword()) ) {
             throw new AuthtenticationException("La contraseña es incorrecta");
         }
         Map<String, Object> map = new HashMap<>();

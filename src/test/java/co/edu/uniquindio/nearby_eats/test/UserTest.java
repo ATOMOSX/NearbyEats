@@ -1,20 +1,23 @@
 package co.edu.uniquindio.nearby_eats.test;
 
 import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserLoginDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserRegistrationDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.user.*;
+import co.edu.uniquindio.nearby_eats.dto.response.TokenDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
+import co.edu.uniquindio.nearby_eats.exceptions.authentication.AuthtenticationException;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
+import co.edu.uniquindio.nearby_eats.exceptions.user.ChangePasswordException;
 import co.edu.uniquindio.nearby_eats.exceptions.user.GetAllUserException;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
+import co.edu.uniquindio.nearby_eats.service.interfa.AuthenticationService;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,11 +32,34 @@ public class UserTest {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private AuthenticationService authenticationService;
     @Autowired
     private EmailService emailService;
 
     private final String userId = "client2";
+
+    @Test
+    public void loginUser() throws AuthtenticationException {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(
+                "juanito@gmail.com",
+                "123456"
+        );
+        TokenDTO tokenDTO = authenticationService.loginUser(userLoginDTO);
+
+        Assertions.assertNotNull(tokenDTO);
+    }
+
+    @Test
+    public void loginModerator() throws AuthtenticationException {
+        ModeratorLoginDTO moderatorLoginDTO = new ModeratorLoginDTO(
+                "atomosMod@correo.com",
+                "$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW"
+        );
+        TokenDTO tokenDTO = authenticationService.loginModerator(moderatorLoginDTO);
+
+        Assertions.assertNotNull(tokenDTO);
+    }
 
     @Test
     public void registerUserTest() throws Exception {
@@ -156,8 +182,13 @@ public class UserTest {
     }
 
     @Test
-    public void changePasswordTest()  {
-        // TODO: Implement this test
+    public void changePasswordTest() throws ChangePasswordException {
+        UserChangePasswordDTO userChangePasswordDTO = new UserChangePasswordDTO(
+                userId,
+                "juanda29",
+                "$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW"
+        );
+        userService.changePassword(userChangePasswordDTO);
     }
 
 }
