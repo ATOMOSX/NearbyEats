@@ -1,18 +1,13 @@
 package co.edu.uniquindio.nearby_eats.controllers;
 
 import co.edu.uniquindio.nearby_eats.dto.MessageDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.DeletePlaceDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByStatusByClientDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.PlaceCreateDTO;
-import co.edu.uniquindio.nearby_eats.dto.request.place.UpdatePlaceDTO;
+import co.edu.uniquindio.nearby_eats.dto.request.place.*;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.CreatePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.DeletePlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
-import co.edu.uniquindio.nearby_eats.exceptions.place.UpdatePlaceException;
+import co.edu.uniquindio.nearby_eats.exceptions.place.*;
 import co.edu.uniquindio.nearby_eats.exceptions.review.ReviewPlaceException;
+import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
@@ -91,4 +86,15 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, searchService.recommendPlaces(userId)));
     }
 
+    @GetMapping("/save/favorite/place")
+    public ResponseEntity<MessageDTO<Place>> saveFavoritePlace(@Valid @RequestBody FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
+        placeService.saveFavoritePlace(favoritePlaceDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.saveFavoritePlace(favoritePlaceDTO)))
+    }
+
+    @GetMapping("/delete/favorite/place")
+    public ResponseEntity<MessageDTO<Place>> deleteFavoritePlace(@Valid @RequestBody FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
+        placeService.deleteFavoritePlace(deleteFavoritePlaceDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.deleteFavoritePlace(deleteFavoritePlaceDTO)));
+    }
 }
