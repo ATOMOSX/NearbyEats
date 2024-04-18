@@ -107,8 +107,8 @@ public class PlaceTest {
 
     @Test
     public void getPlacesByCategory() throws GetPlaceException {
-        PlaceCategory placeCategory = PlaceCategory.HOTEL;
-        List<PlaceResponseDTO> place = placeService.getPlacesByCategory(placeCategory);
+        String placeCategory = "HOTEL";
+        List<PlaceResponseDTO> place = placeService.getPlacesByCategory(new GetPlacesByCategoryDTO("", placeCategory));
         System.out.println(place);
 
         Assertions.assertNotNull(placeCategory);
@@ -117,7 +117,7 @@ public class PlaceTest {
     @Test
     public void getPlacesByStatusTest() throws GetPlaceException {
         GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO = new GetPlacesByStatusByClientDTO(
-                PlaceStatus.PENDING,
+                "PENDING",
                 userId
         );
 
@@ -153,8 +153,8 @@ public class PlaceTest {
 
     @Test
     public void getPlaceByNameTest() throws GetPlaceException {
-        String name = "Exito";
-        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByName(name);
+        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO("", "Exito");
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByName(getPlacesByNameDTO);
         System.out.println(placeResponseDTOS);
 
         Assertions.assertNotNull(placeResponseDTOS);

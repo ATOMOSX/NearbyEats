@@ -19,17 +19,17 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     Boolean existsByName(String name);
 
-    List<Place> findAllByCategoriesContaining(PlaceCategory category);
+    List<Place> findAllByCategoriesContaining(String category);
 
     List<Place> findAllByCreatedBy(String clientId);
 
     List<Place> findAllByStatus(String status);
 
-    List<Place> findAllByLocation(Location location);
+    List<Place> findAllByLocation(String location);
 
     List<Place> findAllByName(String name);
 
-    List<Place> findAllByStatusAndCreatedBy(PlaceStatus status, String clientId);
+    List<Place> findAllByStatusAndCreatedBy(String status, String clientId);
 
     @Aggregation({"{$unwind: '$reviews'}",
             "{$lookup: { from: 'users', localField: 'reviews.moderatorId', foreignField: '_id', as: 'moderator' } }",

@@ -54,8 +54,8 @@ public class PlaceController {
     }
 
     @GetMapping("/get-place/by-category/{category}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable PlaceCategory category) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(category)));
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@Valid @RequestBody GetPlacesByCategoryDTO getPlacesByCategoryDTO) throws GetPlaceException {
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(getPlacesByCategoryDTO)));
     }
 
     @GetMapping("/get-place/by-status")
@@ -69,8 +69,8 @@ public class PlaceController {
     }
 
     @GetMapping("/get-place/by-location/{location}")
-    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@PathVariable Location location) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByLocation(location)));
+    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@Valid @RequestBody GetPlacesByLocation getPlacesByLocation) throws GetPlaceException {
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByLocation(getPlacesByLocation)));
     }
 
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda

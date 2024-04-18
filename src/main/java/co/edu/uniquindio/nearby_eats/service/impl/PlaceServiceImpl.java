@@ -1,5 +1,6 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
+import co.edu.uniquindio.nearby_eats.dto.SaveSearchDTO;
 import co.edu.uniquindio.nearby_eats.dto.email.EmailDTO;
 import co.edu.uniquindio.nearby_eats.dto.request.place.*;
 import co.edu.uniquindio.nearby_eats.dto.request.review.PlaceReviewDTO;
@@ -18,6 +19,7 @@ import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
+import co.edu.uniquindio.nearby_eats.service.interfa.SearchService;
 import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -34,10 +36,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -47,15 +46,17 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final SearchService searchService;
     private final Set<String> bannedNames = new HashSet<>();
     private final JwtUtils jwtUtils;
 
     public PlaceServiceImpl(PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService
-            , JwtUtils jwtUtils) {
+            , JwtUtils jwtUtils, SearchService searchService) {
         this.placeRepository = placeRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.jwtUtils = jwtUtils;
+        this.searchService = searchService;
 
         try {
             loadBannedNames();
@@ -162,14 +163,20 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByCategory(PlaceCategory category) {
-        List<Place> places = placeRepository.findAllByCategoriesContaining(category);
+    public List<PlaceResponseDTO> getPlacesByCategory(GetPlacesByCategoryDTO getPlacesByCategoryDTO) {
+        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByCategoryDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByCategoryDTO.category(), new Date().toString()));
+        List<Place> places = placeRepository.findAllByCategoriesContaining(getPlacesByCategoryDTO.category());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
     @Override
     public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) {
-        List<Place> places = placeRepository.findAllByStatusAndCreatedBy(getPlacesByStatusByClientDTO.status(), getPlacesByStatusByClientDTO.clientId());
+        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByStatusByClientDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByStatusByClientDTO.status(), new Date().toString()));
+        List<Place> places = placeRepository.findAllByStatusAndCreatedBy(getPlacesByStatusByClientDTO.status(), getPlacesByStatusByClientDTO.token());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
@@ -186,8 +193,11 @@ public class PlaceServiceImpl implements PlaceService {
 
     // TODO: Organizar método, para ingresar una ubicacoión aproximada
     @Override
-    public List<PlaceResponseDTO> getPlacesByLocation(Location location) {
-        List<Place> places = placeRepository.findAllByLocation(location);
+    public List<PlaceResponseDTO> getPlacesByLocation(GetPlacesByLocation getPlacesByLocation) {
+        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByLocation.token());
+        String userId = jws.getPayload().get("id").toString();
+        searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByLocation.location(), new Date().toString()));
+        List<Place> places = placeRepository.findAllByLocation(getPlacesByLocation.location());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
@@ -199,8 +209,11 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByName(String name) throws GetPlaceException {
-        List<Place> places = placeRepository.findAllByName(name);
+    public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByNameDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
+        List<Place> places = placeRepository.findAllByName(getPlacesByNameDTO.name());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 

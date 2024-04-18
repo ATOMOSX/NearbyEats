@@ -23,19 +23,19 @@ public interface PlaceService {
 
     PlaceResponseDTO getPlace(String placeId) throws GetPlaceException;
 
-    List<PlaceResponseDTO> getPlacesByCategory(PlaceCategory category) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesByCategory(GetPlacesByCategoryDTO getPlacesByCategoryDTO) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException;
 
-    List<PlaceResponseDTO> getPlacesByLocation(Location location) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesByLocation(GetPlacesByLocation getPlacesByLocation) throws GetPlaceException;
 
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda
 
     List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException;
 
-    List<PlaceResponseDTO> getPlacesByName(String name) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException;
 
     Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException;
 
