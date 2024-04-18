@@ -1,8 +1,10 @@
 package co.edu.uniquindio.nearby_eats.service.impl;
 
+import co.edu.uniquindio.nearby_eats.dto.SaveSearchDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.Search;
+import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.SearchRepository;
@@ -11,6 +13,7 @@ import co.edu.uniquindio.nearby_eats.service.interfa.SearchService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +25,7 @@ public class SearchServiceImpl implements SearchService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
 
+
     public SearchServiceImpl(SearchRepository searchRepository, PlaceRepository placeRepository, UserRepository userRepository) {
         this.searchRepository = searchRepository;
         this.placeRepository = placeRepository;
@@ -29,8 +33,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public void saveSearch() {
+    public void saveSearch(SaveSearchDTO saveSearchDTO) {
+        
+        Search search = Search.builder()
+                .user(saveSearchDTO.clientId())
+                .date(saveSearchDTO.date())
+                .query(saveSearchDTO.date())
+                .build();
 
+        Search saveSearch = searchRepository.save(search);
     }
 
     @Override
