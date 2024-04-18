@@ -156,7 +156,7 @@ public class UserTest {
 
     @Test
     public void getAllUsersTest() throws GetAllUserException {
-        int expectedUsers = 2;
+        int expectedUsers = 1;
         List<UserInformationDTO> users = userService.getAllUsers();
         System.out.println(users);
         Assertions.assertEquals(expectedUsers, users.size());

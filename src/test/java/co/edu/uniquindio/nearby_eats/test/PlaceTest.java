@@ -44,7 +44,7 @@ public class PlaceTest {
     private UserRepository userRepository;
 
     private final String placeId = "place1";
-    private final String userId = "client1";
+    private final String userId = "client2";
 
     @Test
     public void createPlaceTest() throws CreatePlaceException {
