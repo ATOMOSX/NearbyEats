@@ -9,12 +9,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "places")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Builder
@@ -48,4 +48,11 @@ public class Place implements Serializable {
     private String deletionDate;
     private boolean open;
 
+    public Place() {
+        this.reviews = new ArrayList<>();
+        this.images = new ArrayList<>();
+        this.schedules = new ArrayList<>();
+        this.phones = new ArrayList<>();
+        this.categories = new ArrayList<>();
+    }
 }

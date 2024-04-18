@@ -17,7 +17,7 @@ public interface UserService {
 
     void updateUser(UserUpdateDTO userUpdateDTO) throws UpdateAccountException;
 
-    void deleteUser(String id) throws DeleteAccountException;
+    void deleteUser(String token) throws DeleteAccountException;
 
     void sendRecoveryEmail(String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException;
 

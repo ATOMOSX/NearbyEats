@@ -18,6 +18,9 @@ import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
+import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -45,11 +48,14 @@ public class PlaceServiceImpl implements PlaceService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final Set<String> bannedNames = new HashSet<>();
+    private final JwtUtils jwtUtils;
 
-    public PlaceServiceImpl(PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService) {
+    public PlaceServiceImpl(PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService
+            , JwtUtils jwtUtils) {
         this.placeRepository = placeRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.jwtUtils = jwtUtils;
 
         try {
             loadBannedNames();
@@ -242,19 +248,22 @@ public class PlaceServiceImpl implements PlaceService {
             throw new ReviewPlaceException("El lugar no existe");
         }
 
-        if (!userRepository.existsById(placeReviewDTO.moderatorId())) {
+        Jws<Claims> jws = jwtUtils.parseJwt(placeReviewDTO.token());
+        String modId = jws.getPayload().get("id").toString();
+        if (!userRepository.existsById(modId)) {
             throw new ReviewPlaceException("El moderador no existe");
         }
 
         Review review = Review.builder()
-                .moderatorId(placeReviewDTO.moderatorId())
+                .moderatorId(modId)
                 .date(LocalDateTime.now().toString())
-                .action(placeReviewDTO.action().name())
+                .action(placeReviewDTO.action())
                 .commentary(placeReviewDTO.commentary())
                 .build();
 
         Place updatedPlace = place.get();
         updatedPlace.getReviews().add(review);
+        updatedPlace.setStatus(placeReviewDTO.action());
 
         if (placeReviewDTO.action().equals(PlaceStatus.REJECTED)) {
             updatedPlace.setStatus(PlaceStatus.REJECTED.name());

@@ -14,6 +14,8 @@ import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -80,14 +82,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
-        Optional<User> userOptional = userRepository.findById(userUpdateDTO.id());
+        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty()){
             throw new UpdateAccountException("El id no puede estar vacio para poder actualizar el cliente");
         }
 
-        if(existEmail(userUpdateDTO.email()))
-            throw new UpdateAccountException("El email ya existe en la base de datos");
+        if(!userOptional.get().getEmail().equals(userUpdateDTO.email())) {
+            if(existEmail(userUpdateDTO.email()))
+                throw new UpdateAccountException("El email ya existe en la base de datos");
+        }
 
         User user = userOptional.get();
         user.setFirstName(userUpdateDTO.firstName());
@@ -100,8 +106,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String id) throws DeleteAccountException {
-        Optional<User> userOptional = userRepository.findById(id);
+    public void deleteUser(String token) throws DeleteAccountException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty()){
             throw new DeleteAccountException("El id del cliente a eliminar no puede ser vacío");
@@ -177,7 +185,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private User getUserById(UserUpdateDTO userUpdateDTO) throws Exception {
-        Optional<User> user = userRepository.findById(userUpdateDTO.id());
+        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> user = userRepository.findById(userId);
         if (user.isPresent() && user.get().getIsActive()) {
             return user.get();
         } else {

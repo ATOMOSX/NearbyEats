@@ -14,6 +14,9 @@ import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.AuthenticationService;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
+import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,6 +39,8 @@ public class UserTest {
     private AuthenticationService authenticationService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     private final String userId = "client2";
 
@@ -136,7 +141,9 @@ public class UserTest {
                 "to.png"
         );
 
-        Optional<User> clientOptional = userRepository.findById(userUpdateDTO.id());
+        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> clientOptional = userRepository.findById(userId);
 
         User user = clientOptional.get();
         user.setFirstName(userUpdateDTO.firstName());
