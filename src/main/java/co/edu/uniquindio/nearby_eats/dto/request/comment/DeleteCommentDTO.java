@@ -5,6 +5,6 @@ import org.hibernate.validator.constraints.Length;
 
 public record DeleteCommentDTO(
         @NotBlank(message = "commentId is required") @Length(max = 100) String commentId,
-        @NotBlank(message = "userId is required") @Length(max = 100) String userId
+        @NotBlank(message = "token is required") @Length(max = 100) String userId
 ) {
 }

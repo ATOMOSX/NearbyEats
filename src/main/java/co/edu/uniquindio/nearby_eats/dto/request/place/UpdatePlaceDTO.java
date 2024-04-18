@@ -10,11 +10,11 @@ import java.util.List;
 public record UpdatePlaceDTO(
         @NotBlank(message = "name is required" ) String name,
         @NotBlank(message = "description is required" ) String description,
-        @NotBlank(message = "location is required") Location location,
-        @NotBlank(message = "images is empty") List<String> images,
-        @NotBlank(message = "schedule is empty" ) List<Schedule> schedule,
-        @NotBlank(message = "this phones is empty" ) List<String> phones,
-        @NotBlank(message = "No category has been established" ) List<PlaceCategory> categories,
+        Location location,
+        List<String> images,
+        List<Schedule> schedule,
+        List<String> phones,
+        List<PlaceCategory> categories,
         @NotBlank(message = "clientId is required") String clientId,
         @NotBlank(message = "placeId is required") String placeId
 ) {

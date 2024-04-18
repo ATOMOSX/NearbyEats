@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 public record FavoritePlaceDTO(
-        @NotBlank(message = "userId is required") @Length(max = 100) String userId,
+        String token,
         @NotBlank(message = "placeId is required") @Length(max = 100) String placeId
 ) {
 }

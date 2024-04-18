@@ -39,8 +39,9 @@ public class doFilterInternal extends OncePerRequestFilter {
             List<String> userList = List.of("/api/user/update-account-user", "/api/user/delete-user/{id}", "/api/user/get-all-users", "/api/user/get-user/{id}");
             List<String> commentList = List.of("/api/comment/answer-comment", "/api/comment/delete-comment");
             List<String> userPlaceList = List.of("/api/place/create-place", "/api/place/update-place", "/api/place/delete-place",
-                    "/api/place/get-place/by-user-id/{clientId}", "/api/place/recommend-places/{userId}", "/api/place/save/favorite/place", "/api/place/delete/favorite/place");
-            List<String> imageList = List.of("/api/images/upload", "/api/images/delete");
+                    "/api/place/get-place/by-user-id/{clientId}", "/api/place/recommend-places/{token}", "/api/place/save/favorite/place", "/api/place/delete/favorite/place");
+            List<String> imageList = List.of("/api/images/upload", "/api/images/delete", "/api/user/get-user/{id}");
+            List<String> modList = List.of("/api/place/review-place", "/api/user/get-all-users");
 
             String token = getToken(request);
             boolean error = true;
@@ -118,7 +119,7 @@ public class doFilterInternal extends OncePerRequestFilter {
                     error = false;
                 }
 
-                if (requestURI.equals("/api/place/review-place")) {
+                if (modList.contains(requestURI)) {
 
                     if (token != null) {
                         Jws<Claims> jws = jwtUtils.parseJwt(token);

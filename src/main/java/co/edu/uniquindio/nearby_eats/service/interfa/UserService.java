@@ -7,6 +7,7 @@ import co.edu.uniquindio.nearby_eats.dto.request.user.UserUpdateDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.user.UserInformationDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.exceptions.user.*;
+import co.edu.uniquindio.nearby_eats.model.docs.User;
 import jakarta.mail.MessagingException;
 
 import java.util.List;

@@ -146,8 +146,8 @@ public class UserServiceImpl implements UserService {
                 user.getLastName(),
                 user.getEmail(),
                 user.getNickname(),
-                user.getProfilePicture(),
-                user.getCity()
+                user.getCity(),
+                user.getProfilePicture()
         );
     }
 
@@ -162,16 +162,17 @@ public class UserServiceImpl implements UserService {
         String token = jwtUtils.generateToken(email, null);
 
         emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
-                "Para cambiar la contraseña ingrese al siguiente enlace http://localhost:8080/api/user/change-password"+token, email));
+                "Para cambiar la contraseña ingrese al siguiente enlace " +
+                        "http://localhost:8080/api/user/change-password/"+token, email));
 
     }
 
     @Override
     public void changePassword(UserChangePasswordDTO userChangePasswordDTO) throws ChangePasswordException {
 
-        Optional<User> userOptional = userRepository.findById(userChangePasswordDTO.id());
-
-        jwtUtils.parseJwt(userChangePasswordDTO.recoveryToken());
+        Jws<Claims> jws = jwtUtils.parseJwt(userChangePasswordDTO.recoveryToken());
+        String userEmail = jws.getPayload().get("sub").toString();
+        Optional<User> userOptional = userRepository.findByemail(userEmail);
 
         if (userOptional.isEmpty()) {
             throw new ChangePasswordException("id user is empty");
@@ -182,17 +183,6 @@ public class UserServiceImpl implements UserService {
         User user = userOptional.get();
         user.setPassword(encryptedPassword);
         userRepository.save(user);
-    }
-
-    private User getUserById(UserUpdateDTO userUpdateDTO) throws Exception {
-        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
-        String userId = jws.getPayload().get("id").toString();
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent() && user.get().getIsActive()) {
-            return user.get();
-        } else {
-            throw new Exception("User not found");
-        }
     }
 
     private UserInformationDTO convertToUserInformationDTO(User user) {

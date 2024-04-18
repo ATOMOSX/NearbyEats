@@ -211,7 +211,9 @@ public class PlaceServiceImpl implements PlaceService {
         if(placeOptional.isEmpty())
             throw new FavoritePlaceException("El lugar no existe");
 
-        Optional<User> userOptional = userRepository.findById(favoritePlaceDTO.userId());
+        Jws<Claims> jws = jwtUtils.parseJwt(favoritePlaceDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
 
@@ -224,7 +226,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
-        Optional<User> userOptional = userRepository.findById(deleteFavoritePlaceDTO.userId());
+        Jws<Claims> jws = jwtUtils.parseJwt(deleteFavoritePlaceDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
 
