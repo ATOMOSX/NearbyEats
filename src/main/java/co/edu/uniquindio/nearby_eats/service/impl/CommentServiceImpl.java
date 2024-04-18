@@ -11,12 +11,16 @@ import co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException;
 import co.edu.uniquindio.nearby_eats.model.docs.Comment;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Reply;
 import co.edu.uniquindio.nearby_eats.repository.CommentRepository;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.CommentService;
 import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
+import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,29 +37,33 @@ public class CommentServiceImpl implements CommentService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final JwtUtils jwtUtils;
 
-    public CommentServiceImpl(CommentRepository commentRepository, PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService) {
+    public CommentServiceImpl(CommentRepository commentRepository, PlaceRepository placeRepository, UserRepository userRepository, EmailService emailService, JwtUtils jwtUtils) {
         this.commentRepository = commentRepository;
         this.placeRepository = placeRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
     public Comment createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(commentDTO.token());
+        String userId = jws.getPayload().get("id").toString();
 
         Optional<Place> placeOptional = placeRepository.findById(commentDTO.placeId());
         if (placeOptional.isEmpty()) {
             throw new CreateCommentException("El lugar no existe");
         }
 
-        Optional<User> userOptional = userRepository.findById(commentDTO.clientId());
+        Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             throw new CreateCommentException("El usuario no existe");
         }
 
         // Verificar si el usuario ya ha comentado en el lugar
-        if (commentRepository.existsByUserAndPlace(commentDTO.clientId(), commentDTO.placeId())) {
+        if (commentRepository.existsByUserAndPlace(userId, commentDTO.placeId())) {
             throw new CreateCommentException("El usuario ya ha comentado en este lugar");
         }
 
@@ -66,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .place(commentDTO.placeId())
-                .user(commentDTO.clientId())
+                .user(userId)
                 .text(commentDTO.comment())
                 .rating(commentDTO.score())
                 .date(LocalDateTime.now().toString())
@@ -83,6 +91,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(replyDTO.token());
+        String userId = jws.getPayload().get("id").toString();
 
         Optional<Comment> commentOptional = commentRepository.findById(replyDTO.commentId());
         if (commentOptional.isEmpty()) {
@@ -95,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // Verificar si el usuario es el dueño del lugar
-        if (!place.get().getCreatedBy().equals(replyDTO.respondedBy())) {
+        if (!place.get().getCreatedBy().equals(userId)) {
             throw new AnswerCommentException("El usuario no es el dueño del lugar");
         }
 
@@ -104,12 +114,12 @@ public class CommentServiceImpl implements CommentService {
         Reply reply = Reply.builder()
                 .text(replyDTO.text())
                 .date(LocalDateTime.now().toString())
-                .respondedBy(replyDTO.respondedBy())
+                .respondedBy(userId)
                         .build();
 
         comment.setReply(reply);
         Comment comment1 = commentRepository.save(comment);
-        Optional<User> user = userRepository.findById(replyDTO.respondedBy());
+        Optional<User> user = userRepository.findById(comment.getUser());
         emailService.sendEmail(new EmailDTO("Nuevo comentario en "+place.get().getName(),
                 "Su comentario ha sido respondido:  http://localhost:8080/api/comment/create-comment", user.get().getEmail()));
         return comment1;
@@ -122,7 +132,9 @@ public class CommentServiceImpl implements CommentService {
             throw new DeleteCommentException("El comentario no existe");
         }
 
-        if(!commentOptional.get().getUser().equals(deleteCommentDTO.userId()))
+        Jws<Claims> jws = jwtUtils.parseJwt(deleteCommentDTO.token());
+        String userId = jws.getPayload().get("id").toString();
+        if(!commentOptional.get().getUser().equals(userId))
             throw new DeleteCommentException("El usuario no puede eliminar un comentario de otro usuario");
 
         commentRepository.deleteById(deleteCommentDTO.commentId());

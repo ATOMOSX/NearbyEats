@@ -49,28 +49,39 @@ public class PlaceController {
     }
 
     @GetMapping("/get-place/{id}")
-    public ResponseEntity<MessageDTO<PlaceResponseDTO>> getPlace(@PathVariable String placeId) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlace(placeId)));
+    public ResponseEntity<MessageDTO<PlaceResponseDTO>> getPlace(@PathVariable String id) throws GetPlaceException {
+        PlaceResponseDTO place = placeService.getPlace(id);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, place));
     }
 
-    @GetMapping("/get-place/by-category/{category}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@Valid @RequestBody GetPlacesByCategoryDTO getPlacesByCategoryDTO) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByCategory(getPlacesByCategoryDTO)));
+    @GetMapping("/get-place/by-category")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@RequestParam String category,
+                                                                                  @RequestParam String token) throws GetPlaceException {
+        GetPlacesByCategoryDTO getPlacesByCategoryDTO = new GetPlacesByCategoryDTO(token, category);
+        List<PlaceResponseDTO> places = placeService.getPlacesByCategory(getPlacesByCategoryDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
     @GetMapping("/get-place/by-status")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@Valid @RequestBody GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByStatus(getPlacesByStatusByClientDTO)));
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@RequestParam String status,
+                                                                                @RequestParam String token) throws GetPlaceException {
+        GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO = new GetPlacesByStatusByClientDTO(status, token);
+        List<PlaceResponseDTO> places = placeService.getPlacesByStatus(getPlacesByStatusByClientDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
     @GetMapping("/get-place/by-user-id/{clientId}")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByClientId(@PathVariable String clientId) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByClientId(clientId)));
+        List<PlaceResponseDTO> places = placeService.getPlacesByClientId(clientId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
-    @GetMapping("/get-place/by-location/{location}")
-    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@Valid @RequestBody GetPlacesByLocation getPlacesByLocation) throws GetPlaceException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getPlacesByLocation(getPlacesByLocation)));
+    @GetMapping("/get-place/by-location")
+    private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@RequestParam String location,
+                                                                                   @RequestParam String token) throws GetPlaceException {
+        GetPlacesByLocation getPlacesByLocation = new GetPlacesByLocation(token, location);
+        List<PlaceResponseDTO> places = placeService.getPlacesByLocation(getPlacesByLocation);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda

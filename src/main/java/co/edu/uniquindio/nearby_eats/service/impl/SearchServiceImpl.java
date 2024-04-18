@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
         Search search = Search.builder()
                 .user(saveSearchDTO.clientId())
                 .date(saveSearchDTO.date())
-                .query(saveSearchDTO.date())
+                .query(saveSearchDTO.query())
                 .build();
 
         Search saveSearch = searchRepository.save(search);

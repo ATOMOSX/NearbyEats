@@ -36,9 +36,9 @@ public class UserController {
         userService.updateUser(userUpdateDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "update user successful"));
     }
-    @DeleteMapping("/delete-user/{id}")
-    public ResponseEntity<MessageDTO<String>> deleteUser(@PathVariable String id) throws DeleteAccountException {
-        userService.deleteUser(id);
+    @DeleteMapping("/delete-user/{token}")
+    public ResponseEntity<MessageDTO<String>> deleteUser(@PathVariable String token) throws DeleteAccountException {
+        userService.deleteUser(token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }
 

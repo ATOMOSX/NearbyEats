@@ -29,7 +29,7 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByName(String name);
 
-    List<Place> findAllByStatusAndCreatedBy(String status, String clientId);
+    List<Place> findAllByStatusAndCreatedBy(String status, String createdBy);
 
     @Aggregation({"{$unwind: '$reviews'}",
             "{$lookup: { from: 'users', localField: 'reviews.moderatorId', foreignField: '_id', as: 'moderator' } }",

@@ -172,11 +172,16 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) {
+    public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException {
         Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByStatusByClientDTO.token());
         String userId = jws.getPayload().get("id").toString();
+
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByStatusByClientDTO.status(), new Date().toString()));
-        List<Place> places = placeRepository.findAllByStatusAndCreatedBy(getPlacesByStatusByClientDTO.status(), getPlacesByStatusByClientDTO.token());
+
+        List<Place> places = placeRepository.findAllByStatusAndCreatedBy(getPlacesByStatusByClientDTO.status(), userId);
+
+        if(places.isEmpty())
+            throw new GetPlaceException("No hay lugares");
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
