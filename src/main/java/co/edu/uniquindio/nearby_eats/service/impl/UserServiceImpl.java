@@ -15,13 +15,14 @@ import co.edu.uniquindio.nearby_eats.service.interfa.EmailService;
 import co.edu.uniquindio.nearby_eats.service.interfa.UserService;
 import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,17 +30,19 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
-    private Set<String> forbiddenNickName;
+    private Set<String> forbiddenNickName = new HashSet<>();
     private final JwtUtils jwtUtils;
 
     public UserServiceImpl(UserRepository userRepository, EmailService emailService, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.jwtUtils = jwtUtils;
+        uploadForbiddenName();
     }
 
     @Override
@@ -203,16 +206,18 @@ public class UserServiceImpl implements UserService {
     }
 
     private void uploadForbiddenName() {
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("usuarios_prohibidos.txt"))) {
-            String nickName;
-            while ((nickName = bufferedReader.readLine() ) != null) {
-                forbiddenNickName.add(nickName.trim());
+        ClassPathResource resource = new ClassPathResource("usuarios_prohibidos.txt");
+        try (InputStream inputStream = resource.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                forbiddenNickName.add(line.trim().toLowerCase());
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean isForbiddenNickName (String nickName) {return forbiddenNickName.contains(nickName);}
+    public boolean isForbiddenNickName (String nickName) {return forbiddenNickName.contains(nickName.trim().toLowerCase());}
 
 }

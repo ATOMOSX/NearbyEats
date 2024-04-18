@@ -31,7 +31,7 @@ public class JwtUtils {
     }
 
     private SecretKey getKey(){
-        String secret = "&%#key@-.Muy_s)/cre74";
+        String secret = "&%#key@-.Muy_s)/cre74&%#key@-.Muy_s)/cre74&%#key@-.Muy_s)/cre74";
         byte[] secretKeyBytes = secret.getBytes();
         return Keys.hmacShaKeyFor(secretKeyBytes);
     }

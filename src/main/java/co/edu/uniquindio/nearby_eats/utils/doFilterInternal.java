@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.security.SignatureException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class doFilterInternal extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
         response.addHeader("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization");
 
         if (request.getMethod().equals("OPTIONS")) {
@@ -35,12 +36,17 @@ public class doFilterInternal extends OncePerRequestFilter {
         } else {
 
             String requestURI = request.getRequestURI();
+            List<String> userList = List.of("/api/user/update-account-user", "/api/user/delete-user/{id}", "/api/user/get-all-users", "/api/user/get-user/{id}");
+            List<String> commentList = List.of("/api/comment/answer-comment", "/api/comment/delete-comment");
+            List<String> userPlaceList = List.of("/api/place/create-place", "/api/place/update-place", "/api/place/delete-place",
+                    "/api/place/get-place/by-user-id/{clientId}", "/api/place/recommend-places/{userId}", "/api/place/save/favorite/place", "/api/place/delete/favorite/place");
+            List<String> imageList = List.of("/api/images/upload", "/api/images/delete");
 
             String token = getToken(request);
             boolean error = true;
 
             try {
-                if (requestURI.startsWith("/api/user")) {
+                if (userList.contains(requestURI)) {
 
                     if (token != null) {
                         Jws<Claims> jws = jwtUtils.parseJwt(token);
@@ -58,7 +64,7 @@ public class doFilterInternal extends OncePerRequestFilter {
                     error = false;
                 }
 
-                if (requestURI.startsWith("/api/place")) {
+                if (userPlaceList.contains(requestURI)) {
 
                     if (token != null) {
                         Jws<Claims> jws = jwtUtils.parseJwt(token);
@@ -76,11 +82,47 @@ public class doFilterInternal extends OncePerRequestFilter {
                     error = false;
                 }
 
-                if (requestURI.startsWith("/api/comment")) {
+                if (commentList.contains(requestURI)) {
 
                     if (token != null) {
                         Jws<Claims> jws = jwtUtils.parseJwt(token);
                         if (!jws.getPayload().get("role").equals("CLIENT")) {
+                            createErrorResponse("You do not have permission to access this resource",
+                                    HttpServletResponse.SC_FORBIDDEN, response);
+                        } else {
+                            error = false;
+                        }
+                    } else {
+                        createErrorResponse("You do not have permission to access this resource",
+                                HttpServletResponse.SC_FORBIDDEN, response);
+                    }
+                } else {
+                    error = false;
+                }
+
+                if (imageList.contains(requestURI)) {
+
+                    if (token != null) {
+                        Jws<Claims> jws = jwtUtils.parseJwt(token);
+                        if (!jws.getPayload().get("role").equals("CLIENT") || !jws.getPayload().get("role").equals("MODERATOR")) {
+                            createErrorResponse("You do not have permission to access this resource",
+                                    HttpServletResponse.SC_FORBIDDEN, response);
+                        } else {
+                            error = false;
+                        }
+                    } else {
+                        createErrorResponse("You do not have permission to access this resource",
+                                HttpServletResponse.SC_FORBIDDEN, response);
+                    }
+                } else {
+                    error = false;
+                }
+
+                if (requestURI.equals("/api/place/review-place")) {
+
+                    if (token != null) {
+                        Jws<Claims> jws = jwtUtils.parseJwt(token);
+                        if (!jws.getPayload().get("role").equals("MODERATOR")) {
                             createErrorResponse("You do not have permission to access this resource",
                                     HttpServletResponse.SC_FORBIDDEN, response);
                         } else {

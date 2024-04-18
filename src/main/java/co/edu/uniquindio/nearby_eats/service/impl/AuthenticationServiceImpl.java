@@ -42,8 +42,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("id", user.getId());
-        map.put("nombre", user.getFirstName());
-        map.put("rol", user.getRole());
+        map.put("name", user.getFirstName());
+        map.put("role", user.getRole());
         return new TokenDTO( jwtUtils.generateToken(user.getEmail(), map) );
     }
 
@@ -63,8 +63,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("id", user.getId());
-        map.put("nombre", user.getFirstName());
-        map.put("rol", user.getRole());
+        map.put("name", user.getFirstName());
+        map.put("role", user.getRole());
         return new TokenDTO( jwtUtils.generateToken(user.getEmail(), map) );
     }
 }

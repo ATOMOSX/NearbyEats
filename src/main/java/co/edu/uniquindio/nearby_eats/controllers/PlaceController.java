@@ -86,13 +86,13 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, searchService.recommendPlaces(userId)));
     }
 
-    @GetMapping("/save/favorite/place")
+    @PatchMapping("/save/favorite/place")
     public ResponseEntity<MessageDTO<Place>> saveFavoritePlace(@Valid @RequestBody FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
         placeService.saveFavoritePlace(favoritePlaceDTO);
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.saveFavoritePlace(favoritePlaceDTO)))
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.saveFavoritePlace(favoritePlaceDTO)));
     }
 
-    @GetMapping("/delete/favorite/place")
+    @PatchMapping("/delete/favorite/place")
     public ResponseEntity<MessageDTO<Place>> deleteFavoritePlace(@Valid @RequestBody FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
         placeService.deleteFavoritePlace(deleteFavoritePlaceDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.deleteFavoritePlace(deleteFavoritePlaceDTO)));

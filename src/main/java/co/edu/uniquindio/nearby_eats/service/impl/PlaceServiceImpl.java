@@ -105,9 +105,9 @@ public class PlaceServiceImpl implements PlaceService {
             throw new UpdatePlaceException("El lugar no existe");
         }
 
-        if (isBannedName(updatePlaceDTO.name())) {
+        /*if (isBannedName(updatePlaceDTO.name())) {
             throw new UpdatePlaceException("El nombre del lugar no es permitido");
-        }
+        }*/
 
         Place updatedPlace = placeOptional.get();
         updatedPlace.setName(updatePlaceDTO.name());
