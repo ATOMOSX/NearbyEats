@@ -62,6 +62,14 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
+    @GetMapping("/get-place/by-name")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@RequestParam String name,
+                                                                                  @RequestParam String token) throws GetPlaceException {
+        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO(token, name);
+        List<PlaceResponseDTO> places = placeService.getPlacesByName(getPlacesByNameDTO);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
+    }
+
     @GetMapping("/get-place/by-status")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByStatus(@RequestParam String status,
                                                                                 @RequestParam String token) throws GetPlaceException {

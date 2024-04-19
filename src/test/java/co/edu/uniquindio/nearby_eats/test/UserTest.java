@@ -59,7 +59,7 @@ public class UserTest {
     public void loginModerator() throws AuthtenticationException {
         ModeratorLoginDTO moderatorLoginDTO = new ModeratorLoginDTO(
                 "atomosMod@correo.com",
-                "$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW"
+                "juandis"
         );
         TokenDTO tokenDTO = authenticationService.loginModerator(moderatorLoginDTO);
 
@@ -191,7 +191,6 @@ public class UserTest {
     @Test
     public void changePasswordTest() throws ChangePasswordException {
         UserChangePasswordDTO userChangePasswordDTO = new UserChangePasswordDTO(
-                userId,
                 "juanda29",
                 "$2a$10$Se1GLM8hfjywo69nPVtkhekiHzUbU6uAqqQhe8zk25RLZoLKzaGxW"
         );
