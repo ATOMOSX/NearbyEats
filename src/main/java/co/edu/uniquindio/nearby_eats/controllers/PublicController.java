@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/publico")
+@RequestMapping("/api/public")
 public class PublicController {
 
     private final PlaceService placeService;
