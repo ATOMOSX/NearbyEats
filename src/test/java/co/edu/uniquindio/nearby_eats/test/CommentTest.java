@@ -31,22 +31,22 @@ public class CommentTest {
 
     @Test
     public void createCommentTest() throws CreateCommentException, MessagingException, EmailServiceException {
-        CommentDTO commentDTO = new CommentDTO(placeId, userId, "Excelente lugar", 5);
-        Comment comment = commentService.createComment(commentDTO);
+        CommentDTO commentDTO = new CommentDTO(placeId, "Excelente lugar", 5);
+        Comment comment = commentService.createComment(commentDTO, userId);
         Assertions.assertNotNull(comment);
     }
 
     @Test
     public void answerCommentTest() throws AnswerCommentException, MessagingException, EmailServiceException {
-        ReplyDTO replyDTO = new ReplyDTO("client1", "respuesta", "comment1");
-        Comment comment = commentService.answerComment(replyDTO);
+        ReplyDTO replyDTO = new ReplyDTO( "respuesta", "comment1");
+        Comment comment = commentService.answerComment(replyDTO, userId);
         Assertions.assertNotNull(comment);
     }
 
     @Test
     public void deleteCommentTest() throws DeleteCommentException {
-        DeleteCommentDTO deleteCommentDTO = new DeleteCommentDTO("comment1", "client1");
-        String comment = commentService.deleteComment(deleteCommentDTO);
+        DeleteCommentDTO deleteCommentDTO = new DeleteCommentDTO("comment1");
+        String comment = commentService.deleteComment(deleteCommentDTO, userId);
         Assertions.assertNotNull(comment);
     }
 
