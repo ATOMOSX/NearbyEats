@@ -100,8 +100,9 @@ public class PlaceController {
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda
 
     @PostMapping("/review-place")
-    public ResponseEntity<MessageDTO<String>> reviewPlace(@Valid @RequestBody PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException, MessagingException, EmailServiceException {
-        placeService.reviewPlace(placeReviewDTO);
+    public ResponseEntity<MessageDTO<String>> reviewPlace(@Valid @RequestBody PlaceReviewDTO placeReviewDTO, @RequestHeader Map<String, String> headers) throws ReviewPlaceException, MessagingException, EmailServiceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        placeService.reviewPlace(placeReviewDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, ""));
     }
 

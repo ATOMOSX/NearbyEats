@@ -11,7 +11,8 @@ public record UserRegistrationDTO(
        @NotBlank(message = "password is required") String password,
        @NotBlank(message = "nickname is required") @Length(max = 30) String nickname,
        @NotBlank(message = "city is required") String city,
-       @NotBlank(message = "profilePicture is required") String profilePicture
+       @NotBlank(message = "profilePicture is required") String profilePicture,
+       @NotBlank(message = "password is required") String confirmPassword
 ) {
 
 }

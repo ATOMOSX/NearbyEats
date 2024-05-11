@@ -6,15 +6,14 @@ import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByLocation;
 import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByNameDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,25 +24,34 @@ public class PublicController {
 
     @GetMapping("/get-place/by-location")
     private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@RequestParam String location,
-                                                                                   @RequestParam String token) throws GetPlaceException {
-        GetPlacesByLocation getPlacesByLocation = new GetPlacesByLocation(token, location);
-        List<PlaceResponseDTO> places = placeService.getPlacesByLocation(getPlacesByLocation);
+                                                                                   @RequestHeader Map<String, String> headers) throws GetPlaceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        GetPlacesByLocation getPlacesByLocation = new GetPlacesByLocation(location);
+        List<PlaceResponseDTO> places = placeService.getPlacesByLocation(getPlacesByLocation, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
     @GetMapping("/get-place/by-category")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@RequestParam String category,
-                                                                                  @RequestParam String token) throws GetPlaceException {
-        GetPlacesByCategoryDTO getPlacesByCategoryDTO = new GetPlacesByCategoryDTO(token, category);
-        List<PlaceResponseDTO> places = placeService.getPlacesByCategory(getPlacesByCategoryDTO);
+                                                                                  @RequestHeader Map<String, String> headers) throws GetPlaceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        GetPlacesByCategoryDTO getPlacesByCategoryDTO = new GetPlacesByCategoryDTO(category);
+        List<PlaceResponseDTO> places = placeService.getPlacesByCategory(getPlacesByCategoryDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
     @GetMapping("/get-place/by-name")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@RequestParam String name,
-                                                                              @RequestParam String token) throws GetPlaceException {
-        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO(token, name);
-        List<PlaceResponseDTO> places = placeService.getPlacesByName(getPlacesByNameDTO);
+                                                                              @RequestHeader Map<String, String> headers) throws GetPlaceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO(name);
+        List<PlaceResponseDTO> places = placeService.getPlacesByName(getPlacesByNameDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
+    }
+
+    @GetMapping("/get-place-status")
+    public ResponseEntity<MessageDTO<List<String>>> getPlacesStatus() {
+        List<String> placeStatus = placeService.getPlaceStatus();
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeStatus));
     }
 }

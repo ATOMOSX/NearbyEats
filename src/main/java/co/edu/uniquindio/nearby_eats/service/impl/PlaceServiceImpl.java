@@ -264,14 +264,14 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void reviewPlace(PlaceReviewDTO placeReviewDTO) throws ReviewPlaceException, MessagingException, EmailServiceException {
+    public void reviewPlace(PlaceReviewDTO placeReviewDTO, String token) throws ReviewPlaceException, MessagingException, EmailServiceException {
         Optional<Place> place = placeRepository.findById(placeReviewDTO.placeId());
 
         if (place.isEmpty() || place.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new ReviewPlaceException("El lugar no existe");
         }
 
-        Jws<Claims> jws = jwtUtils.parseJwt(placeReviewDTO.token());
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String modId = jws.getPayload().get("id").toString();
         if (!userRepository.existsById(modId)) {
             throw new ReviewPlaceException("El moderador no existe");
@@ -317,6 +317,11 @@ public class PlaceServiceImpl implements PlaceService {
                 "Su negocio ha sido revisado:  " +
                         "http://localhost:8080/api/place/review-place", user.getEmail()));
         // TODO: validar urls de los email
+    }
+
+    @Override
+    public List<String> getPlaceStatus() {
+        return List.of(PlaceStatus.REJECTED.toString(), PlaceStatus.PENDING.toString(), PlaceStatus.DELETED.toString(), PlaceStatus.APPROVED.toString());
     }
 
     private void loadBannedNames() throws IOException {
