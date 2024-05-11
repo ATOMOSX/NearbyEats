@@ -36,7 +36,7 @@ public class doFilterInternal extends OncePerRequestFilter {
         } else {
 
             String requestURI = request.getRequestURI();
-            List<String> userList = List.of("/api/user/update-account-user", "/api/user/delete-user/{id}", "/api/user/get-all-users", "/api/user/get-user/{id}");
+            List<String> userList = List.of("/api/user/update-account-user", "/api/user/delete-user", "/api/user/get-all-users", "/api/user/get-user/{id}");
             List<String> commentList = List.of("/api/comment/create-comment", "/api/comment/answer-comment", "/api/comment/delete-comment");
             List<String> userPlaceList = List.of("/api/place/create-place", "/api/place/update-place", "/api/place/delete-place", "/api/place/recommend-places/{token}", "/api/place/save/favorite/place", "/api/place/delete/favorite/place", "/api/place/get-place/by-status", "/api/place/get-place/by-category", "/api/place/get-place/by-location");
             List<String> imageList = List.of("/api/images/upload", "/api/images/delete", "/api/user/get-user/{id}",

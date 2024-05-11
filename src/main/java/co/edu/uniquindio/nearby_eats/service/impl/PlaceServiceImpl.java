@@ -163,8 +163,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByCategory(GetPlacesByCategoryDTO getPlacesByCategoryDTO) {
-        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByCategoryDTO.token());
+    public List<PlaceResponseDTO> getPlacesByCategory(GetPlacesByCategoryDTO getPlacesByCategoryDTO, String token) {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByCategoryDTO.category(), new Date().toString()));
         List<Place> places = placeRepository.findAllByCategoriesContaining(getPlacesByCategoryDTO.category());
@@ -172,8 +172,9 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO) throws GetPlaceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByStatusByClientDTO.token());
+    public List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO,
+                                                    String token) throws GetPlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
 
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByStatusByClientDTO.status(), new Date().toString()));
@@ -198,8 +199,8 @@ public class PlaceServiceImpl implements PlaceService {
 
     // TODO: Organizar método, para ingresar una ubicacoión aproximada
     @Override
-    public List<PlaceResponseDTO> getPlacesByLocation(GetPlacesByLocation getPlacesByLocation) {
-        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByLocation.token());
+    public List<PlaceResponseDTO> getPlacesByLocation(GetPlacesByLocation getPlacesByLocation, String token) {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByLocation.location(), new Date().toString()));
         List<Place> places = placeRepository.findAllByLocation(getPlacesByLocation.location());
@@ -214,8 +215,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(getPlacesByNameDTO.token());
+    public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
         List<Place> places = placeRepository.findAllByName(getPlacesByNameDTO.name());
@@ -223,13 +224,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO) throws FavoritePlaceException {
+    public Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO, String token) throws FavoritePlaceException {
 
         Optional<Place> placeOptional = placeRepository.findById(favoritePlaceDTO.placeId());
         if(placeOptional.isEmpty())
             throw new FavoritePlaceException("El lugar no existe");
 
-        Jws<Claims> jws = jwtUtils.parseJwt(favoritePlaceDTO.token());
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())
@@ -243,8 +244,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO) throws FavoritePlaceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(deleteFavoritePlaceDTO.token());
+    public Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO, String token) throws FavoritePlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())

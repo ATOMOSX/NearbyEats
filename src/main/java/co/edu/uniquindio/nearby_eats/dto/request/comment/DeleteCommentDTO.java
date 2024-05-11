@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 public record DeleteCommentDTO(
-        @NotBlank(message = "commentId is required") @Length(max = 100) String commentId,
-        String token
+        @NotBlank(message = "commentId is required") @Length(max = 100) String commentId
 ) {
 }

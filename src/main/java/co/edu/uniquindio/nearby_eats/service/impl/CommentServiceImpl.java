@@ -48,8 +48,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(commentDTO.token());
+    public Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
 
         Optional<Place> placeOptional = placeRepository.findById(commentDTO.placeId());
@@ -90,8 +90,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(replyDTO.token());
+    public Comment answerComment(ReplyDTO replyDTO, String token) throws AnswerCommentException, MessagingException, EmailServiceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
 
         Optional<Comment> commentOptional = commentRepository.findById(replyDTO.commentId());
@@ -126,13 +126,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public String deleteComment(DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException {
+    public String deleteComment(DeleteCommentDTO deleteCommentDTO, String token) throws DeleteCommentException {
         Optional<Comment> commentOptional = commentRepository.findById(deleteCommentDTO.commentId());
         if (commentOptional.isEmpty()) {
             throw new DeleteCommentException("El comentario no existe");
         }
 
-        Jws<Claims> jws = jwtUtils.parseJwt(deleteCommentDTO.token());
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         if(!commentOptional.get().getUser().equals(userId))
             throw new DeleteCommentException("El usuario no puede eliminar un comentario de otro usuario");

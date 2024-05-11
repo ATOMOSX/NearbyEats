@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,12 +33,14 @@ public class UserController {
     }
 
     @PatchMapping("/update-account-user")
-    public ResponseEntity<MessageDTO<String>> updateUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
-        userService.updateUser(userUpdateDTO);
+    public ResponseEntity<MessageDTO<String>> updateUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader Map<String, String> headers) throws UpdateAccountException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        userService.updateUser(userUpdateDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "update user successful"));
     }
-    @DeleteMapping("/delete-user/{token}")
-    public ResponseEntity<MessageDTO<String>> deleteUser(@PathVariable String token) throws DeleteAccountException {
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<MessageDTO<String>> deleteUser(@RequestHeader Map<String, String> headers) throws DeleteAccountException {
+        String token = headers.get("authorization").replace("Bearer ", "");
         userService.deleteUser(token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }

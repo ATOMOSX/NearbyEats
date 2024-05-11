@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserUpdateDTO userUpdateDTO) throws UpdateAccountException {
-        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
+    public void updateUser(UserUpdateDTO userUpdateDTO, String token) throws UpdateAccountException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         Optional<User> userOptional = userRepository.findById(userId);
 

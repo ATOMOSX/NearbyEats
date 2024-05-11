@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 public record UserUpdateDTO(
-        String token,
         @NotBlank(message = "firstName is required") @Length(max = 55) String firstName,
         @NotBlank(message = "lastName is required") @Length(max = 55) String lastName,
         @NotBlank(message = "email is required") @Email String email,

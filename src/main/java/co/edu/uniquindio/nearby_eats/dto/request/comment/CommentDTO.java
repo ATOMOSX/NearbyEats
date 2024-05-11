@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.Length;
 
 public record CommentDTO(
         String placeId,
-        String token,
         @NotBlank(message = "comment is required") @Length(max = 380) String comment,int score
 ) {
 }

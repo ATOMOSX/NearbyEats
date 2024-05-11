@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,19 +28,22 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/create-comment")
-    public ResponseEntity<MessageDTO<Comment>> createComment(@Valid @RequestBody CommentDTO commentDTO) throws MessagingException, EmailServiceException, CreateCommentException {
-        Comment comment = commentService.createComment(commentDTO);
+    public ResponseEntity<MessageDTO<Comment>> createComment(@Valid @RequestBody CommentDTO commentDTO, @RequestHeader Map<String, String> headers) throws MessagingException, EmailServiceException, CreateCommentException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        Comment comment = commentService.createComment(commentDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, comment));
     }
     @PostMapping("/answer-comment")
-    public ResponseEntity<MessageDTO<Comment>> answerComment(@Valid @RequestBody ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException {
-        Comment comment = commentService.answerComment(replyDTO);
+    public ResponseEntity<MessageDTO<Comment>> answerComment(@Valid @RequestBody ReplyDTO replyDTO, @RequestHeader Map<String, String> headers) throws AnswerCommentException, MessagingException, EmailServiceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        Comment comment = commentService.answerComment(replyDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, comment));
     }
 
     @DeleteMapping("/delete-comment")
-    public ResponseEntity<MessageDTO<String>> deleteComment(@Valid @RequestBody DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException{
-        commentService.deleteComment(deleteCommentDTO);
+    public ResponseEntity<MessageDTO<String>> deleteComment(@Valid @RequestBody DeleteCommentDTO deleteCommentDTO, @RequestHeader Map<String, String> headers) throws DeleteCommentException{
+        String token = headers.get("authorization").replace("Bearer ", "");
+        commentService.deleteComment(deleteCommentDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "comment is delete correctly"));
     }
 

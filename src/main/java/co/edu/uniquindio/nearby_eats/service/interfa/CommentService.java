@@ -13,11 +13,11 @@ import java.util.List;
 
 public interface CommentService {
 
-    Comment createComment(CommentDTO commentDTO) throws CreateCommentException, MessagingException, EmailServiceException;
+    Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException;
 
-    Comment answerComment(ReplyDTO replyDTO) throws AnswerCommentException, MessagingException, EmailServiceException;
+    Comment answerComment(ReplyDTO replyDTO, String token) throws AnswerCommentException, MessagingException, EmailServiceException;
 
-    String deleteComment(DeleteCommentDTO deleteCommentDTO) throws DeleteCommentException;
+    String deleteComment(DeleteCommentDTO deleteCommentDTO, String token) throws DeleteCommentException;
 
     List<CommentResponseDTO> getCommentsByPlace(String placeId) throws ListCommentsException;
 
