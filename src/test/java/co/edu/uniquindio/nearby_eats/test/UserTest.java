@@ -137,13 +137,10 @@ public class UserTest {
                 "Perez",
                 "jloaizanieto@gmail.com",
                 "Armenia",
-                "Imagen de perfil 2",
-                "to.png"
+                "Imagen de perfil 2"
         );
 
-        Jws<Claims> jws = jwtUtils.parseJwt(userUpdateDTO.token());
-        String userId = jws.getPayload().get("id").toString();
-        Optional<User> clientOptional = userRepository.findById(userId);
+        Optional<User> clientOptional = userRepository.findByEmail(userUpdateDTO.email());
 
         User user = clientOptional.get();
         user.setFirstName(userUpdateDTO.firstName());

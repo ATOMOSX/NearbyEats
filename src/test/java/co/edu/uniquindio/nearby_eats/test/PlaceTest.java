@@ -108,7 +108,7 @@ public class PlaceTest {
     @Test
     public void getPlacesByCategory() throws GetPlaceException {
         String placeCategory = "HOTEL";
-        List<PlaceResponseDTO> place = placeService.getPlacesByCategory(new GetPlacesByCategoryDTO("", placeCategory));
+        List<PlaceResponseDTO> place = placeService.getPlacesByCategory(new GetPlacesByCategoryDTO(placeCategory), userId);
         System.out.println(place);
 
         Assertions.assertNotNull(placeCategory);
@@ -117,11 +117,10 @@ public class PlaceTest {
     @Test
     public void getPlacesByStatusTest() throws GetPlaceException {
         GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO = new GetPlacesByStatusByClientDTO(
-                "PENDING",
-                userId
+                "PENDING"
         );
 
-        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByStatus(getPlacesByStatusByClientDTO);
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByStatus(getPlacesByStatusByClientDTO, userId);
         System.out.println(placeResponseDTOS);
 
         Assertions.assertNotNull(getPlacesByStatusByClientDTO);
@@ -153,8 +152,8 @@ public class PlaceTest {
 
     @Test
     public void getPlaceByNameTest() throws GetPlaceException {
-        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO("", "Exito");
-        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByName(getPlacesByNameDTO);
+        GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO("Exito");
+        List<PlaceResponseDTO> placeResponseDTOS = placeService.getPlacesByName(getPlacesByNameDTO, userId);
         System.out.println(placeResponseDTOS);
 
         Assertions.assertNotNull(placeResponseDTOS);
@@ -164,11 +163,10 @@ public class PlaceTest {
     @Test
     public void saveFavoritePlaceTest() throws FavoritePlaceException {
         FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
-                userId,
                 placeId
         );
 
-        Place place = placeService.saveFavoritePlace(favoritePlaceDTO);
+        Place place = placeService.saveFavoritePlace(favoritePlaceDTO, userId);
         System.out.println(place);
         Assertions.assertNotNull(place);
     }
@@ -177,11 +175,10 @@ public class PlaceTest {
     @Test
     public void deleteFavortitePlace() throws FavoritePlaceException {
         FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
-                userId,
                 placeId
         );
 
-        Place place = placeService.deleteFavoritePlace(favoritePlaceDTO);
+        Place place = placeService.deleteFavoritePlace(favoritePlaceDTO, userId);
         System.out.println(place);
         Assertions.assertNotNull(place);
     }
