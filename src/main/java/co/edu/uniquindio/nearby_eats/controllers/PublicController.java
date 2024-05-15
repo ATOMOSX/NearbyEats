@@ -6,9 +6,10 @@ import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByLocation;
 import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByNameDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
-import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
+import co.edu.uniquindio.nearby_eats.service.MongoService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ import java.util.Map;
 public class PublicController {
 
     private final PlaceService placeService;
+    @Autowired
+    private MongoService mongoService;
 
     @GetMapping("/get-place/by-location")
     private ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByLocation(@RequestParam String location,
@@ -53,5 +56,11 @@ public class PublicController {
     public ResponseEntity<MessageDTO<List<String>>> getPlacesStatus() {
         List<String> placeStatus = placeService.getPlaceStatus();
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeStatus));
+    }
+
+    @GetMapping("/get-cities")
+    public ResponseEntity<MessageDTO<List<String>>> getCities() {
+        List<String> cities = mongoService.findCities();
+        return ResponseEntity.ok().body(new MessageDTO<>(false, cities));
     }
 }

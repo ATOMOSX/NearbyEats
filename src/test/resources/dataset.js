@@ -319,3 +319,17 @@ db.comments.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },
 ]);
+db.cities.insertMany([
+    {
+        nombre: "Armenia"
+    },
+    {
+        nombre: "Pereira"
+    },
+    {
+        nombre: "Manizales"
+    },
+    {
+        nombre: "Cali"
+    },
+]);

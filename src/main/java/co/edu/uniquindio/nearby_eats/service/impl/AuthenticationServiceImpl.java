@@ -9,6 +9,8 @@ import co.edu.uniquindio.nearby_eats.model.enums.UserRole;
 import co.edu.uniquindio.nearby_eats.repository.UserRepository;
 import co.edu.uniquindio.nearby_eats.service.interfa.AuthenticationService;
 import co.edu.uniquindio.nearby_eats.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
