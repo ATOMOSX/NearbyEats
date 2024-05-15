@@ -104,13 +104,7 @@ public class doFilterInternal extends OncePerRequestFilter {
                 if (imageList.contains(requestURI)) {
 
                     if (token != null) {
-                        Jws<Claims> jws = jwtUtils.parseJwt(token);
-                        if (!jws.getPayload().get("role").equals("CLIENT") || !jws.getPayload().get("role").equals("MODERATOR")) {
-                            createErrorResponse("You do not have permission to access this resource",
-                                    HttpServletResponse.SC_FORBIDDEN, response);
-                        } else {
-                            error = false;
-                        }
+
                     } else {
                         createErrorResponse("You do not have permission to access this resource",
                                 HttpServletResponse.SC_FORBIDDEN, response);

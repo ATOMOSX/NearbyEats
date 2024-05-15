@@ -38,7 +38,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private File convert(MultipartFile image) throws IOException {
-        File file = File.createTempFile(image.getOriginalFilename(), null);
+        File file = File.createTempFile(Objects.requireNonNull(image.getOriginalFilename()), null);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(image.getBytes());
         fileOutputStream.close();
