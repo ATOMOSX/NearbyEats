@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         if(isForbiddenNickName(userRegistrationDTO.nickname()))
             throw new UserRegistrationException("El nickname es inválido");
 
-        if(userRegistrationDTO.password() != userRegistrationDTO.confirmPassword())
+        if(!userRegistrationDTO.password().equals(userRegistrationDTO.confirmPassword()))
             throw new UserRegistrationException("Las contraseñas deben ser iguales");
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
