@@ -101,18 +101,6 @@ public class doFilterInternal extends OncePerRequestFilter {
                     error = false;
                 }
 
-                if (imageList.contains(requestURI)) {
-
-                    if (token != null) {
-
-                    } else {
-                        createErrorResponse("You do not have permission to access this resource",
-                                HttpServletResponse.SC_FORBIDDEN, response);
-                    }
-                } else {
-                    error = false;
-                }
-
                 if (modList.contains(requestURI)) {
 
                     if (token != null) {
