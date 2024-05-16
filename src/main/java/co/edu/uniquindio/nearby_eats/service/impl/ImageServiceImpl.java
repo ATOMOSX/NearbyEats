@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +36,12 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Map deleteImage(String idImage) throws Exception {
         return cloudinary.uploader().destroy(idImage, ObjectUtils.emptyMap());
+    }
+
+    @Override
+    public Map uploadImages(MultipartFile image) throws Exception {
+        File file = convert(image);
+        return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "NearbyEats"));
     }
 
     private File convert(MultipartFile image) throws IOException {

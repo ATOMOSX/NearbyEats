@@ -12,7 +12,6 @@ import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceStatus;
-import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
@@ -329,6 +328,18 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public List<String> getPlaceStatus() {
         return List.of(PlaceStatus.REJECTED.toString(), PlaceStatus.PENDING.toString(), PlaceStatus.DELETED.toString(), PlaceStatus.APPROVED.toString());
+    }
+
+    @Override
+    public List<String> categories() {
+        return Collections.singletonList(List.of(
+                PlaceCategory.CAFE,
+                PlaceCategory.FAST_FOOD,
+                PlaceCategory.HOTEL,
+                PlaceCategory.MUSEUM,
+                PlaceCategory.RESTAURANT,
+                PlaceCategory.OTHER
+        ).toString());
     }
 
     private void loadBannedNames() throws IOException {

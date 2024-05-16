@@ -5,5 +5,6 @@ public enum PlaceCategory {
     FAST_FOOD,
     HOTEL,
     MUSEUM,
-    RESTAURANT
+    RESTAURANT,
+    OTHER
 }

@@ -61,4 +61,10 @@ public class PublicController {
         List<String> cities = List.of("Armenia", "Pereira");
         return ResponseEntity.ok().body(new MessageDTO<>(false, cities));
     }
+
+    @GetMapping("/get-categories")
+    public ResponseEntity<MessageDTO<List<String>>> getCategories() {
+        List<String> categories = placeService.categories();
+        return ResponseEntity.ok().body(new MessageDTO<>(false, categories));
+    }
 }
