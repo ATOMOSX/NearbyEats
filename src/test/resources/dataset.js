@@ -82,8 +82,8 @@ db.users.insertMany([
 
 db.places.insertMany([
     {
-        _id: 'place1',
-        name: 'Sazón criollo',
+        _id: 'place12',
+        name: 'Sazón criollo 2',
         description: 'Lorem ipsum',
         location: {
             type: 'point',
@@ -120,8 +120,8 @@ db.places.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Place'
     },
     {
-        _id: 'place2',
-        name: 'Éxito',
+        _id: 'place22',
+        name: 'Éxito2',
         description: 'Lorem ipsum éxito',
         location: {
             type: 'point',
@@ -158,8 +158,8 @@ db.places.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Place'
     },
     {
-        _id: 'place3',
-        name: 'Mocawa',
+        _id: 'place32',
+        name: 'Mocawa2',
         description: 'Lorem ipsum Mocawa',
         location: {
             type: 'point',
@@ -196,8 +196,8 @@ db.places.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Place'
     },
     {
-        _id: 'place4',
-        name: 'Olímpica',
+        _id: 'place42',
+        name: 'Olímpica2',
         description: 'Lorem ipsum olímpica',
         location: {
             type: 'point',
@@ -234,8 +234,8 @@ db.places.insertMany([
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Place'
     },
     {
-        _id: 'place5',
-        name: 'Casita',
+        _id: 'place52',
+        name: 'Casita2',
         description: 'Lorem ipsum casita',
         location: {
             type: 'point',
@@ -274,47 +274,47 @@ db.places.insertMany([
 ]);
 db.comments.insertMany([
     {
-        _id: "comment1",
+        _id: "comment12",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client1',
-        place: 'place2',
+        place: 'place22',
         rating: 5,
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },
     {
-        _id: "comment2",
+        _id: "comment22",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client2',
-        place: 'place1',
+        place: 'place12',
         rating: 5,
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },
     {
-        _id: "comment3",
+        _id: "comment32",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client3',
-        place: 'place2',
+        place: 'place22',
         rating: 5,
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },
     {
-        _id: "comment4",
+        _id: "comment42",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client4',
-        place: 'place1',
+        place: 'place12',
         rating: 5,
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },
     {
-        _id: "comment5",
+        _id: "comment52",
         text: "Excelente sitio, muy buena atención",
         date: '2024-04-04T22:51:08.832850',
         user: 'client5',
-        place: 'place2',
+        place: 'place22',
         rating: 5,
         _class: 'co.edu.uniquindio.nearby_eats.model.docs.Comment'
     },

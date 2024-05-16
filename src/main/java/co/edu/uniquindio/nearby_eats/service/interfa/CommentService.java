@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException;
+    Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException, GetAverageScoreCommentException;
 
     Comment answerComment(ReplyDTO replyDTO, String token) throws AnswerCommentException, MessagingException, EmailServiceException;
 

@@ -28,7 +28,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/create-comment")
-    public ResponseEntity<MessageDTO<Comment>> createComment(@Valid @RequestBody CommentDTO commentDTO, @RequestHeader Map<String, String> headers) throws MessagingException, EmailServiceException, CreateCommentException {
+    public ResponseEntity<MessageDTO<Comment>> createComment(@Valid @RequestBody CommentDTO commentDTO, @RequestHeader Map<String, String> headers) throws MessagingException, EmailServiceException, CreateCommentException, GetAverageScoreCommentException {
         String token = headers.get("authorization").replace("Bearer ", "");
         Comment comment = commentService.createComment(commentDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, comment));

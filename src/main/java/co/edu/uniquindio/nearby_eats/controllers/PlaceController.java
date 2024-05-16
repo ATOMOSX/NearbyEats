@@ -64,8 +64,8 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
-    @GetMapping("/get-place/by-name")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@RequestParam String name,
+    @GetMapping("/get-place/by-name/{name}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@PathVariable String name,
                                                                               @RequestHeader Map<String, String> headers) throws GetPlaceException {
         String token = headers.get("authorization").replace("Bearer ", "");
         GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO(name);

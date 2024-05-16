@@ -90,7 +90,9 @@ public class SearchServiceImpl implements SearchService {
                 place.getSchedules(),
                 place.getPhones(),
                 place.getCategories(),
-                place.getReviews()
+                place.getReviews(),
+                place.getStatus(),
+                place.getScore()
         );
     }
 

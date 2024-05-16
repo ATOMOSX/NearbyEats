@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
 
-public record PlaceResponseDTO(
+public record   PlaceResponseDTO(
         @NotBlank(message = "id is required") @Length(max = 100) String id,
         @NotBlank(message = "name is required") @Length(max = 55) String name,
         @NotBlank(message = "description is required") @Length(max = 288) String description,
@@ -19,6 +19,8 @@ public record PlaceResponseDTO(
         @NotBlank(message = "id is required") @DateTimeFormat List<Schedule> schedule,
         @NotBlank(message = "phones is required") List<String> phones,
         @NotBlank(message = "categories is required")  List<PlaceCategory> categories,
-        @NotBlank(message = "revisionHistory is required") List<Review> revisionsHistory
+        @NotBlank(message = "revisionHistory is required") List<Review> revisionsHistory,
+        String status,
+        float score
 ) {
 }

@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException {
+    public Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException, GetAverageScoreCommentException {
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
 
@@ -81,6 +81,10 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         Comment comment1 = commentRepository.save(comment);
+        float score = getAverageScoreByPlace(commentDTO.placeId());
+        Place place = placeOptional.get();
+        place.setScore(score);
+        placeRepository.save(place);
 
         Optional<User> ownerOptional = userRepository.findById(placeOptional.get().getCreatedBy());
         User owner = ownerOptional.get();

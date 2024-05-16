@@ -45,10 +45,12 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }
 
-    @PostMapping("/change-password/send-recovery-email/{email}")
-    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@PathVariable String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
+    @PostMapping("/change-password/send-recovery-email")
+    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@RequestBody String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
         userService.sendRecoveryEmail(email);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "send email recovery email successful"));
+
+        //"response":"Required request body is missing: public org.springframework.http.ResponseEntity<co.edu.uniquindio.nearby_eats.dto.MessageDTO<java.lang.String>> co.edu.uniquindio.nearby_eats.controllers.UserController.sendRecoveryEmail(java.lang.String) throws co.edu.uniquindio.nearby_eats.exceptions.user.SendRecoveryEmailException,jakarta.mail.MessagingException,co.edu.uniquindio.nearby_eats.exceptions.email.EmailServiceException"}
     }
 
     @PostMapping("/change-password")

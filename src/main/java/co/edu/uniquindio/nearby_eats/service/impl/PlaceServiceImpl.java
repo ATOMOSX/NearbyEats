@@ -158,6 +158,7 @@ public class PlaceServiceImpl implements PlaceService {
         if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
             throw new GetPlaceException("El lugar no existe");
         }
+        System.out.println(placeOptional.get());
 
         return convertToPlaceResponseDTO(placeOptional.get());
     }
@@ -188,11 +189,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException {
-
         if (!userRepository.existsById(clientId)) {
             throw new GetPlaceException("El cliente no existe");
         }
-
         List<Place> places = placeRepository.findAllByCreatedBy(clientId);
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
@@ -216,10 +215,18 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException {
-        Jws<Claims> jws = jwtUtils.parseJwt(token);
-        String userId = jws.getPayload().get("id").toString();
-        searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
-        List<Place> places = placeRepository.findAllByName(getPlacesByNameDTO.name());
+        //Jws<Claims> jws = jwtUtils.parseJwt(token);
+        //String userId = jws.getPayload().get("id").toString();
+        //searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
+        List<Place> places = placeRepository.findAllByNameIgnoreCase(getPlacesByNameDTO.name());
+        System.out.println(places.toString());
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
+    }
+
+    @Override
+    public List<PlaceResponseDTO> getPlacesByNamePublic(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException {
+        List<Place> places = placeRepository.findAllByNameIgnoreCase(getPlacesByNameDTO.name());
+        System.out.println(places.toString());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
@@ -345,7 +352,9 @@ public class PlaceServiceImpl implements PlaceService {
                 place.getSchedules(),
                 place.getPhones(),
                 place.getCategories(),
-                place.getReviews()
+                place.getReviews(),
+                place.getStatus(),
+                place.getScore()
         );
     }
 

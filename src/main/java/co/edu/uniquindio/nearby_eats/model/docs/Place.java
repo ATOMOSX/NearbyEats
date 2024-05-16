@@ -47,6 +47,7 @@ public class Place implements Serializable {
     private String creationDate;
     private String deletionDate;
     private boolean open;
+    private float score;
 
     public Place() {
         this.reviews = new ArrayList<>();

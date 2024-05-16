@@ -43,12 +43,10 @@ public class PublicController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
-    @GetMapping("/get-place/by-name")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@RequestParam String name,
-                                                                              @RequestHeader Map<String, String> headers) throws GetPlaceException {
-        String token = headers.get("authorization").replace("Bearer ", "");
+    @GetMapping("/get-place/by-name/{name}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByName(@PathVariable String name) throws GetPlaceException {
         GetPlacesByNameDTO getPlacesByNameDTO = new GetPlacesByNameDTO(name);
-        List<PlaceResponseDTO> places = placeService.getPlacesByName(getPlacesByNameDTO, token);
+        List<PlaceResponseDTO> places = placeService.getPlacesByNamePublic(getPlacesByNameDTO);
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
@@ -60,7 +58,7 @@ public class PublicController {
 
     @GetMapping("/get-cities")
     public ResponseEntity<MessageDTO<List<String>>> getCities() {
-        List<String> cities = mongoService.findCities();
+        List<String> cities = List.of("Armenia", "Pereira");
         return ResponseEntity.ok().body(new MessageDTO<>(false, cities));
     }
 }

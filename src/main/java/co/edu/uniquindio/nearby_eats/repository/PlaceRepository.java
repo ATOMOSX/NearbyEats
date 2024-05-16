@@ -27,7 +27,7 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByLocation(String location);
 
-    List<Place> findAllByName(String name);
+    List<Place> findAllByNameIgnoreCase(String name);
 
     List<Place> findAllByStatusAndCreatedBy(String status, String createdBy);
 
