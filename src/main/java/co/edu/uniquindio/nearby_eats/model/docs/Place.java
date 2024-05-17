@@ -35,7 +35,7 @@ public class Place implements Serializable {
 
     private List<String> phones;
 
-    private List<PlaceCategory> categories;
+    private List<String> categories;
 
     private Location location;
 

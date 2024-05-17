@@ -14,7 +14,7 @@ public record UpdatePlaceDTO(
         List<String> images,
         List<Schedule> schedule,
         List<String> phones,
-        List<PlaceCategory> categories,
+        List<String> categories,
         @NotBlank(message = "clientId is required") String clientId,
         @NotBlank(message = "placeId is required") String placeId
 ) {

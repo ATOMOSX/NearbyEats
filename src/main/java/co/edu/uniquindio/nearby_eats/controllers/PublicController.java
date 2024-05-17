@@ -6,6 +6,7 @@ import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByLocation;
 import co.edu.uniquindio.nearby_eats.dto.request.place.GetPlacesByNameDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.exceptions.place.GetPlaceException;
+import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.service.MongoService;
 import co.edu.uniquindio.nearby_eats.service.interfa.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,14 @@ public class PublicController {
 
     @GetMapping("/get-categories")
     public ResponseEntity<MessageDTO<List<String>>> getCategories() {
-        List<String> categories = placeService.categories();
+        List<String> categories = List.of(
+                PlaceCategory.CAFE.toString(),
+                PlaceCategory.FAST_FOOD.toString(),
+                PlaceCategory.HOTEL.toString(),
+                PlaceCategory.MUSEUM.toString(),
+                PlaceCategory.RESTAURANT.toString(),
+                PlaceCategory.OTHER.toString()
+        );
         return ResponseEntity.ok().body(new MessageDTO<>(false, categories));
     }
 }

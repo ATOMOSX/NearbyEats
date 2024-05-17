@@ -217,15 +217,13 @@ public class PlaceServiceImpl implements PlaceService {
         //Jws<Claims> jws = jwtUtils.parseJwt(token);
         //String userId = jws.getPayload().get("id").toString();
         //searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
-        List<Place> places = placeRepository.findAllByNameIgnoreCase(getPlacesByNameDTO.name());
-        System.out.println(places.toString());
+        List<Place> places = placeRepository.findAllByNameContainingIgnoreCase(getPlacesByNameDTO.name());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
     @Override
     public List<PlaceResponseDTO> getPlacesByNamePublic(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException {
-        List<Place> places = placeRepository.findAllByNameIgnoreCase(getPlacesByNameDTO.name());
-        System.out.println(places.toString());
+        List<Place> places = placeRepository.findAllByNameContainingIgnoreCase(getPlacesByNameDTO.name());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
