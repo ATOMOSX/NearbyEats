@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> clientOptional = userRepository.findByEmail(email);
 
         if (clientOptional.isEmpty()) {
-            throw new SendRecoveryEmailException("El email no puede ser vacio");
+            throw new SendRecoveryEmailException("No existe el usuario con el email");
         }
 
         String token = jwtUtils.generateToken(email, null);

@@ -45,8 +45,8 @@ public class UserController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, "delete user successful "));
     }
 
-    @PostMapping("/change-password/send-recovery-email")
-    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@RequestBody String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
+    @GetMapping("/change-password/send-recovery-email/{email}")
+    public ResponseEntity<MessageDTO<String>> sendRecoveryEmail(@PathVariable String email) throws SendRecoveryEmailException, MessagingException, EmailServiceException {
         userService.sendRecoveryEmail(email);
         return ResponseEntity.ok().body(new MessageDTO<>(false, "send email recovery email successful"));
 
@@ -66,6 +66,7 @@ public class UserController {
 
     @GetMapping("/get-user/{id}")
     public ResponseEntity<MessageDTO<UserInformationDTO>> getUser(@PathVariable String id) throws GetUserException {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, userService.getUser(id)));
+        UserInformationDTO userInformationDTO = userService.getUser(id);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, userInformationDTO));
     }
 }
