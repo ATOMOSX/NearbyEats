@@ -55,13 +55,13 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, place));
     }
 
-    @GetMapping("/get-place/by-category")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@RequestParam String category,
+    @GetMapping("/get-place/by-category/{category}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByCategory(@PathVariable String category,
                                                                                   @RequestHeader Map<String, String> headers) throws GetPlaceException {
         String token = headers.get("authorization").replace("Bearer ", "");
         GetPlacesByCategoryDTO getPlacesByCategoryDTO = new GetPlacesByCategoryDTO(category);
         List<PlaceResponseDTO> places = placeService.getPlacesByCategory(getPlacesByCategoryDTO, token);
-        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
+        return ResponseEntity.ok().body(new MessageDTO<>(false,places ));
     }
 
     @GetMapping("/get-place/by-name/{name}")
