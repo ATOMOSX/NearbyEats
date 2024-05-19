@@ -1,6 +1,5 @@
 package co.edu.uniquindio.nearby_eats.model.docs;
 
-import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Location;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
@@ -29,7 +28,7 @@ public class Place implements Serializable {
 
     private String description;
 
-    private List<String> images;
+    private List<String> pictures;
 
     private List<Schedule> schedules;
 
@@ -51,7 +50,7 @@ public class Place implements Serializable {
 
     public Place() {
         this.reviews = new ArrayList<>();
-        this.images = new ArrayList<>();
+        this.pictures = new ArrayList<>();
         this.schedules = new ArrayList<>();
         this.phones = new ArrayList<>();
         this.categories = new ArrayList<>();

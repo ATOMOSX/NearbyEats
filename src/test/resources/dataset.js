@@ -92,7 +92,7 @@ db.places.insertMany([
                 -75.65943908691406
             ]
         },
-        images: [
+        pictures: [
             'picture'
         ],
         schedule: [
@@ -130,7 +130,7 @@ db.places.insertMany([
                 -85.65943908691406
             ]
         },
-        images: [
+        pictures: [
             'picture'
         ],
         schedule: [
@@ -168,7 +168,7 @@ db.places.insertMany([
                 -95.65943908691406
             ]
         },
-        images: [
+        pictures: [
             'picture'
         ],
         schedule: [
@@ -206,7 +206,7 @@ db.places.insertMany([
                 -83.65943908691406
             ]
         },
-        images: [
+        pictures: [
             'picture'
         ],
         schedule: [
@@ -244,7 +244,7 @@ db.places.insertMany([
                 -55.65943908691406
             ]
         },
-        images: [
+        pictures: [
             'picture'
         ],
         schedule: [

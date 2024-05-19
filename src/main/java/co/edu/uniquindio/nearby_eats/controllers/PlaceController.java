@@ -88,6 +88,13 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
+    @GetMapping("/get-place/by-status-by-mod/{status}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByModerator(@PathVariable String status, @RequestHeader Map<String, String> headers) throws GetPlaceException {
+        String token = headers.get("authorization").replace("Bearer ", "");
+        List<PlaceResponseDTO> places = placeService.getPlacesByModerator(status, token);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
+    }
+
     @GetMapping("/get-place/by-user-id/{clientId}")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByClientId(@PathVariable String clientId) throws GetPlaceException {
         List<PlaceResponseDTO> places = placeService.getPlacesByClientId(clientId);

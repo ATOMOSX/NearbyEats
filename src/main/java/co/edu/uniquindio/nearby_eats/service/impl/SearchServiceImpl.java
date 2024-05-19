@@ -4,7 +4,6 @@ import co.edu.uniquindio.nearby_eats.dto.SaveSearchDTO;
 import co.edu.uniquindio.nearby_eats.dto.response.place.PlaceResponseDTO;
 import co.edu.uniquindio.nearby_eats.model.docs.Place;
 import co.edu.uniquindio.nearby_eats.model.docs.Search;
-import co.edu.uniquindio.nearby_eats.model.docs.User;
 import co.edu.uniquindio.nearby_eats.model.enums.PlaceCategory;
 import co.edu.uniquindio.nearby_eats.repository.PlaceRepository;
 import co.edu.uniquindio.nearby_eats.repository.SearchRepository;
@@ -13,7 +12,6 @@ import co.edu.uniquindio.nearby_eats.service.interfa.SearchService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,7 +84,7 @@ public class SearchServiceImpl implements SearchService {
                 place.getName(),
                 place.getDescription(),
                 place.getLocation(),
-                place.getImages(),
+                place.getPictures(),
                 place.getSchedules(),
                 place.getPhones(),
                 place.getCategories(),

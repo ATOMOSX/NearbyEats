@@ -84,7 +84,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .name(placeCreateDTO.name())
                 .description(placeCreateDTO.description())
                 .location(placeCreateDTO.location())
-                .images(placeCreateDTO.images())
+                .pictures(placeCreateDTO.images())
                 .schedules(placeCreateDTO.schedule())
                 .phones(placeCreateDTO.phones())
                 .categories(placeCreateDTO.categories())
@@ -119,7 +119,7 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setName(updatePlaceDTO.name());
         updatedPlace.setDescription(updatePlaceDTO.description());
         updatedPlace.setLocation(updatePlaceDTO.location());
-        updatedPlace.setImages(updatePlaceDTO.images());
+        updatedPlace.setPictures(updatePlaceDTO.images());
         updatedPlace.setSchedules(updatePlaceDTO.schedule());
         updatedPlace.setPhones(updatePlaceDTO.phones());
         updatedPlace.setCategories(updatePlaceDTO.categories());
@@ -218,8 +218,8 @@ public class PlaceServiceImpl implements PlaceService {
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String moderatorId = jws.getPayload().get("id").toString();
         if (!userRepository.existsById(moderatorId)) throw new GetPlaceException("El moderador no existe");
-
-        return placeRepository.getPlacesByStatusByModerator(status, moderatorId);
+        List<Place> places = placeRepository.getPlacesByStatusByModerator(status, moderatorId);
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
     @Override
@@ -367,7 +367,7 @@ public class PlaceServiceImpl implements PlaceService {
                 place.getName(),
                 place.getDescription(),
                 place.getLocation(),
-                place.getImages(),
+                place.getPictures(),
                 place.getSchedules(),
                 place.getPhones(),
                 place.getCategories(),

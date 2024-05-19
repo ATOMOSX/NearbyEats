@@ -31,11 +31,15 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByStatusAndCreatedBy(String status, String createdBy);
 
-    @Aggregation({"{$unwind: '$reviews'}",
+    @Aggregation(pipeline = {
+            "{$unwind: '$reviews'}",
+            "{$match: { status: ?0, 'reviews.moderatorId': ?1 } }",
             "{$lookup: { from: 'users', localField: 'reviews.moderatorId', foreignField: '_id', as: 'moderator' } }",
-            "{ $match: { status: ?0, moderator: { $ne: [] }, 'moderator._id': ?1 } }",
-            "{ $project: { _id: 1, name: 1, description: 1, location: 1, pictures: 1, schedule: 1, phones: 1, categories: 1, revisionsHistory: 1 } }"})
-    List<PlaceResponseDTO> getPlacesByStatusByModerator(String status, String moderatorID);
+            "{$unwind: '$moderator'}",
+            "{$group: { _id: '$_id', name: { $first: '$name' }, description: { $first: '$description' }, location: { $first: '$location' }, pictures: { $first: '$pictures' }, schedules: { $first: '$schedules' }, phones: { $first: '$phones' }, categories: { $first: '$categories' }, reviews: { $push: '$reviews' } } }",
+            "{$project: { _id: 1, name: 1, description: 1, location: 1, pictures: 1, schedules: 1, phones: 1, categories: 1, reviews: 1 } }"
+    })
+    List<Place> getPlacesByStatusByModerator(String status, String moderatorID);
 
     List<Place> findAllByCategoriesContaining(List<PlaceCategory> categories);
 
