@@ -187,6 +187,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public List<PlaceResponseDTO> getPlacesMod(String status) throws GetPlaceException {
+        List<Place> places = placeRepository.findAllByStatus(status);
+
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
+    }
+
+    @Override
     public List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException {
         if (!userRepository.existsById(clientId)) {
             throw new GetPlaceException("El cliente no existe");
@@ -207,9 +214,12 @@ public class PlaceServiceImpl implements PlaceService {
 
     // TODO: Crear los moderadores el el dataseet para poder hacer la prueba del método
     @Override
-    public List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException {
-        return placeRepository.getPlacesByStatusByModerator(getPlacesByModeratorDTO.status(),
-                getPlacesByModeratorDTO.moderatorId());
+    public List<PlaceResponseDTO> getPlacesByModerator(String status, String token) throws GetPlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
+        String moderatorId = jws.getPayload().get("id").toString();
+        if (!userRepository.existsById(moderatorId)) throw new GetPlaceException("El moderador no existe");
+
+        return placeRepository.getPlacesByStatusByModerator(status, moderatorId);
     }
 
     @Override
@@ -319,7 +329,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         emailService.sendEmail(new EmailDTO("Nueva revisión en "+updatedPlace.getName(),
                 "Su negocio ha sido revisado:  " +
-                        "http://localhost:8080/api/place/review-place", user.getEmail()));
+                        "http://localhost:4200/detalle-negocio/"+updatedPlace.getId(), user.getEmail()));
         // TODO: validar urls de los email
     }
 

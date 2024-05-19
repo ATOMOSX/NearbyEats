@@ -25,6 +25,7 @@ public interface PlaceService {
     List<PlaceResponseDTO> getPlacesByCategory(GetPlacesByCategoryDTO getPlacesByCategoryDTO, String token) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByStatus(GetPlacesByStatusByClientDTO getPlacesByStatusByClientDTO, String token) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesMod(String status) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException;
 
@@ -32,7 +33,7 @@ public interface PlaceService {
 
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda
 
-    List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException;
+    List<PlaceResponseDTO> getPlacesByModerator(String status, String token) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException;
     List<PlaceResponseDTO> getPlacesByNamePublic(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException;

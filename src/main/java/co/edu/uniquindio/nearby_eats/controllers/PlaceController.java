@@ -82,6 +82,12 @@ public class PlaceController {
         return ResponseEntity.ok().body(new MessageDTO<>(false, places));
     }
 
+    @GetMapping("/get-place/by-status-mod/{status}")
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesMod(@PathVariable String status) throws GetPlaceException {
+        List<PlaceResponseDTO> places = placeService.getPlacesMod(status);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, places));
+    }
+
     @GetMapping("/get-place/by-user-id/{clientId}")
     public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> getPlacesByClientId(@PathVariable String clientId) throws GetPlaceException {
         List<PlaceResponseDTO> places = placeService.getPlacesByClientId(clientId);

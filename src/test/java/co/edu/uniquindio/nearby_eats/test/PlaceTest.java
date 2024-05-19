@@ -56,7 +56,7 @@ public class PlaceTest {
                 List.of(new Schedule(Weekday.MONDAY.name(), "9:00", "18:00"),
                         new Schedule(Weekday.TUESDAY.name(), "9:00", "18:00")),
                 List.of("3207920496", "3108825866"),
-                List.of(PlaceCategory.HOTEL),
+                List.of(PlaceCategory.HOTEL.name()),
                 userId
         );
 
@@ -75,7 +75,7 @@ public class PlaceTest {
                 List.of(new Schedule(Weekday.MONDAY.name(), "9:00", "18:00"),
                         new Schedule(Weekday.TUESDAY.name(), "9:00", "18:00")),
                 List.of("3207920496", "3108825866"),
-                List.of(PlaceCategory.RESTAURANT),
+                List.of(PlaceCategory.RESTAURANT.name()),
                 userId,
                 oldPlace.getId()
         );
@@ -142,9 +142,7 @@ public class PlaceTest {
     @Test
     public void getPlacesByModeratorTest() throws GetPlaceException {
         List<PlaceResponseDTO> placeResponseDTOS =
-                placeService.getPlacesByModerator(new GetPlacesByModeratorDTO(PlaceStatus.PENDING.name(),
-                        "mod1")
-                );
+                placeService.getPlacesByModerator(PlaceStatus.PENDING.name(),"mod1");
 
         Assertions.assertNotNull(placeResponseDTOS);
 
@@ -194,10 +192,10 @@ public class PlaceTest {
 
         Place cafe = new Place();
         cafe.setName("Cafe Central");
-        cafe.setCategories(List.of(PlaceCategory.CAFE));
+        cafe.setCategories(List.of(PlaceCategory.CAFE.name()));
         Place park = new Place();
         park.setName("Big Museum");
-        park.setCategories(List.of(PlaceCategory.MUSEUM));
+        park.setCategories(List.of(PlaceCategory.MUSEUM.name()));
         placeRepository.save(cafe);
         placeRepository.save(park);
 
