@@ -124,8 +124,7 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setPhones(updatePlaceDTO.phones());
         updatedPlace.setCategories(updatePlaceDTO.categories());
 
-        Place place = placeRepository.save(updatedPlace);
-        return place;
+        return placeRepository.save(updatedPlace);
     }
 
     @Override
@@ -141,13 +140,13 @@ public class PlaceServiceImpl implements PlaceService {
         deletedPlace.setDeletionDate(LocalDateTime.now().toString());
 
         Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
-        User user = optionalUser.get();
+        User user = optionalUser.orElse(null);
 
+        assert user != null;
         int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace.getId());
         user.getCreatedPlaces().set(placeIndex, null);
         userRepository.save(user);
-        Place place = placeRepository.save(deletedPlace);
-        return place;
+        return placeRepository.save(deletedPlace);
     }
 
     @Override
@@ -224,9 +223,6 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException {
-        //Jws<Claims> jws = jwtUtils.parseJwt(token);
-        //String userId = jws.getPayload().get("id").toString();
-        //searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
         List<Place> places = placeRepository.findAllByNameContainingIgnoreCase(getPlacesByNameDTO.name());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
@@ -302,27 +298,6 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.getReviews().add(review);
         updatedPlace.setStatus(placeReviewDTO.action());
 
-        if (placeReviewDTO.action().equals(PlaceStatus.REJECTED)) {
-            updatedPlace.setStatus(PlaceStatus.REJECTED.name());
-
-            // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime deadline = now.plusDays(5);
-
-            updatedPlace.setDeletionDate(String.valueOf(deadline));
-
-            // TODO: si sobrepasa los 5 días se eliminará automaticamente.
-            if (now.isAfter(deadline)) {
-                updatedPlace.setStatus(PlaceStatus.DELETED.name());
-                updatedPlace.setDeletionDate(LocalDateTime.now().toString());
-                placeRepository.save(updatedPlace);
-                throw new ReviewPlaceException("El lugar ha sido eliminado automaticamente " +
-                        "debido a que ha sobrepasado los 5 días  en estado rechazado");
-            }
-        } else if (placeReviewDTO.action().equals(PlaceStatus.APPROVED)) {
-            updatedPlace.setStatus(PlaceStatus.APPROVED.name());
-        }
-
         placeRepository.save(updatedPlace);
 
         User user = userRepository.findById(updatedPlace.getCreatedBy()).get();
@@ -372,6 +347,7 @@ public class PlaceServiceImpl implements PlaceService {
                 place.getPhones(),
                 place.getCategories(),
                 place.getReviews(),
+                place.getCreatedBy(),
                 place.getStatus(),
                 place.getScore()
         );
