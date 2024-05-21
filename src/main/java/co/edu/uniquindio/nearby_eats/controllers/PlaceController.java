@@ -124,4 +124,10 @@ public class PlaceController {
         placeService.deleteFavoritePlace(deleteFavoritePlaceDTO, token);
         return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.deleteFavoritePlace(deleteFavoritePlaceDTO, token)));
     }
+
+    @GetMapping("/get-favorite-place")
+    public ResponseEntity<MessageDTO<Place>> getfavoritePlace(@Valid @RequestBody String idPlace) throws Exception {
+        placeService.getFavoritePlace(idPlace);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.getFavoritePlace(idPlace)));
+    }
 }

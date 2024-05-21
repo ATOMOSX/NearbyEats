@@ -1,5 +1,7 @@
 package co.edu.uniquindio.nearby_eats.dto.response.user;
 
+import java.util.List;
+
 public record UserInformationDTO(
         String id,
         String firstName,
@@ -7,6 +9,7 @@ public record UserInformationDTO(
         String email,
         String nickname,
         String city,
-        String profilePicture
+        String profilePicture,
+        List<String>favoritePlaces
 ) {
 }

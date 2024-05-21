@@ -28,6 +28,8 @@ public interface PlaceService {
 
     List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException;
 
+    public Place getFavoritePlace(String idPlace) throws Exception;
+
     List<PlaceResponseDTO> getPlacesByLocation(GetPlacesByLocation getPlacesByLocation, String token) throws GetPlaceException;
 
     // TODO: Implementar el método para obtener los lugares más cercanos a una ubicación dada y un radio de búsqueda
@@ -35,6 +37,7 @@ public interface PlaceService {
     List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException;
 
     List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException;
+
     List<PlaceResponseDTO> getPlacesByNamePublic(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException;
 
     Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO, String token) throws FavoritePlaceException;

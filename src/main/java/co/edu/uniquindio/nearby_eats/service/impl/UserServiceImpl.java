@@ -150,7 +150,8 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 user.getNickname(),
                 user.getCity(),
-                user.getProfilePicture()
+                user.getProfilePicture(),
+                user.getFavoritePlaces()
         );
     }
 
@@ -196,7 +197,8 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 user.getNickname(),
                 user.getCity(),
-                user.getProfilePicture()
+                user.getProfilePicture(),
+                user.getFavoritePlaces()
         );
     }
 

@@ -130,6 +130,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Place deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
+
+        System.out.println( deletePlaceDTO );
+
         Optional<Place> placeOptional = placeRepository.findById(deletePlaceDTO.placeId());
 
         if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
@@ -144,6 +147,9 @@ public class PlaceServiceImpl implements PlaceService {
         User user = optionalUser.get();
 
         int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace.getId());
+
+        System.out.println(placeIndex);
+
         user.getCreatedPlaces().set(placeIndex, null);
         userRepository.save(user);
         Place place = placeRepository.save(deletedPlace);
@@ -245,6 +251,14 @@ public class PlaceServiceImpl implements PlaceService {
         user.getFavoritePlaces().add(place.getId());
         userRepository.save(user);
         return place;
+    }
+
+    public Place getFavoritePlace(String idPlace) throws Exception{
+        Optional<Place> placeOptional = placeRepository.findById(idPlace);
+
+        if(placeOptional.isEmpty())
+            throw new Exception("El lugar no existe");
+        return (Place) placeOptional.stream().map(this::convertToPlaceResponseDTO);
     }
 
     @Override
