@@ -41,7 +41,7 @@ public class doFilterInternal extends OncePerRequestFilter {
             List<String> userPlaceList = List.of("/api/place/create-place", "/api/place/update-place", "/api/place/delete-place", "/api/place/recommend-places/{token}", "/api/place/save/favorite/place", "/api/place/delete/favorite/place", "/api/place/get-place/by-status", "/api/place/get-place/by-category", "/api/place/get-place/by-location");
             List<String> imageList = List.of("/api/images/upload", "/api/images/delete", "/api/user/get-user/{id}",
                     "/api/place/get-place/by-user-id/{clientId}");
-            List<String> modList = List.of("/api/place/review-place", "/api/user/get-all-users");
+            List<String> modList = List.of("/api/place/review-place", "/api/user/get-all-users", "/api/place/get-place/by-status-mod/{status}", "/api/place/get-place/by-status-by-mod/{status}");
 
             String token = getToken(request);
             boolean error = true;

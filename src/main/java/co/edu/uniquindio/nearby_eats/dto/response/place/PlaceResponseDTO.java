@@ -20,6 +20,7 @@ public record   PlaceResponseDTO(
         @NotBlank(message = "phones is required") List<String> phones,
         @NotBlank(message = "categories is required")  List<String> categories,
         @NotBlank(message = "revisionHistory is required") List<Review> revisionsHistory,
+        String createdBy,
         String status,
         float score
 ) {

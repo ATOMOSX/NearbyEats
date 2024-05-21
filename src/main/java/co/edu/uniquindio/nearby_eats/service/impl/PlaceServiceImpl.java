@@ -84,7 +84,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .name(placeCreateDTO.name())
                 .description(placeCreateDTO.description())
                 .location(placeCreateDTO.location())
-                .images(placeCreateDTO.images())
+                .pictures(placeCreateDTO.images())
                 .schedules(placeCreateDTO.schedule())
                 .phones(placeCreateDTO.phones())
                 .categories(placeCreateDTO.categories())
@@ -119,13 +119,12 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setName(updatePlaceDTO.name());
         updatedPlace.setDescription(updatePlaceDTO.description());
         updatedPlace.setLocation(updatePlaceDTO.location());
-        updatedPlace.setImages(updatePlaceDTO.images());
+        updatedPlace.setPictures(updatePlaceDTO.images());
         updatedPlace.setSchedules(updatePlaceDTO.schedule());
         updatedPlace.setPhones(updatePlaceDTO.phones());
         updatedPlace.setCategories(updatePlaceDTO.categories());
 
-        Place place = placeRepository.save(updatedPlace);
-        return place;
+        return placeRepository.save(updatedPlace);
     }
 
     @Override
@@ -144,16 +143,16 @@ public class PlaceServiceImpl implements PlaceService {
         deletedPlace.setDeletionDate(LocalDateTime.now().toString());
 
         Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
-        User user = optionalUser.get();
+        User user = optionalUser.orElse(null);
 
+        assert user != null;
         int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace.getId());
 
         System.out.println(placeIndex);
 
         user.getCreatedPlaces().set(placeIndex, null);
         userRepository.save(user);
-        Place place = placeRepository.save(deletedPlace);
-        return place;
+        return placeRepository.save(deletedPlace);
     }
 
     @Override
@@ -193,6 +192,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public List<PlaceResponseDTO> getPlacesMod(String status) throws GetPlaceException {
+        List<Place> places = placeRepository.findAllByStatus(status);
+
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
+    }
+
+    @Override
     public List<PlaceResponseDTO> getPlacesByClientId(String clientId) throws GetPlaceException {
         if (!userRepository.existsById(clientId)) {
             throw new GetPlaceException("El cliente no existe");
@@ -213,16 +219,16 @@ public class PlaceServiceImpl implements PlaceService {
 
     // TODO: Crear los moderadores el el dataseet para poder hacer la prueba del método
     @Override
-    public List<PlaceResponseDTO> getPlacesByModerator(GetPlacesByModeratorDTO getPlacesByModeratorDTO) throws GetPlaceException {
-        return placeRepository.getPlacesByStatusByModerator(getPlacesByModeratorDTO.status(),
-                getPlacesByModeratorDTO.moderatorId());
+    public List<PlaceResponseDTO> getPlacesByModerator(String status, String token) throws GetPlaceException {
+        Jws<Claims> jws = jwtUtils.parseJwt(token);
+        String moderatorId = jws.getPayload().get("id").toString();
+        if (!userRepository.existsById(moderatorId)) throw new GetPlaceException("El moderador no existe");
+        List<Place> places = placeRepository.getPlacesByStatusByModerator(status, moderatorId);
+        return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
     @Override
     public List<PlaceResponseDTO> getPlacesByName(GetPlacesByNameDTO getPlacesByNameDTO, String token) throws GetPlaceException {
-        //Jws<Claims> jws = jwtUtils.parseJwt(token);
-        //String userId = jws.getPayload().get("id").toString();
-        //searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByNameDTO.name(), new Date().toString()));
         List<Place> places = placeRepository.findAllByNameContainingIgnoreCase(getPlacesByNameDTO.name());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
@@ -306,34 +312,13 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.getReviews().add(review);
         updatedPlace.setStatus(placeReviewDTO.action());
 
-        if (placeReviewDTO.action().equals(PlaceStatus.REJECTED)) {
-            updatedPlace.setStatus(PlaceStatus.REJECTED.name());
-
-            // TODO: validar 5 días hábiles para realizar cambios luego del rechazo
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime deadline = now.plusDays(5);
-
-            updatedPlace.setDeletionDate(String.valueOf(deadline));
-
-            // TODO: si sobrepasa los 5 días se eliminará automaticamente.
-            if (now.isAfter(deadline)) {
-                updatedPlace.setStatus(PlaceStatus.DELETED.name());
-                updatedPlace.setDeletionDate(LocalDateTime.now().toString());
-                placeRepository.save(updatedPlace);
-                throw new ReviewPlaceException("El lugar ha sido eliminado automaticamente " +
-                        "debido a que ha sobrepasado los 5 días  en estado rechazado");
-            }
-        } else if (placeReviewDTO.action().equals(PlaceStatus.APPROVED)) {
-            updatedPlace.setStatus(PlaceStatus.APPROVED.name());
-        }
-
         placeRepository.save(updatedPlace);
 
         User user = userRepository.findById(updatedPlace.getCreatedBy()).get();
 
         emailService.sendEmail(new EmailDTO("Nueva revisión en "+updatedPlace.getName(),
                 "Su negocio ha sido revisado:  " +
-                        "http://localhost:8080/api/place/review-place", user.getEmail()));
+                        "http://localhost:4200/detalle-negocio/"+updatedPlace.getId(), user.getEmail()));
         // TODO: validar urls de los email
     }
 
@@ -371,11 +356,12 @@ public class PlaceServiceImpl implements PlaceService {
                 place.getName(),
                 place.getDescription(),
                 place.getLocation(),
-                place.getImages(),
+                place.getPictures(),
                 place.getSchedules(),
                 place.getPhones(),
                 place.getCategories(),
                 place.getReviews(),
+                place.getCreatedBy(),
                 place.getStatus(),
                 place.getScore()
         );
