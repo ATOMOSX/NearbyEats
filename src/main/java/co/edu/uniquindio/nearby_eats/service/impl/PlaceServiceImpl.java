@@ -129,9 +129,6 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Place deletePlace(DeletePlaceDTO deletePlaceDTO) throws DeletePlaceException {
-
-        System.out.println( deletePlaceDTO );
-
         Optional<Place> placeOptional = placeRepository.findById(deletePlaceDTO.placeId());
 
         if (placeOptional.isEmpty() || placeOptional.get().getStatus().equals(PlaceStatus.DELETED.name())) {
@@ -141,14 +138,12 @@ public class PlaceServiceImpl implements PlaceService {
         Place deletedPlace = placeOptional.get();
         deletedPlace.setStatus(PlaceStatus.DELETED.name());
         deletedPlace.setDeletionDate(LocalDateTime.now().toString());
-
+        System.out.println(deletePlaceDTO);
         Optional<User> optionalUser = userRepository.findById(deletePlaceDTO.clientId());
         User user = optionalUser.orElse(null);
 
         assert user != null;
         int placeIndex = user.getCreatedPlaces().indexOf(deletedPlace.getId());
-
-        System.out.println(placeIndex);
 
         user.getCreatedPlaces().set(placeIndex, null);
         userRepository.save(user);
