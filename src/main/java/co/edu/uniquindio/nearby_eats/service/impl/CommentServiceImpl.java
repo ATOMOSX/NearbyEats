@@ -62,6 +62,11 @@ public class CommentServiceImpl implements CommentService {
             throw new CreateCommentException("El usuario no existe");
         }
 
+        // Verificar que el usuario no sea el dueño del lugar
+        if (placeOptional.get().getCreatedBy().equals(userId)) {
+            throw new CreateCommentException("El usuario no puede comentar en su propio lugar");
+        }
+
         // Verificar si el usuario ya ha comentado en el lugar
         if (commentRepository.existsByUserAndPlace(userId, commentDTO.placeId())) {
             throw new CreateCommentException("El usuario ya ha comentado en este lugar");
