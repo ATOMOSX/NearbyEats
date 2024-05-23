@@ -19,7 +19,7 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     Boolean existsByName(String name);
 
-    List<Place> findAllByCategoriesContaining(String category);
+    List<Place> findAllByCategoriesContainingIgnoreCase(String category);
 
     List<Place> findAllByCreatedBy(String clientId);
 

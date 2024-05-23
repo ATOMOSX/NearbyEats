@@ -167,7 +167,7 @@ public class PlaceServiceImpl implements PlaceService {
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         searchService.saveSearch(new SaveSearchDTO(userId, getPlacesByCategoryDTO.category(), new Date().toString()));
-        List<Place> places = placeRepository.findAllByCategoriesContaining(getPlacesByCategoryDTO.category());
+        List<Place> places = placeRepository.findAllByCategoriesContainingIgnoreCase(getPlacesByCategoryDTO.category());
         return places.stream().map(this::convertToPlaceResponseDTO).toList();
     }
 
@@ -235,22 +235,29 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO, String token) throws FavoritePlaceException {
+    public Place saveFavoritePlace(String placeId, String token) throws FavoritePlaceException {
 
-        Optional<Place> placeOptional = placeRepository.findById(favoritePlaceDTO.placeId());
+        Optional<Place> placeOptional = placeRepository.findById(placeId);
+
         if(placeOptional.isEmpty())
             throw new FavoritePlaceException("El lugar no existe");
 
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         Optional<User> userOptional = userRepository.findById(userId);
+
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
 
         User user = userOptional.get();
         Place place = placeOptional.get();
-        user.getFavoritePlaces().add(place.getId());
-        userRepository.save(user);
+
+        if (user.getFavoritePlaces().contains(placeId)) {
+            throw new FavoritePlaceException("El Lugar ya esta en favoritos");
+        } else {
+            user.getFavoritePlaces().add(place.getId());
+            userRepository.save(user);
+        }
         return place;
     }
 
@@ -263,14 +270,14 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO, String token) throws FavoritePlaceException {
+    public Place deleteFavoritePlace(String placeId, String token) throws FavoritePlaceException {
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
 
-        Optional<Place> placeOptional = placeRepository.findById(deleteFavoritePlaceDTO.placeId());
+        Optional<Place> placeOptional = placeRepository.findById(placeId);
         if(placeOptional.isEmpty())
             throw new FavoritePlaceException("El lugar no existe");
 
