@@ -94,7 +94,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<User> ownerOptional = userRepository.findById(placeOptional.get().getCreatedBy());
         User owner = ownerOptional.get();
         emailService.sendEmail(new EmailDTO("Nuevo comentario en "+placeOptional.get().getName(),
-                "Para responder el comentario, ingrese al siguiente enlace:  http://localhost:8080/api/comment/answer-comment", owner.getEmail()));
+                "Para responder el comentario, ingrese al siguiente enlace:  http://localhost:4200/detalle-negocio/" + place.getId(), owner.getEmail()));
         return comment1;
     }
 
@@ -130,7 +130,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment1 = commentRepository.save(comment);
         Optional<User> user = userRepository.findById(comment.getUser());
         emailService.sendEmail(new EmailDTO("Nuevo comentario en "+place.get().getName(),
-                "Su comentario ha sido respondido:  http://localhost:8080/api/comment/create-comment", user.get().getEmail()));
+                "Su comentario ha sido respondido: http://localhost:4200/detalle-negocio/" + place.get().getId(), user.get().getEmail()));
         return comment1;
     }
 

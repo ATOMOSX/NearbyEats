@@ -28,6 +28,8 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByStatus(String status);
 
+
+    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByLocation(String location);
 
 

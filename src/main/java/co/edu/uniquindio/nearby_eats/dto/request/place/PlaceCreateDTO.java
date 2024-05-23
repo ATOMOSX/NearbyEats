@@ -12,7 +12,7 @@ public record PlaceCreateDTO(
         @NotBlank(message = "name is required" ) String name,
         @NotBlank(message = "description is required" ) String description,
         Location location,
-        @NotEmpty(message = "images is empty") List<String> images,
+        @NotEmpty(message = "images is empty") List<String> pictures,
         @NotEmpty(message = "this schedule is empty" ) List<Schedule> schedule,
         @NotEmpty(message = "this phones is empty" ) List<String> phones,
         @NotEmpty(message = "No category has been established" ) List<String> categories,

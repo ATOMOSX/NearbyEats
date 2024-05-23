@@ -84,7 +84,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .name(placeCreateDTO.name())
                 .description(placeCreateDTO.description())
                 .location(placeCreateDTO.location())
-                .pictures(placeCreateDTO.images())
+                .pictures(placeCreateDTO.pictures())
                 .schedules(placeCreateDTO.schedule())
                 .phones(placeCreateDTO.phones())
                 .categories(placeCreateDTO.categories())
@@ -244,20 +244,19 @@ public class PlaceServiceImpl implements PlaceService {
 
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
-        Optional<User> userOptional = userRepository.findById(userId);
 
+        Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isEmpty())
             throw new FavoritePlaceException("El cliente no existe");
 
         User user = userOptional.get();
         Place place = placeOptional.get();
 
-        if (user.getFavoritePlaces().contains(placeId)) {
-            throw new FavoritePlaceException("El Lugar ya esta en favoritos");
-        } else {
+        if (!user.getFavoritePlaces().contains(place.getId())) {
             user.getFavoritePlaces().add(place.getId());
             userRepository.save(user);
         }
+
         return place;
     }
 
