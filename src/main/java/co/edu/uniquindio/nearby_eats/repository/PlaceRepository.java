@@ -9,6 +9,7 @@ import co.edu.uniquindio.nearby_eats.model.subdocs.Review;
 import co.edu.uniquindio.nearby_eats.model.subdocs.Schedule;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -19,6 +20,8 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     Boolean existsByName(String name);
 
+
+    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByCategoriesContainingIgnoreCase(String category);
 
     List<Place> findAllByCreatedBy(String clientId);
@@ -27,6 +30,8 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
 
     List<Place> findAllByLocation(String location);
 
+
+    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByNameContainingIgnoreCase(String name);
 
     List<Place> findAllByStatusAndCreatedBy(String status, String createdBy);
