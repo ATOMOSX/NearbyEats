@@ -75,4 +75,10 @@ public class PublicController {
         );
         return ResponseEntity.ok().body(new MessageDTO<>(false, categories));
     }
+
+    @GetMapping("/{id}/isOpen")
+    public ResponseEntity<Boolean> isOpen(@PathVariable String id) throws GetPlaceException {
+        boolean isOpen = placeService.isOpen(id);
+        return ResponseEntity.ok(isOpen);
+    }
 }

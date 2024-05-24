@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDateTime;
@@ -84,7 +86,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .name(placeCreateDTO.name())
                 .description(placeCreateDTO.description())
                 .location(placeCreateDTO.location())
-                .pictures(placeCreateDTO.images())
+                .pictures(placeCreateDTO.pictures())
                 .schedules(placeCreateDTO.schedule())
                 .phones(placeCreateDTO.phones())
                 .categories(placeCreateDTO.categories())
@@ -119,7 +121,7 @@ public class PlaceServiceImpl implements PlaceService {
         updatedPlace.setName(updatePlaceDTO.name());
         updatedPlace.setDescription(updatePlaceDTO.description());
         updatedPlace.setLocation(updatePlaceDTO.location());
-        updatedPlace.setPictures(updatePlaceDTO.images());
+        updatedPlace.setPictures(updatePlaceDTO.pictures());
         updatedPlace.setSchedules(updatePlaceDTO.schedule());
         updatedPlace.setPhones(updatePlaceDTO.phones());
         updatedPlace.setCategories(updatePlaceDTO.categories());
@@ -362,20 +364,16 @@ public class PlaceServiceImpl implements PlaceService {
         );
     }
 
-    private boolean isOpenNow(Place place) {
+    @Override
+    public boolean isOpen(String id) throws GetPlaceException {
+        Place lugar = placeRepository.findById(id).orElseThrow(() -> new GetPlaceException("El lugar no existe"));
+        LocalTime now = LocalTime.now();
+        String today = String.valueOf(LocalDate.now().getDayOfWeek());
 
-        List<Schedule> schedules = place.getSchedules();
-        if (schedules == null || schedules.isEmpty()) {
-            return false;
-        }
-
-        LocalDateTime currentTime = LocalDateTime.now();
-
-        for (Schedule schedule : schedules) {
-            LocalTime openingTime = LocalTime.parse(schedule.getOpeningTime());
-            LocalTime closingTime = LocalTime.parse(schedule.getClosingTime());
-
-            if (currentTime.isAfter(ChronoLocalDateTime.from(openingTime)) && currentTime.isBefore(ChronoLocalDateTime.from(closingTime))) {
+        for (Schedule horario : lugar.getSchedules()) {
+            if (horario.getWeekday().equals(today) &&
+                    now.isAfter(LocalTime.parse(horario.getOpeningTime())) &&
+                    now.isBefore(LocalTime.parse(horario.getClosingTime()))) {
                 return true;
             }
         }

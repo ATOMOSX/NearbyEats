@@ -11,7 +11,7 @@ public record UpdatePlaceDTO(
         @NotBlank(message = "name is required" ) String name,
         @NotBlank(message = "description is required" ) String description,
         Location location,
-        List<String> images,
+        List<String> pictures,
         List<Schedule> schedule,
         List<String> phones,
         List<String> categories,

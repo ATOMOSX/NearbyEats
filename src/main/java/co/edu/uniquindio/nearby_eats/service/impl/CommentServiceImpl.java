@@ -51,6 +51,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment createComment(CommentDTO commentDTO, String token) throws CreateCommentException, MessagingException, EmailServiceException, GetAverageScoreCommentException {
         Jws<Claims> jws = jwtUtils.parseJwt(token);
         String userId = jws.getPayload().get("id").toString();
+        System.out.println(commentDTO.placeId());
 
         Optional<Place> placeOptional = placeRepository.findById(commentDTO.placeId());
         if (placeOptional.isEmpty()) {

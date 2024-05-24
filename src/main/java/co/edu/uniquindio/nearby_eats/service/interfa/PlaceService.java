@@ -50,4 +50,6 @@ public interface PlaceService {
     List<String> getPlaceStatus();
 
     List<String> categories();
+
+    boolean isOpen(String id) throws GetPlaceException;
 }
