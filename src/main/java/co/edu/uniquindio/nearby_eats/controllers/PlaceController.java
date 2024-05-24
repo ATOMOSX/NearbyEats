@@ -120,7 +120,7 @@ public class PlaceController {
     }
 
     @GetMapping("/recommend-places/{userId}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> recommendPlaces(@PathVariable String userId) throws Exception {
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> recommendPlaces(@Valid @PathVariable String userId) throws Exception {
         return ResponseEntity.ok().body(new MessageDTO<>(false, searchService.recommendPlaces(userId)));
     }
 

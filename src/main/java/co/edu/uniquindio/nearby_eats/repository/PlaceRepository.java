@@ -21,7 +21,6 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
     Boolean existsByName(String name);
 
 
-    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByCategoriesContainingIgnoreCase(String category);
 
     List<Place> findAllByCreatedBy(String clientId);
@@ -29,11 +28,9 @@ public interface PlaceRepository extends MongoRepository<Place, String>{
     List<Place> findAllByStatus(String status);
 
 
-    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByLocation(String location);
 
 
-    @Query(value = "{ 'status' : 'APPROVED' }")
     List<Place> findAllByNameContainingIgnoreCase(String name);
 
     List<Place> findAllByStatusAndCreatedBy(String status, String createdBy);
