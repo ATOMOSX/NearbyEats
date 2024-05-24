@@ -22,6 +22,7 @@ public record   PlaceResponseDTO(
         @NotBlank(message = "revisionHistory is required") List<Review> revisionsHistory,
         String createdBy,
         String status,
-        float score
+        float score,
+        boolean isOpen
 ) {
 }

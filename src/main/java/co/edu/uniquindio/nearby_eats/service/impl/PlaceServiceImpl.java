@@ -366,7 +366,8 @@ public class PlaceServiceImpl implements PlaceService {
                 place.getReviews(),
                 place.getCreatedBy(),
                 place.getStatus(),
-                place.getScore()
+                place.getScore(),
+                place.isOpen()
         );
     }
 

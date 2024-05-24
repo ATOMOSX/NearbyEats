@@ -91,7 +91,8 @@ public class SearchServiceImpl implements SearchService {
                 place.getReviews(),
                 place.getCreatedBy(),
                 place.getStatus(),
-                place.getScore()
+                place.getScore(),
+                place.isOpen()
         );
     }
 
