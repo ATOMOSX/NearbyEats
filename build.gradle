@@ -10,6 +10,15 @@ description = 'Plataforma para encontrar lugares locales de comida y comercio. '
         'Permite crear, buscar, comentar y calificar lugares cercanos. Desarrollado ' +
         'con tecnologías modernas y funciones de geolocalización.'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    sourceCompatibility = '17'
+    targetCompatibility='17'
+}
+
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -39,7 +48,6 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
-
-test {
-    useJUnitPlatform()
+springBoot {
+    mainClass = 'co.edu.uniquindio.ProjectApplication'
 }
