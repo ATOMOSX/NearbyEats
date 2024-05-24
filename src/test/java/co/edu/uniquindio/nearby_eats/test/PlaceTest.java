@@ -164,7 +164,7 @@ public class PlaceTest {
                 placeId
         );
 
-        Place place = placeService.saveFavoritePlace(favoritePlaceDTO, userId);
+        Place place = placeService.saveFavoritePlace(placeId, userId);
         System.out.println(place);
         Assertions.assertNotNull(place);
     }
@@ -172,11 +172,9 @@ public class PlaceTest {
     //Revisión
     @Test
     public void deleteFavortitePlace() throws FavoritePlaceException {
-        FavoritePlaceDTO favoritePlaceDTO = new FavoritePlaceDTO(
-                placeId
-        );
 
-        Place place = placeService.deleteFavoritePlace(favoritePlaceDTO, userId);
+
+        Place place = placeService.deleteFavoritePlace(placeId, userId);
         System.out.println(place);
         Assertions.assertNotNull(place);
     }

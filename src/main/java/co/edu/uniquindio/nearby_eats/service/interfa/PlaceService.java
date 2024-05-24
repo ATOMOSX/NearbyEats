@@ -41,9 +41,9 @@ public interface PlaceService {
 
     List<PlaceResponseDTO> getPlacesByNamePublic(GetPlacesByNameDTO getPlacesByNameDTO) throws GetPlaceException;
 
-    Place saveFavoritePlace(FavoritePlaceDTO favoritePlaceDTO, String token) throws FavoritePlaceException;
+    Place saveFavoritePlace(String placeId, String token) throws FavoritePlaceException;
 
-    Place deleteFavoritePlace(FavoritePlaceDTO deleteFavoritePlaceDTO, String token) throws FavoritePlaceException;
+    Place deleteFavoritePlace(String placeId, String token) throws FavoritePlaceException;
 
     void reviewPlace(PlaceReviewDTO placeReviewDTO, String token) throws ReviewPlaceException, MessagingException, EmailServiceException;
 

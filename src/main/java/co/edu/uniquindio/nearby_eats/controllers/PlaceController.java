@@ -120,22 +120,22 @@ public class PlaceController {
     }
 
     @GetMapping("/recommend-places/{userId}")
-    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> recommendPlaces(@PathVariable String userId) throws Exception {
+    public ResponseEntity<MessageDTO<List<PlaceResponseDTO>>> recommendPlaces(@Valid @PathVariable String userId) throws Exception {
         return ResponseEntity.ok().body(new MessageDTO<>(false, searchService.recommendPlaces(userId)));
     }
 
-    @PatchMapping("/save/favorite/place")
-    public ResponseEntity<MessageDTO<Place>> saveFavoritePlace(@Valid @RequestBody FavoritePlaceDTO favoritePlaceDTO, @RequestHeader Map<String, String> headers) throws FavoritePlaceException {
+    @GetMapping("/save/favorite/place/{placeId}")
+    public ResponseEntity<MessageDTO<Place>> saveFavoritePlace(@Valid @PathVariable String placeId, @RequestHeader Map<String, String> headers) throws FavoritePlaceException {
         String token = headers.get("authorization").replace("Bearer ", "");
-        placeService.saveFavoritePlace(favoritePlaceDTO, token);
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.saveFavoritePlace(favoritePlaceDTO, token)));
+        placeService.saveFavoritePlace(placeId, token);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.saveFavoritePlace(placeId, token)));
     }
 
-    @PatchMapping("/delete/favorite/place")
-    public ResponseEntity<MessageDTO<Place>> deleteFavoritePlace(@Valid @RequestBody FavoritePlaceDTO deleteFavoritePlaceDTO, @RequestHeader Map<String, String> headers) throws FavoritePlaceException {
+    @GetMapping("/delete/favorite/place/{placeId}")
+    public ResponseEntity<MessageDTO<Place>> deleteFavoritePlace(@Valid @PathVariable String placeId, @RequestHeader Map<String, String> headers) throws FavoritePlaceException {
         String token = headers.get("authorization").replace("Bearer ", "");
-        placeService.deleteFavoritePlace(deleteFavoritePlaceDTO, token);
-        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.deleteFavoritePlace(deleteFavoritePlaceDTO, token)));
+        placeService.deleteFavoritePlace(placeId, token);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, placeService.deleteFavoritePlace(placeId, token)));
     }
 
     @GetMapping("/get-favorite-place")
