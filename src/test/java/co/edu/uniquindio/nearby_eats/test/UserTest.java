@@ -75,7 +75,8 @@ public class UserTest {
                 "123456",
                 "juanito123",
                 "Armenia",
-                "Imagen de perfil"
+                "Imagen de perfil",
+                "123456"
         );
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -107,7 +108,8 @@ public class UserTest {
                 "pedir",
                 "yose.jpg",
                 "Montenegro",
-                "elpepe"
+                "elpepe",
+                "123456"
         );
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

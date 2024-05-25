@@ -11,9 +11,6 @@ description = 'Plataforma para encontrar lugares locales de comida y comercio. '
         'con tecnologías modernas y funciones de geolocalización.'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
     sourceCompatibility = '17'
     targetCompatibility='17'
 }

@@ -30,7 +30,7 @@ public class CommentTest {
     private final String userId = "client2";
 
     @Test
-    public void createCommentTest() throws CreateCommentException, MessagingException, EmailServiceException {
+    public void createCommentTest() throws CreateCommentException, MessagingException, EmailServiceException, GetAverageScoreCommentException {
         CommentDTO commentDTO = new CommentDTO(placeId, "Excelente lugar", 5);
         Comment comment = commentService.createComment(commentDTO, userId);
         Assertions.assertNotNull(comment);
