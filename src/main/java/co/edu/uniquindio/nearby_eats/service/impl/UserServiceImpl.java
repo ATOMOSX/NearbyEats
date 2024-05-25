@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
 
         emailService.sendEmail(new EmailDTO("Cambio de contraseña de NearbyEats",
                 "Para cambiar la contraseña ingrese al siguiente enlace " +
-                        "http://localhost:4200/cambiar-contrasenia/"+token, email));
+                        "https://nearbyeats-169cc.web.app/cambiar-contrasenia/"+token, email));
 
     }
 

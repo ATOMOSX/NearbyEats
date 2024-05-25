@@ -321,7 +321,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         emailService.sendEmail(new EmailDTO("Nueva revisión en "+updatedPlace.getName(),
                 "Su negocio ha sido revisado:  " +
-                        "http://localhost:4200/detalle-negocio/"+updatedPlace.getId(), user.getEmail()));
+                        "https://nearbyeats-169cc.web.app/detalle-negocio/"+updatedPlace.getId(), user.getEmail()));
         // TODO: validar urls de los email
     }
 
