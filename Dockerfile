@@ -14,4 +14,4 @@ RUN ./gradlew build
 # Set the port to expose
 EXPOSE ${PORT}
 # Set the entry point to run the application
-ENTRYPOINT ["java", "-jar", "nearby_eats-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/nearby_eats-1.0-SNAPSHOT.jar"]
