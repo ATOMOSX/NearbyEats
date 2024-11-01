@@ -34,7 +34,7 @@ NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastro
 - Notificaciones por correo electrónico para acciones relevantes.
 - Gestión de imágenes a través de un servicio externo (Cloudinary, Firebase, etc.).
 - Código fuente alojado en GitHub para colaboración del equipo de desarrollo.
-- Moderadores preconfigurados en la base de datos.
+- Moderadores preconfigurados en la base de datos mongodb.
 
 ## Instalación y Uso
 
