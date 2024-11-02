@@ -26,7 +26,7 @@ NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastro
 - Búsqueda por nombre, tipo y distancia.
 - Solicitar ruta entre ubicaciones con distancia y tiempo de viaje.
 - Ver lista de lugares creados y responder comentarios.
-- Eliminar cuenta.
+- Eliminar cuenta Permanentes.
 
 ## Consideraciones Importantes
 
