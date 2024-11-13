@@ -5,7 +5,7 @@ NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastro
 ## Tecnologías Utilizadas
 
 - **Backend**: Spring Boot, Gradle, MongoDB
-- **Frontend**: Angular (TypeScript), Npm, Bootstrap 5
+- **Frontend**: Angular (TypeScript), Npm, Bootstrap 5, FontAwesome
 
 ## Funcionalidades Principales
 
