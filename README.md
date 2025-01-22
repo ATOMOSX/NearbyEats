@@ -2,6 +2,7 @@
 
 NearbyEats es una plataforma web diseñada para fomentar el comercio y la gastronomía regional, priorizando el apoyo a los pequeños comerciantes. Permite a los usuarios buscar, explorar y compartir lugares de interés como restaurantes, cafeterías, museos y hoteles, cercanos a su ubicación.
 
+
 ## Tecnologías Utilizadas
 
 - **Backend**: Spring Boot, Gradle, MongoDB
